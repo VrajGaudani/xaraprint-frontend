@@ -1,0 +1,148 @@
+<div class="topbar d-flex justify-content-between px-4" >
+  <div class="toppbar_left d-flex flex-nowrap align-items-center header-first-sec">
+    <a class="text-light font-size-13">
+      <img src="assets/images/order-tracking.svg" alt="order-tracking" class="tracking-png" />
+      Order Tracking
+    </a>
+  </div>
+  <div class="topbar_right d-flex font-size-13 right-sideheader w-46 " *ngIf="gs.isLogin">
+    <div class="text-light font-size-13 d-sm-none">
+      <img src="assets/images/account.svg" alt="account" class="profile-png" /> Hi,
+      {{profileData?.firstname}}
+    </div>
+    <a class="dropdown-toggle text-light font-size-13 d-none d-md-inline d-sm-inline d-lg-inline d-xl-inline"
+      role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <img src="assets/images/account.svg" alt="account" class="profile-png" /> Hi, {{profileData?.firstname + ' ' +
+      profileData?.lastname}}
+    </a>
+    <div class="dropdown-menu font-size-13 py-0 profile-dropdown" aria-labelledby="dropdownMenuLink">
+      <a class="dropdown-item px-3 pointer" routerLink="/account">My Account</a>
+      <a class="dropdown-item px-3 pointer" (click)="logout()">Logout</a>
+    </div>
+    <a class="hover_orange text-light" [routerLink]="['/cart']" routerLinkActive="router-link-active">
+      <img src="assets/images/items.svg" alt="items" class="items-png" /> {{cartItems}} Item(s)
+      <span>${{finalPrice}}</span>
+    </a>
+    <div class="dropdown show pr-1">
+      <a class="dropdown-toggle text-light" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+        <img src="assets/images/usa.svg" alt="usa-map" class="small-png" />
+      </a>
+      <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
+        <a class="dropdown-item">
+          <img src="assets/images/uk.svg" alt="uk-map" class="small-png" width="25" /> UK
+        </a>
+        <a class="dropdown-item">
+          <img src="assets/images/au.svg" alt="au-map" class="small-png" width="25" /> AU
+        </a>
+        <a class="dropdown-item">
+          <img src="assets/images/nz.svg" alt="nz-map" class="small-png" width="25" /> NZ
+        </a>
+        <a class="dropdown-item">
+          <img src="assets/images/ca.svg" alt="ca-map" class="small-png" width="25" /> CA
+        </a>
+        <a class="dropdown-item">
+          <img src="assets/images/ind.svg" alt="ind-map" class="small-png" width="25" /> IND
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="topbar_right d-flex font-size-13 right-sideheader w-46 " *ngIf="!gs.isLogin">
+    <div class="text-light font-size-13">
+      <img src="assets/images/account.svg" alt="account" class="profile-png" />
+      <span [routerLink]="['/login']">Login/Register</span>
+    </div>
+  </div>
+</div>
+
+<div class="main_wrapper">
+  <div class="header-logo d-flex align-items-center">
+    <img src="assets/images/sidebaarIcon.svg" class="d-none side-baar-icon cursor-pointer" alt="logo"
+      [routerLink]="['/home']" routerLinkActive="router-link-active" />
+    <!-- (click)="setSideBar(true)" -->
+    <img src="assets/images/logo.svg" class="mw-90 cursor-pointer" alt="logo" [routerLink]="['/home']"
+      routerLinkActive="router-link-active" />
+  </div>
+  <div class="search-select-box d-flex align-items-center dropdown">
+    <input type="text" [formControl]="searchControl" placeholder="Search for" class="w-100 form-control dropdown-toggle"
+      data-bs-toggle="dropdown" aria-expanded="false" />
+    <div class="quick-access-container dropdown-menu">
+      <h1>Quick Access</h1>
+      <div class="grid-container ">
+        <div class="grid-item" *ngFor="let item of searchProductList" [routerLink]="'product-details/' + item._id">
+          <img [src]="item?.product_images[0]" [alt]="item?.productname">
+          <p>{{item?.productname}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex w-20 justify-content-around chat-now-box">
+    <div class="d-flex align-items-center w-50 callUsBox">
+      <img src="assets/images/chat-now.svg" alt="callUs" class="call-us connect" />
+      <span class="small-sub-text ml-3">Chat now</span>
+    </div>
+    <div class="d-flex align-items-center w-50 callUsBox">
+      <img src="assets/images/call-us.svg" alt="callUs" class="call-us connect" />
+      <span class="small-sub-text ml-3">
+        Call us
+        <p class="mb-0">800-580-4489</p>
+      </span>
+    </div>
+    <div class="Icons-header">
+      <a class="dropdown-toggle text-dark" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16"
+          className="profile-icons">
+          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+          <path fill-rule="evenodd"
+            d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+        </svg>
+      </a>
+      <div class="dropdown-menu font-size-13 py-0 profile-dropdown" aria-labelledby="dropdownMenuLink">
+        <a class="dropdown-item px-3" routerLink="/account">My Account</a>
+        <!-- <a class="dropdown-item px-3">My design</a> -->
+        <a class="dropdown-item px-3 bg-secondary text-light">Logout</a>
+      </div>
+      <div> <!--  (click)="setCart(true)" -->
+        <svg xmlns="http://www.w3.org/2000/svg" fill="#000000" class="bi bi-bag-check" viewBox="0 0 16 16"
+          className="cart-icon">
+          <path fill-rule="#000000" stroke="30"
+            d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0z" />
+          <path
+            d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main-navbar navbar-color">
+  <div class="d-none d-md-flex justify-content-around">
+    <ng-container *ngFor="let item of header; index as k">
+      <!-- Parent Wrapper for Positioning -->
+      <div class="nav-item-wrapper position-relative">
+        <!-- Toggle -->
+        <a class="text-light d-flex align-items-center w-fit-content mx-2"
+          [class.dropdown-toggle]="item.subCatArray.length > 0" [class.remove_icon]="item.subCatArray.length <= 0"
+          role="button">
+          <div class="prl-2 nav-item cursor-pointer" [routerLink]="['/product-list', item.slug]" [queryParams]="{ cat_url: item._id }">{{ item.name }}</div>
+        </a>
+
+        <!-- Dropdown -->
+        <div class="dropdown-menu font-size-13 p-2" *ngIf="item.subCatArray.length > 0">
+          <div class="d-flex flex-wrap">
+            <div class="py-2">
+              <ng-container *ngFor="let data of item.subCatArray">
+                <a [routerLink]="['/product-list', data.slug]" [queryParams]="{ sub_cat : data._id }"
+                  class="px-3 py-1 mb-0 text-center d-flex justify-content-between cursor-pointer f-size-16 text-primary">
+                  {{ data.name }}
+                </a>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

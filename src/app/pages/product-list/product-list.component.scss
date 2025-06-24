@@ -1,0 +1,14 @@
+.sticky-top {
+  top: 50px !important;
+  z-index: 0 !important;
+}
+
+.maxHeight {
+  min-height: 50px;
+}
+
+.card-img-top {
+  object-fit: cover;
+  height: 176px;
+  padding: 5%;
+}

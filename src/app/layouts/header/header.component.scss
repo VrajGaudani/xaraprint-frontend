@@ -1,0 +1,92 @@
+#dropdownMenuLink {
+  z-index: 9999 !important;
+}
+
+.quick-access-container {
+  padding: 20px;
+  text-align: center;
+  max-height: 700px;
+  overflow-x: auto;
+
+  h1 {
+    margin-bottom: 20px;
+    font-size: 20px;
+    color: #333;
+    text-align: left;
+  }
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+
+  .grid-item {
+      background-color: #fff;
+      // border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      // box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      // transition: transform 0.3s ease;
+
+      // &:hover {
+      //     transform: scale(1.05);
+      // }
+
+      img {
+        border-radius: 2px;
+        margin-bottom: 10px;
+        max-width: 100px;
+        object-fit: cover;
+      }
+
+      p {
+        margin: 2px 0px 0px;
+        word-break: break-word;
+        color: rgb(36, 36, 36);
+        font-size: 11px;
+        line-height: 15.4px;
+        padding-bottom: 0px;
+      }
+  }
+}
+
+
+
+.main-navbar{
+  /* Parent wrapper for positioning */
+  .nav-item-wrapper {
+    position: relative; /* Ensures child dropdown is positioned relative to this element */
+  }
+
+  /* Dropdown menu - hidden by default */
+  .dropdown-menu {
+    display: none; /* Initially hidden */
+    opacity: 0;    /* Invisible */
+    position: absolute; /* Position relative to the parent */
+    top: 100%; /* Positioned below the parent */
+    left: 0; /* Align left */
+    z-index: 1000; /* Make sure it's on top */
+    transition: opacity 0.2s ease-in-out; /* Smooth fade-in effect */
+  }
+
+  /* Show dropdown on hover */
+  .nav-item-wrapper:hover .dropdown-menu {
+    display: block; /* Show the dropdown */
+    opacity: 1; /* Fully visible */
+  }
+
+  /* Adjust dropdown styling (optional) */
+  .dropdown-menu a {
+    white-space: nowrap; /* Prevent text from wrapping */
+  }
+
+}
+
+.remove_icon{
+  white-space: nowrap;
+}
+

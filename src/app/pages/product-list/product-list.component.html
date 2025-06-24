@@ -1,0 +1,356 @@
+<div>
+  <!-- <div class="container my-4 pt-3" style="max-width: 1200px;">
+    <div class="row align-items-center">
+      <div class="col-12 mb-3 mb-lg-0 col-lg-5 d-flex">
+        <div class="startBox"><span>Start</span>Your Order:</div>
+        <div class="input-box dropdown"><button type="button" id="dropdown-basic" aria-expanded="false"
+            class="w-100 d-flex justify-content-between align-items-center order-select dropdown-toggle btn btn-info">Dropdown
+            Button</button></div>
+      </div>
+      <div class="col-12 col-lg-7 d-flex flex-wrap size-box align-items-center justify-content-between">
+        <div class="d-flex"><span class="size">Size (W X H)</span>
+          <select class="me-2 form-select" style="width: 120px;">
+            <option>3 x 3</option>
+          </select><select class="form-select" style="width: 80px;">
+            <option>ft</option>
+          </select>
+        </div>
+        <div class="input-group" style="width: 100px;"><span class="input-group-text"
+            id="inputGroup-sizing-default">Qty</span><input aria-label="Default"
+            aria-describedby="inputGroup-sizing-default" class="form-control"></div>
+        <div class="priceBox">
+          <div class="pricesBox my-3"><span class="priceLabel">Price</span><span class="oldPrice">$9.79</span><span
+              class="newPrice">$6.99</span></div>
+        </div><button class="btn  btn-primary">BUY NOW</button>
+      </div>
+    </div>
+  </div>
+  <div class="container overflow-hidden">
+    <div class="row">
+      <div class="d-flex align-items-center">
+        <div class="breadcrum-box"><span>Home</span></div><span class="breadcrum-color">StandPage</span>
+      </div>
+
+      <div class="col-12">
+        <h1 class="breadcrumhead fw-bold">StandPage</h1>
+        <p class="f-size-12">Get your striking and attention-drawing banner printed on premium-quality art cotton
+          canvas, polyester fabric, or processed fabric. Our full-color, 600DPI, UV Printing will bring your banner
+          graphics to life with vibrant, bold, and imposing colors. Versatile display options, lamination, and UV
+          printing are available. Our free to use design templates and online design tool makes custom banner designing
+          easy and quick. These aesthetically appealing fabric banners are popularly used at churches, indoor events,
+          in-store displays, retail stores, etc. Order yours now to avail the best price guarantee and FREE SHIPPING.
+        </p>
+      </div>
+
+      <div class="p-3"></div>
+      <div class="mb-3">
+        <div class="float-end d-flex align-items-center"><span class="fw-light d-none d-md-block mr-3"
+            style="font-size: 12px;">Sort by</span><select class="mr-3 form-select" style="width: 220px;">
+            <option>Best Seller</option>
+          </select><img src="assets/images/down-arrow.svg" role="button" alt="down arrow"></div>
+      </div>
+      <hr>
+    </div>
+  </div> -->
+
+
+  <div class="container dr-box d-block d-lg-none">
+    <div class="dropdown"><button type="button" id="dropdown-variants-Primary" aria-expanded="false"
+        class="dropdown-toggle btn btn-primary">Filter</button></div>
+  </div>
+  <div class="my-4 container">
+    <div class="row">
+      <div class="col-3 d-none d-lg-block">
+        <div class="top-0 sticky-top accordion">
+          <div class="accordion-item">
+            <h2 class="accordion-header"><button type="button" aria-expanded="false"
+                class="accordion-button collapsed">Category</button></h2>
+            <div class="accordion-collapse collapse">
+              <div class="accordion-body">
+                <p class="primary-hover">test1</p>
+                <p class="primary-hover">test1</p>
+                <p class="primary-hover">test1</p>
+                <p class="primary-hover">test1</p>
+                <p class="primary-hover">test1</p>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header"><button type="button" aria-expanded="false"
+                class="accordion-button collapsed">Use</button></h2>
+            <div class="accordion-collapse collapse">
+              <div class="accordion-body">
+                <div class="mb-3" id="formGridCheckbox">
+                  <div class="form-check"><input type="checkbox" class="form-check-input"><label title=""
+                      class="form-check-label">Check me out</label></div>
+                </div>
+                <div class="mb-3" id="formGridCheckbox">
+                  <div class="form-check"><input type="checkbox" class="form-check-input"><label title=""
+                      class="form-check-label">Check me out</label></div>
+                </div>
+                <div class="mb-3" id="formGridCheckbox">
+                  <div class="form-check"><input type="checkbox" class="form-check-input"><label title=""
+                      class="form-check-label">Check me out</label></div>
+                </div>
+                <div class="mb-3" id="formGridCheckbox">
+                  <div class="form-check"><input type="checkbox" class="form-check-input"><label title=""
+                      class="form-check-label">Check me out</label></div>
+                </div>
+                <div class="mb-3" id="formGridCheckbox">
+                  <div class="form-check"><input type="checkbox" class="form-check-input"><label title=""
+                      class="form-check-label">Check me out</label></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header"><button type="button" aria-expanded="false"
+                class="accordion-button collapsed">Print type</button></h2>
+            <div class="accordion-collapse collapse">
+              <div class="accordion-body">
+                <p class="primary-hover">test1</p>
+                <p class="primary-hover">test1</p>
+                <p class="primary-hover">test1</p>
+                <p class="primary-hover">test1</p>
+                <p class="primary-hover">test1</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-9 d-flex flex-wrap">
+        <div class="col-6 col-md-4 col-lg-3 p-2" *ngFor="let data of productsArray">
+          <div class="text-center">
+            <a (click)="navigate(data)">
+              <div class="card-box card">
+                <img class="card-img-top" [src]="data?.product_images?.[0]">
+                <div class="card-body">
+                  <div class="mb-2">{{data?.productname}}</div>
+                  <div class="d-flex align-items-center justify-content-center">
+                    <img src="assets/images/star.svg" alt="star">
+                    <img src="assets/images/star.svg" alt="star">
+                    <img src="assets/images/star.svg" alt="star">
+                    <img src="assets/images/star.svg" alt="star">
+                    <img src="assets/images/half-start.svg" alt="star">
+                    <span class="ms-1">(4.5/5)</span>
+                  </div>
+                  <p class="mb-2 mt-2 card-text"><span class="test-dec">Size (W X H): </span>{{data?.min_size_obj?.size}}
+                  </p>
+                  <p class="card-text"><span class="test-dec">Starts at </span>${{data?.price}}</p>
+                  <button type="button" class="btn btn-primary" (click)="navigate(data)">Customize</button>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container mt-4">
+      <h3 class="f-size-18"><strong>Grab Your Audience's Attention With Long-Lasting Vinyl Banners</strong></h3>
+      <h4 class="f-size-18">Customize Full-Color Business Banners to Suit Your Marketing Needs</h4>
+      <p class="f-size-12">Growing your audience is necessary to ensure consistent earnings, especially if yours is a
+        start-up business. Through our premium custom vinyl banners, your can announce your products and services
+        effectively, ensuring they stay in potential customer's minds. Our signs boast full-color, 720 DPI eco-solvent
+        printing for sharp and bold images that catch the eye. Create personalized banners through our design studio,
+        where you can choose from a variety of templates and add your logo, pictures, and other preferred content. Want
+        a fully original sign that represents your brand? Upload your own artwork or work with one of our professional
+        designers.</p>
+      <h4 class="f-size-18">Durable Vinyl Banners for Outdoor Promotional Use</h4>
+      <p class="f-size-12">Make a smart business investment by purchasing durable signage you can display repeatedly for
+        various purposes. We craft our special banners using 11-ounce or 16-ounce PVC flex for superior durability and
+        lasting use. Water- and fade-resistant, they withstand prolonged weather exposure, which suits outdoor
+        advertising or trade shows. Upgrade your banner with lamination, which adds abrasion resistance and additional
+        longevity. Optional wind flaps prevent damage when the sign hangs in gusty areas, while metal grommets keep the
+        edges sturdy against tight ropes or cords.</p>
+      <h4 class="f-size-18">Bulk Discounts for Easy-to-Install Custom Banners</h4>
+      <p class="f-size-12">Easy to use, our custom vinyl banners are flexible to facilitate set up, relocation, and
+        storage. Vinyl banner printing offers versatility, durability, and vibrant visuals, making it a popular choice
+        for outdoor and indoor advertising, events, trade shows, and more. Simplify installation by ordering your sign
+        with various accessories, such as zip ties, nylon rope, and wall brackets. Maintenance is just as fuss-free;
+        just dampen a soft piece of cloth with water and give your banner a good wipe. Certain sizes come with bulk
+        discounts, allowing you to cost-effectively decorate your celebration or promote your sale event. Prices per
+        unit decrease the more units you order, whether you purchase two or 500 banners at a time.</p>
+      <h3 class="f-size-18"><strong>FAQs for Vinyl Banners</strong></h3>
+      <div class="schema-faq-code" itemscope="" itemtype="https://schema.org/FAQPage">
+        <div itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question" class="faq-question">
+          <h3 itemprop="name" class="faq-q f-size-18">1. Can I use my own template to print vinyl banners?</h3>
+          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <p itemprop="text" class="faq-a f-size-12">Ans: Yes, we print customized vinyl posters with sizes as big as
+              8" x 20". You can easily upload artwork from your computer or drag and drop the files directly to the
+              website. You also have the option to send your files via Dropbox, a file hosting service that allows you
+              to securely manage and store your files.</p>
+          </div>
+        </div>
+        <div itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question" class="faq-question">
+          <h3 itemprop="name" class="faq-q f-size-18">2. Are vinyl banners suitable for outdoor use?</h3>
+          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <p itemprop="text" class="faq-a f-size-12">Ans: Yes, our vinyl banners are perfectly suitable for both
+              indoor and outdoor display, making them a great option for promotional advertising, marketing campaigns,
+              backdrops for outdoor photo shoot, parades, and much more!</p>
+          </div>
+        </div>
+        <div itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question" class="faq-question">
+          <h3 itemprop="name" class="faq-q f-size-18">3. Are your vinyl banners available in different weights?</h3>
+          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <p itemprop="text" class="faq-a f-size-12">Ans: Yes, they are available in two scrim vinyl options. Both of
+              these material options are suitable as indoor and outdoor banners. 1. 13 oz vinyl (Glossy or Matte) 2.18
+              oz extra heavy-duty scrim vinyl (Matte)</p>
+          </div>
+        </div>
+        <div itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question" class="faq-question">
+          <h3 itemprop="name" class="faq-q f-size-18">4. How large or small can my vinyl banners be?</h3>
+          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <p itemprop="text" class="faq-a f-size-12">Ans: The smallest banner size we offer is a 1’ x 1’ banner and
+              the maximum size we offer is 16’ x 50’ without seams.</p>
+          </div>
+        </div>
+        <div itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question" class="faq-question">
+          <h3 itemprop="name" class="faq-q f-size-18">5. Can you recycle vinyl banners?</h3>
+          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <p itemprop="text" class="faq-a f-size-12">Ans: Yes, they can be, the most common way to recycle them is by
+              upcycling them. Some businesses will take your old, unwanted vinyl banners and turn them into totes bags,
+              duffle bags, and other consumer goods. It is also more common for your local recycling facility to recycle
+              vinyl banners, but we recommend reaching out to them prior to putting them in your recycling bin.</p>
+          </div>
+        </div>
+        <div itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question" class="faq-question">
+          <h3 itemprop="name" class="faq-q f-size-18">6. Are vinyl banners waterproof?</h3>
+          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <p itemprop="text" class="faq-a f-size-12">Ans: Yes, they are. All three vinyl banner materials we use, 9
+              oz. mesh, 13 oz. standard, and 15 oz. premium, are waterproof. They can be displayed outdoors for years.
+            </p>
+          </div>
+        </div>
+        <div itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question" class="faq-question">
+          <h3 itemprop="name" class="faq-q f-size-18">7. Can I print on both sides of the vinyl banner?</h3>
+          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <p itemprop="text" class="faq-a f-size-12">Ans: Yes. Our high-quality vinyl poster printing will allow you
+              to print on both the front and the back side of your vinyl poster.</p>
+            <p class="w-90 mb-0 f-size-14 text-left mx-auto px-1 font-weight-lighter light-grey mt-3">Halloween ranks as
+              one of the most consumer-driven holidays in the calendar year, second in prominence only to Christmas.
+              Families and</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="w-100 text-center " style="background-color: rgb(67, 131, 184); color: white;">
+    <div class="w-100 text-center d-flex align-items-center justify-content-evenly p-3 Subscribe-box w-cm">
+      <p class="w-33">Subscribe to our newsletter and get 20% OFF on Your First Order + Free Shipping.</p><input
+        placeholder="Normal text" type="text" class="w-45 height-fitcontant form-control"><button type="button"
+        class="height-fitcontant px-2 my-2 btn btn-light">SUBSCRIBE</button>
+    </div>
+  </div>
+  <div class="container mw-100 m-0 p-0 w-cm mx-auto">
+    <footer class=" text-center text-lg-start  w-100 ">
+      <div class="container mw-100 p-4 pb-0">
+        <div class="row my-4 justify-content-between">
+          <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
+            <h5 class="text-uppercase mb-4 f-size-18">Get in touch</h5>
+            <ul class="list-unstyled">
+              <li>
+                <p>Need help?</p>
+              </li>
+              <li>
+                <p>800-580-4489</p>
+              </li>
+              <li>
+                <p>contactexample.com</p>
+              </li>
+            </ul>
+          </div>
+          <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
+            <h5 class="text-uppercase mb-4 f-size-18">Category</h5>
+            <ul class="list-unstyled">
+              <li class="mb-2"><a class="text-dark f-size-14" href="/stands-and-displays">Flags</a></li>
+              <li class="mb-2"><a class="text-dark f-size-14" href="/stands-and-displays">Step and Repeat Displays</a>
+              </li>
+              <li class="mb-2"><a class="text-dark f-size-14" href="/stands-and-displays">Banners</a></li>
+              <li class="mb-2"><a class="text-dark f-size-14" href="/stands-and-displays">Canopies</a></li>
+              <li class="mb-2"><a class="text-dark f-size-14" href="/stands-and-displays">Table Covers and Throws</a>
+              </li>
+            </ul>
+          </div>
+          <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
+            <h5 class="text-uppercase mb-4 f-size-18">Information</h5>
+            <ul class="list-unstyled">
+              <li class="mb-2"><a class="text-dark f-size-14" href="/orderstatus">Order Tracking</a></li>
+              <li class="mb-2"><a class="text-dark f-size-14" href="/country">International Shipping</a></li>
+              <li class="mb-2"><a class="text-dark f-size-14" href="/reviews">Customer Reviews</a></li>
+              <li class="mb-2"><a class="text-dark f-size-14" href="/coupons">Special Offers</a></li>
+              <li class="mb-2"><a class="text-dark f-size-14" href="/">Sitemap</a></li>
+              <li class="mb-2"><a class="text-dark f-size-14" href="/stands-and-displays">Safety Signs &amp; Banners</a>
+              </li>
+            </ul>
+          </div>
+          <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
+            <h5 class="text-uppercase mb-4 f-size-18">Information</h5>
+            <ul class="list-unstyled">
+              <li class="mb-2"><a class="text-dark f-size-14" href="/contact-us">Contact us</a></li>
+              <li class="mb-2"><a class="text-dark f-size-14" href="/privacy-policy">Privacy Policy</a></li>
+              <li class="mb-2"><a class="text-dark f-size-14" href="/terms-and-conditions">Terms of Use</a></li>
+              <li class="mb-2"><a class="text-dark f-size-14" href="/affiliate-program">Affiliate Program</a></li>
+              <li class="mb-2"><a class="text-dark f-size-14" href="/local">Areas of Service</a></li>
+              <li class="mb-2"><a class="text-dark f-size-14" href="/">Safety Signs &amp; Banners</a></li>
+            </ul>
+          </div>
+          <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
+            <h5 class="text-uppercase mb-4 f-size-18">Information</h5>
+            <ul class="list-unstyled">
+              <li class="mb-2"><a class="text-dark f-size-14" href="/faqs">FAQs</a></li>
+              <li class="mb-2"><a class="text-dark f-size-14" href="/faqs">Return Policy</a></li>
+              <li class="mb-2"><a class="text-dark f-size-14" href="/faqs">Free Design Proofs</a></li>
+              <li class="mb-2"><a class="text-dark f-size-14" href="/faqs">Shipping</a></li>
+              <li class="mb-2"><a class="text-dark f-size-14" href="/sampal-kit">Sample Kit</a></li>
+            </ul>
+          </div>
+          <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
+            <div
+              class="rounded-circle bg-white shadow-1-strong d-flex align-items-center justify-content-center mb-4 mx-auto"
+              style="width: 150px; height: 150px;"><img
+                src="https://mdbootstrap.com/img/Photos/new-templates/animal-shelter/logo.png" height="70" alt=""
+                loading="lazy"></div>
+            <p class="text-center">Homless animal shelter The budgetary unit of the Capital City of Warsaw</p>
+            <ul class="list-unstyled d-flex flex-row justify-content-center">
+              <li><a class=" px-2" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                    fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
+                    <path
+                      d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z">
+                    </path>
+                  </svg></a></li>
+              <li><a class=" px-2" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                    fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16">
+                    <path
+                      d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z">
+                    </path>
+                  </svg></a></li>
+              <li><a class=" ps-2" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                    fill="currentColor" class="bi bi-youtube" viewBox="0 0 16 16">
+                    <path
+                      d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.007 2.007 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.007 2.007 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31.4 31.4 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.007 2.007 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A99.788 99.788 0 0 1 7.858 2h.193zM6.4 5.209v4.818l4.157-2.408L6.4 5.209z">
+                    </path>
+                  </svg></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="text-center p-3 d-flex pt-0">
+        <div class="w-25">
+          <div class="container mw-100 mt-0 mb-2 p-0">
+            <footer class=" text-center text-lg-start  w-100 ">
+              <div class="text-center p-3 pt-0 container"><img
+                  src="/static/media/credit-card-logo-clipart.f0a864853b6b4e31b14d.png" alt="security" class=""
+                  style="max-width: 200px;">
+                <p class="f-size-12 py-3">© 2009-2023 bannerbuzz.com All rights reserved.</p>
+              </div>
+            </footer>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>

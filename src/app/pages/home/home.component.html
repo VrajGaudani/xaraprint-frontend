@@ -1,0 +1,610 @@
+<!-- top selling product  -->
+<div class="w-cm bb_top_selling-main">
+  <h3 class="all-titles text-center mx-auto my-4 w-cm">Top Selling Products</h3>
+  <div class="bb_top_selling d-flex flex-wrap justify-content-center">
+    <a *ngFor="let item of bestSellings" [routerLink]="['/product-details',item._id]">
+      <div><img [src]="item?.product_images?.[0]" alt="img1"></div>
+      <p>{{ item?.productname }}</p>
+    </a>
+  </div>
+</div>
+
+<div class="w-100 py-5" style="background-color: rgba(239, 40, 0, 0.1);">
+  <h3 class="all-titles text-center mx-auto mb-4 w-cm">Most Loved Products</h3>
+  <ngx-slick-carousel [config]="slideConfigForML" class="carousel">
+    <div ngxSlickItem *ngFor="let item of mostLoved" class="slide">
+      <div class="card-body d-flex p-2 most-loved-card" [routerLink]="['/product-details',item._id]">
+        <div class="img-container w-35 overflow-hidden"><img [src]="item?.product_images?.[0]" alt="card-img">
+        </div>
+        <div class="d-flex flex-wrap align-items-center pl-3 w-75">
+          <h5 class="card-title text-left mb-0 f-size-18 fw-bold">{{item?.productname}}</h5>
+          <div class="w-100">
+            <p class="mb-2 text-left fw-bold card-text"><span class="test-dec fw-normal">Starts at
+              </span>${{item?.price}}
+            </p>
+            <div class="d-flex align-items-center justify-content-center w-fit-content"><img
+                src="assets/images/star.svg" alt="star"><img src="assets/images/star.svg" alt="star"><img
+                src="assets/images/star.svg" alt="star"><img src="assets/images/star.svg" alt="star"><img
+                src="assets/images/half-start.svg" alt="star"><span class="ms-1 f-size-14">({{item?.rating}}/5)</span>
+            </div>
+          </div><a href="javascript:void(0)" [routerLink]="['/product-details',item._id]"
+            class="d-flex card-title align-items-center px-3 py-2 justify-content-around w-fit-content text-light bg-blue-btn"><span
+              class="pr-2 f-size-16">View Details</span> <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+              fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+              <path fill-rule="evenodd"
+                d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z">
+              </path>
+            </svg></a>
+        </div>
+      </div>
+    </div>
+  </ngx-slick-carousel>
+</div>
+
+<!-- most loved products  -->
+<!-- <div class="w-100 py-5" style="background-color: rgba(239, 40, 0, 0.1);">
+  <h3 class="all-titles text-center mx-auto mb-4 w-cm">Most Loved Products</h3>
+  <div class="w-100 px-3 w-cm">
+    <div class="swiper swiper-initialized swiper-horizontal swiper-backface-hidden mySwiper py-3 height-fitcontant">
+      <div class="swiper-wrapper">
+        <div class="slider-container">
+          <div class="slider" [style.transform]="'translateX(' + (-currentIndexML * 100 / itemsPerViewML) + '%)'">
+            <div class="" *ngFor="let item of mostLoved">
+              <div class="swiper-slide swiper-slide-active" style="width: 457px; margin-right: 20px;">
+                <div class="col-sm-12 border p-0 bg-light bb_most_love_product">
+                  <div class="card-body d-flex p-2 most-loved-card" [routerLink]="['/product-details',item._id]">
+                    <div class="img-container w-35 overflow-hidden"><img [src]="item?.product_images?.[0]"
+                        alt="card-img">
+                    </div>
+                    <div class="d-flex flex-wrap align-items-center pl-3 w-75">
+                      <h5 class="card-title text-left mb-0 f-size-18 fw-bold">{{item?.productname}}</h5>
+                      <div class="w-100">
+                        <p class="mb-2 text-left fw-bold card-text"><span class="test-dec fw-normal">Starts at
+                          </span>${{item?.price}}
+                        </p>
+                        <div class="d-flex align-items-center justify-content-center w-fit-content"><img
+                            src="assets/images/star.svg" alt="star"><img src="assets/images/star.svg" alt="star"><img
+                            src="assets/images/star.svg" alt="star"><img src="assets/images/star.svg" alt="star"><img
+                            src="assets/images/half-start.svg" alt="star"><span
+                            class="ms-1 f-size-14">({{item?.rating}}/5)</span></div>
+                      </div><a href="javascript:void(0)"
+                        class="d-flex card-title align-items-center px-3 py-2 justify-content-around w-fit-content text-light bg-blue-btn"><span
+                          class="pr-2 f-size-16">View Details</span> <svg xmlns="http://www.w3.org/2000/svg" width="22"
+                          height="22" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd"
+                            d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z">
+                          </path>
+                        </svg></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="swiper-button-prev" (click)="prevSlideMostLoved()"></div>
+      <div class="swiper-button-next" (click)="nextSlideMostLoved()"></div>
+    </div>
+  </div>
+</div> -->
+
+<!-- product by category  -->
+<div class="w-100 select-product-box py-5">
+  <div class="w-cm px-5 text-center">
+    <h3 class="all-titles px-4 offer-title" style="font-size: 29px;">Offering Custom Banners</h3>
+  </div>
+  <div class="w-cm w-100 d-flex justify-content-center align-items-center px-4 pt-4 flex-wrap">
+    <h5 class="d-inline m-2">Select Your Product</h5>
+    <select aria-label="Default select example" class="d-inline w-15 m-2 form-select" (change)="changeCategory($event)">
+      <option [defaultSelected]="true" disabled>Category</option>
+      <option *ngFor="let item of mainCategory" [value]="item?._id">{{item?.name}}</option>
+    </select>
+    <select aria-label="Default select example" class="d-inline w-15 m-2 form-select" [(ngModel)]="subCatValue"
+      (change)="changeSubCategory($event)">
+      <option [defaultSelected]="true" disabled value="0">Sub-category</option>
+      <option *ngFor="let item of subCategory" [value]="item?._id">{{item?.name}}</option>
+    </select>
+    <h6 class="w-100 text-center mt-4 mb-0">Found <b>{{customeBannerList?.length}} Banners</b> for your selection</h6>
+    <!-- <div class="swiper swiper-initialized swiper-horizontal swiper-backface-hidden mySwiper p-5"
+      style="height: fit-content;">
+      <div class="swiper-wrapper">
+        <div class="slider-container">
+          <div class="slider" [style.transform]="'translateX(' + (-currentIndexCB * 100 / itemsPerViewCB) + '%)'">
+            <div class="" *ngFor="let item of customeBannerList">
+              <div class="swiper-slide" style="height: fit-content; width: 287.25px; margin-right: 50px;">
+                <div class="col-sm-12 bb_custom_banners border p-0">
+                  <div class="card-body d-flex flex-wrap justify-content-center select-product-box-body"
+                    [routerLink]="['/product-details',item._id]">
+                    <div class="img-container w-100"><img [src]="item?.product_images?.[0]" alt="card-img">
+                    </div>
+                    <div class="pb-4 d-flex flex-wrap align-items-center w-100 justify-content-center">
+                      <h5 class="card-title text-center mb-0 p-2 f-size-18 fw-bold mt-3">{{item?.productname}}</h5>
+                      <div class="w-100 p-2">
+                        <div class="d-flex align-items-center justify-content-center w-50 mx-auto"><img
+                            src="assets/images/star.svg" alt="star"><img src="assets/images/star.svg" alt="star"><img
+                            src="assets/images/star.svg" alt="star"><img src="assets/images/star.svg" alt="star"><img
+                            src="assets/images/half-start.svg" alt="star"><span
+                            class="ms-1 font-weight-light f-size-14">{{item?.rating}}</span></div>
+                        <p class="text-center p-2 f-size-16 card-text"><span class="test-dec ">Starts at
+                          </span>${{item?.price}}</p>
+                      </div><a
+                        class="d-flex card-title align-items-center px-3 py-2 justify-content-around w-fit-content text-light bg-blue-btn"><span
+                          class="pr-2 f-size-16">Customize</span> <svg xmlns="http://www.w3.org/2000/svg" width="22"
+                          height="22" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd"
+                            d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z">
+                          </path>
+                        </svg></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="swiper-button-prev" (click)="prevSlideCustomeBanner()"></div>
+      <div class="swiper-button-next" (click)="nextSlideCustomeBanner()"></div>
+    </div> -->
+
+    <ngx-slick-carousel [config]="slideConfig" class="carousel">
+      <div ngxSlickItem *ngFor="let item of customeBannerList" class="slide">
+        <div class="col-sm-12 bb_custom_banners border p-0">
+          <div class="card-body d-flex flex-wrap justify-content-center select-product-box-body"
+            [routerLink]="['/product-details',item._id]">
+            <div class="img-container w-100"><img [src]="item?.product_images?.[0]" alt="card-img">
+            </div>
+            <div class="pb-4 d-flex flex-wrap align-items-center w-100 justify-content-center">
+              <h5 class="card-title text-center mb-0 p-2 f-size-18 fw-bold mt-3">{{item?.productname}}</h5>
+              <div class="w-100 p-2">
+                <div class="d-flex align-items-center justify-content-center w-50 mx-auto"><img
+                    src="assets/images/star.svg" alt="star"><img src="assets/images/star.svg" alt="star"><img
+                    src="assets/images/star.svg" alt="star"><img src="assets/images/star.svg" alt="star"><img
+                    src="assets/images/half-start.svg" alt="star"><span
+                    class="ms-1 font-weight-light f-size-14">{{item?.rating}}</span></div>
+                <p class="text-center p-2 f-size-16 card-text"><span class="test-dec ">Starts at
+                  </span>${{item?.price}}</p>
+              </div><a
+                class="d-flex card-title align-items-center px-3 py-2 justify-content-around w-fit-content text-light bg-blue-btn"><span
+                  class="pr-2 f-size-16">Customize</span> <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+                  fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd"
+                    d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z">
+                  </path>
+                </svg></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ngx-slick-carousel>
+  </div>
+</div>
+
+
+<div class="w-100 border rounded-30 my-5 w-cm p-3 px-5 text-center">
+  <div class="d-flex justify-content-between mx-auto py-3 px-2 way-to-get-section">
+    <div class="d-flex align-item-center design-template-sec"><img src="assets/images/web-design.png" alt="designPng"
+        class="ways-png-width">
+      <div class="p-2"><span class="font-weight-bold d-block">Design Template</span>
+        <p class="mb-0 d-inline">Professionally Designed</p>
+      </div>
+    </div>
+    <div class="d-flex align-item-center design-template-sec"><img src="assets/images/upload.png" alt="uploadPng"
+        class="ways-png-width">
+      <div class="p-2"><span class="font-weight-bold d-block">Upload Artwork</span>
+        <p class="mb-0 d-inline">Perfect Print</p>
+      </div>
+    </div>
+    <div class="d-flex align-item-center design-template-sec"><img src="assets/images/candidate.png" alt="hirePng"
+        class="ways-png-width">
+      <div class="p-2"><span class="font-weight-bold d-block">Hire a Designer</span>
+        <p class="mb-0 d-inline">Starts <b> $9.99</b></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="w-100 text-center">
+  <h3 class="text-center all-titles w-100">Our Best Sellers</h3><span class="text-center w-100 sub-gray-text">Boost
+    Sales with Top-Charting Categories</span>
+</div>
+
+<div class="my-5 d-flex flex-wrap justify-content-around w-cm">
+  <div class="w-18 cursor-pointer product-box my-3" *ngFor="let item of mainCategory">
+    <a [routerLink]="['/product-list', item.slug]" [queryParams]="{ cat_url: item._id }">
+      <div class="border rounded-30 product-img-box">
+        <img [src]="item?.image" alt="alt" class="w-100 h-100 object-fit-contain rounded-30">
+      </div>
+      <p class="text-center text-dark py-3 f-size-18 mb-0 product-label">{{item?.name}}</p>
+    </a>
+  </div>
+</div>
+
+
+<div class="w-100 d-flex justify-content-around poster-box my-5 w-cm flex-wrap">
+  <div class="col-6 px-3">
+    <div class="img-container w-100 h-100">
+      <img src="assets/images/poster-1.jpg" alt="poster"
+        class="w-100 h-100 object-fit-cover rounded-30 overflow-hidden cursor-pointer mb-2">
+    </div>
+  </div>
+  <div class="col-6 px-3">
+    <div class="img-container w-100 h-100">
+      <img src="assets/images/poster-2.jpg" alt="poster"
+        class="w-100 h-100 object-fit-cover mh-100 rounded-30 overflow-hidden cursor-pointer">
+    </div>
+  </div>
+</div>
+
+<div class="w-cm px-5 d-flex justify-content-between align-items-center">
+  <div>
+    <h3 class="all-titles mt-3">Customer Picks</h3><span class="text-center sub-gray-text">Explore Our Most Popular
+      Products</span>
+  </div>
+  <div class="">
+    <button type="button" [routerLink]="['/product-list']"
+      class="btn btn-outline-primary bg-orange border-0 text-light shop-now-btn" style="padding: 10px 20px;">View
+      All</button>
+  </div>
+</div>
+
+
+<!-- customer picks  -->
+<div class="w-cm">
+  <!-- <div class="swiper swiper-initialized swiper-horizontal swiper-backface-hidden mySwiper py-5 px-5"
+    style="height: fit-content;">
+    <div class="swiper-wrapper">
+      <div class="slider-container">
+        <div class="slider" [style.transform]="'translateX(' + (-currentIndexMP * 100 / itemsPerViewMP) + '%)'">
+          <div class="slide px-4" *ngFor="let item of mostPopular">
+            <div class="swiper-slide">
+              <div class="cursor-pointer product-h-box" [routerLink]="['/product-details',item._id]">
+                <div class="img-container card-img-box w-100">
+                  <img [src]="item?.product_images?.[0]" alt="alt" class="w-100">
+                </div>
+                <div class="py-3 px-2">
+                  <p class="text-center f-size-18 px-3 mb-0 product-label text-capitalize">{{item?.productname}}</p>
+                  <div class="d-flex justify-content-center align-items-center gap-2 mt-2"><span
+                      class="f-size-18 font-weight-bolder d-block text-center"><strong>
+                        ${{item?.price}}</strong></span><span
+                      class="f-size-14 sub-gray-text text-decoration-line-through">$7.59</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="swiper-button-prev" (click)="prevSlideMostPopular()"></div>
+    <div class="swiper-button-next" (click)="nextSlideMostPopular()"></div>
+  </div> -->
+
+  <ngx-slick-carousel [config]="slideConfig" class="carousel">
+    <div ngxSlickItem *ngFor="let item of mostPopular" class="slide">
+      <div class="cursor-pointer product-h-box" [routerLink]="['/product-details',item._id]">
+        <div class="img-container card-img-box w-100">
+          <img [src]="item?.product_images?.[0]" alt="alt" class="w-100">
+        </div>
+        <div class="py-3 px-2">
+          <p class="text-center f-size-18 px-3 mb-0 product-label text-capitalize">{{item?.productname}}</p>
+          <div class="d-flex justify-content-center align-items-center gap-2 mt-2"><span
+              class="f-size-18 font-weight-bolder d-block text-center"><strong>
+                ${{item?.price}}</strong></span><span
+              class="f-size-14 sub-gray-text text-decoration-line-through">$7.59</span></div>
+        </div>
+      </div>
+    </div>
+  </ngx-slick-carousel>
+
+  <!-- new arrival  -->
+  <div class="w-100 py-2 " style="background: rgb(247, 247, 255);">
+    <div class="w-cm px-5 d-flex justify-content-between align-items-center">
+      <div>
+        <h3 class="all-titles mt-3">New Arrivals</h3><span class="sub-gray-text">Check Out Our Latest Products</span>
+      </div>
+      <div class="">
+        <button type="button" [routerLink]="['/product-list']"
+          class="btn btn-outline-primary bg-orange border-0 text-light shop-now-btn" style="padding: 10px 20px;">View
+          All
+        </button>
+      </div>
+    </div>
+    <div class="w-cm">
+      <!-- <div class="swiper swiper-initialized swiper-horizontal swiper-backface-hidden mySwiper py-5 px-5"
+        style="height: fit-content;">
+        <div class="swiper-wrapper">
+          <div class="slider-container">
+            <div class="slider" [style.transform]="'translateX(' + (-currentIndex * 100 / itemsPerView) + '%)'">
+              <div class="slide px-4" *ngFor="let item of products">
+                <div class="swiper-slide">
+                  <div class="product-h-box"  [routerLink]="['/product-details',item._id]">
+                    <div class="img-container w-100">
+                      <img [src]="item?.product_images?.[0]" alt="alt" class="w-100">
+                    </div>
+                    <div class="py-3 px-2">
+                      <p class="text-center f-size-18 px-3 mb-0 product-label">{{ item.productname }}</p>
+                      <div class="d-flex justify-content-center align-items-center gap-2 mt-2">
+                        <span class="f-size-18 font-weight-bolder d-block text-center">
+                          <strong> {{ item.price | currency }} </strong>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-button-prev prev" (click)="prevSlide()"></div>
+        <div class="swiper-button-next next" (click)="nextSlide()"></div>
+      </div> -->
+    </div>
+  </div>
+
+  <div class="row justify-content-around my-5 w-cm banner-poster-box">
+    <div class="col-md-6 mb-4" *ngFor="let item of blogBannerList">
+      <!-- <div class="poster-side1 d-flex flex-wrap"><strong class="f-size-28 w-100">Banners</strong>
+        <p class="f-size-28 mb-0 w-100">Starting at <strong>$2.25</strong></p><button type="button"
+          class="my-3 height-fitcontant btn btn-dark">Explore More</button>
+      </div> -->
+      <a [href]="item?.redirectLink" target="_blank" class="w-100 banner-poster rounded-30 overflow-hidden d-block">
+        <img [src]="item?.image" alt="poster" class="w-100 h-100 object-fit-cover">
+      </a>
+    </div>
+  </div>
+
+  <div class="w-100 d-flex flex-wrap justify-content-around my-3 w-cm px-2 ">
+    <div class="w-49 rounded-30 d-flex flex-wrap review-container" style="background-color: rgb(255, 253, 236);">
+      <h3 class="text-center w-100 mt-5 font-weight-bold d-block">Reviews &amp; Ratings</h3>
+      <div class="d-flex flex-wrap justify-content-around w-90 mx-auto my-5">
+        <div class="d-flex justify-content-center align-items-center p-2 mw-100 gap-3 review-main-box"
+          style="background-color: rgb(255, 242, 205); border-radius: 55px;"><img
+            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFsAAABbCAYAAAAcNvmZAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDoyMEI3OTkyRjE2MUYxMUVDOURFQkQ1QTFFREIyMkRERCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDoyMEI3OTkzMDE2MUYxMUVDOURFQkQ1QTFFREIyMkRERCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjIwQjc5OTJEMTYxRjExRUM5REVCRDVBMUVEQjIyREREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjIwQjc5OTJFMTYxRjExRUM5REVCRDVBMUVEQjIyREREIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+lf/+jAAADr9JREFUeNrsnQmMFFUa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"
+            alt="reviews" class="height-fitcontant review-me-60" style="width: 80px;">
+          <div class="w-33 review-me-60"><strong class="f-size-20 w-100 d-block">Banners</strong><span class="">Customer
+              Reviews</span></div>
+          <div class="review-rating-star" style="width: 240px;">
+            <div class="d-flex align-items-center justify-content-center w-50 d-block"><span class="ms-1"><strong
+                  class="f-size-20 w-100">4.5</strong></span><img src="assets/images/star.svg" alt="star"><img
+                src="assets/images/star.svg" alt="star"><img src="assets/images/star.svg" alt="star"><img
+                src="assets/images/star.svg" alt="star"><img src="assets/images/half-start.svg" alt="star"></div><span
+              class="">Customer Reviews</span>
+          </div>
+        </div>
+        <div class="w-100 d-flex mt-5 justify-content-center customers-review-box">
+          <div class="w-30 d-flex">
+            <div style="width: 65px; height: 65px;">
+              <div data-test-id="CircularProgressbarWithChildren">
+                <div style="position: relative; width: 100%; height: 100%;"><svg class="CircularProgressbar "
+                    viewBox="0 0 100 100" data-test-id="CircularProgressbar">
+                    <path class="CircularProgressbar-trail" d="
+      M 50,50
+      m 0,-46
+      a 46,46 0 1 1 0,92
+      a 46,46 0 1 1 0,-92
+    " stroke-width="8" fill-opacity="0"
+                      style="stroke: transparent; stroke-dasharray: 289.027px, 289.027px; stroke-dashoffset: 0px;">
+                    </path>
+                    <path class="CircularProgressbar-path" d="
+      M 50,50
+      m 0,-46
+      a 46,46 0 1 1 0,92
+      a 46,46 0 1 1 0,-92
+    " stroke-width="8" fill-opacity="0"
+                      style="stroke: rgb(90, 157, 121); stroke-dasharray: 289.027px, 289.027px; stroke-dashoffset: 98.269px;">
+                    </path>
+                  </svg>
+                  <div data-test-id="CircularProgressbarWithChildren__children"
+                    style="position: absolute; width: 100%; height: 100%; margin-top: -100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                    <div style="font-size: 16px; margin-top: 0px; color: rgb(90, 157, 121);"><strong>66%</strong></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h5 class="mb-0 fw-bold ms-2 review-box-title">Customers Support</h5>
+          </div>
+          <div class="w-30 d-flex">
+            <div style="width: 65px; height: 65px;">
+              <div data-test-id="CircularProgressbarWithChildren">
+                <div style="position: relative; width: 100%; height: 100%;"><svg class="CircularProgressbar "
+                    viewBox="0 0 100 100" data-test-id="CircularProgressbar">
+                    <path class="CircularProgressbar-trail" d="
+      M 50,50
+      m 0,-46
+      a 46,46 0 1 1 0,92
+      a 46,46 0 1 1 0,-92
+    " stroke-width="8" fill-opacity="0"
+                      style="stroke: transparent; stroke-dasharray: 289.027px, 289.027px; stroke-dashoffset: 0px;">
+                    </path>
+                    <path class="CircularProgressbar-path" d="
+      M 50,50
+      m 0,-46
+      a 46,46 0 1 1 0,92
+      a 46,46 0 1 1 0,-92
+    " stroke-width="8" fill-opacity="0"
+                      style="stroke: rgb(90, 157, 121); stroke-dasharray: 289.027px, 289.027px; stroke-dashoffset: 98.269px;">
+                    </path>
+                  </svg>
+                  <div data-test-id="CircularProgressbarWithChildren__children"
+                    style="position: absolute; width: 100%; height: 100%; margin-top: -100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                    <div style="font-size: 16px; margin-top: 0px; color: rgb(90, 157, 121);"><strong>66%</strong></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h5 class="mb-0 d-inline fw-bold ms-2 review-box-title">Customers Review</h5>
+          </div>
+          <div class="w-30 d-flex">
+            <div style="width: 65px; height: 65px;">
+              <div data-test-id="CircularProgressbarWithChildren">
+                <div style="position: relative; width: 100%; height: 100%;"><svg class="CircularProgressbar "
+                    viewBox="0 0 100 100" data-test-id="CircularProgressbar">
+                    <path class="CircularProgressbar-trail" d="
+      M 50,50
+      m 0,-46
+      a 46,46 0 1 1 0,92
+      a 46,46 0 1 1 0,-92
+    " stroke-width="8" fill-opacity="0"
+                      style="stroke: transparent; stroke-dasharray: 289.027px, 289.027px; stroke-dashoffset: 0px;">
+                    </path>
+                    <path class="CircularProgressbar-path" d="
+      M 50,50
+      m 0,-46
+      a 46,46 0 1 1 0,92
+      a 46,46 0 1 1 0,-92
+    " stroke-width="8" fill-opacity="0"
+                      style="stroke: rgb(90, 157, 121); stroke-dasharray: 289.027px, 289.027px; stroke-dashoffset: 98.269px;">
+                    </path>
+                  </svg>
+                  <div data-test-id="CircularProgressbarWithChildren__children"
+                    style="position: absolute; width: 100%; height: 100%; margin-top: -100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                    <div style="font-size: 16px; margin-top: 0px; color: rgb(90, 157, 121);"><strong>66%</strong></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h5 class="mb-0 d-inline fw-bold ms-2 review-box-title">Repeat Customers</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="w-49 rounded-30 review-container" style="background-color: rgb(242, 242, 242);">
+      <h3 class="text-center w-100 mt-5 font-weight-bold">Our customers speak for us!</h3>
+      <div class="w-100">
+        <div class="swiper swiper-initialized swiper-horizontal swiper-backface-hidden mySwiper">
+          <div class="swiper-wrapper" style="transition-duration: 300ms; transform: translate3d(-699px, 0px, 0px);">
+            <div class="swiper-slide swiper-slide-prev" style="width: 699px;">
+              <p class="mb-0 w-75 mx-auto text-center mt-4">I comeback to those who provide outstanding quality and this
+                is one of those companies that go above and beyond for you. Easy designing and the codes they provide
+                for
+                you to save even more is awesome. I'll definitely be coming back again! Thanks for being great to me!
+              </p>
+              <div class="d-flex height-fitcontant w-45 mx-auto my-5 justify-content-center"><img
+                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFsAAABbCAYAAAAcNvmZAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDoyMEI3OTkyRjE2MUYxMUVDOURFQkQ1QTFFREIyMkRERCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDoyMEI3OTkzMDE2MUYxMUVDOURFQkQ1QTFFREIyMkRERCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjIwQjc5OTJEMTYxRjExRUM5REVCRDVBMUVEQjIyREREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjIwQjc5OTJFMTYxRjExRUM5REVCRDVBMUVEQjIyREREIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+lf/+jAAADr9JREFUeNrsnQmMFFUa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"
+                  alt="reviews" class="me-3" style="width: 55px;">
+                <div class=""><strong class="f-size-20 w-100 d-block ms-1 text-left">Banners</strong>
+                  <div class="d-flex align-items-center text-left justify-content-start w-50 d-block"><img
+                      src="assets/images/star.svg" alt="star"><img src="assets/images/star.svg" alt="star"><img
+                      src="assets/images/star.svg" alt="star"><img src="assets/images/star.svg" alt="star"><img
+                      src="assets/images/star.svg" alt="star"><span class="ms-1 me-2">5.0</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="swiper-slide swiper-slide-active" style="width: 699px;">
+              <p class="mb-0 w-75 mx-auto text-center mt-4">I comeback to those who provide outstanding quality and this
+                is one of those companies that go above and beyond for you. Easy designing and the codes they provide
+                for
+                you to save even more is awesome. I'll definitely be coming back again! Thanks for being great to me!
+              </p>
+              <div class="d-flex height-fitcontant w-45 mx-auto my-5 justify-content-center"><img
+                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFsAAABbCAYAAAAcNvmZAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDoyMEI3OTkyRjE2MUYxMUVDOURFQkQ1QTFFREIyMkRERCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDoyMEI3OTkzMDE2MUYxMUVDOURFQkQ1QTFFREIyMkRERCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjIwQjc5OTJEMTYxRjExRUM5REVCRDVBMUVEQjIyREREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjIwQjc5OTJFMTYxRjExRUM5REVCRDVBMUVEQjIyREREIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+lf/+jAAADr9JREFUeNrsnQmMFFUa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"
+                  alt="reviews" class="me-3" style="width: 55px;">
+                <div class=""><strong class="f-size-20 w-100 d-block ms-1 text-left">Banners</strong>
+                  <div class="d-flex align-items-center text-left justify-content-start w-50 d-block"><img
+                      src="assets/images/star.svg" alt="star"><img src="assets/images/star.svg" alt="star"><img
+                      src="assets/images/star.svg" alt="star"><img src="assets/images/star.svg" alt="star"><img
+                      src="assets/images/star.svg" alt="star"><span class="ms-1 me-2">5.0</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="swiper-slide swiper-slide-next" style="width: 699px;">
+              <p class="mb-0 w-75 mx-auto text-center mt-4">I comeback to those who provide outstanding quality and this
+                is one of those companies that go above and beyond for you. Easy designing and the codes they provide
+                for
+                you to save even more is awesome. I'll definitely be coming back again! Thanks for being great to me!
+              </p>
+              <div class="d-flex height-fitcontant w-45 mx-auto my-5 justify-content-center"><img
+                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFsAAABbCAYAAAAcNvmZAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDoyMEI3OTkyRjE2MUYxMUVDOURFQkQ1QTFFREIyMkRERCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDoyMEI3OTkzMDE2MUYxMUVDOURFQkQ1QTFFREIyMkRERCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjIwQjc5OTJEMTYxRjExRUM5REVCRDVBMUVEQjIyREREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjIwQjc5OTJFMTYxRjExRUM5REVCRDVBMUVEQjIyREREIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+lf/+jAAADr9JREFUeNrsnQmMFFUa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"
+                  alt="reviews" class="me-3" style="width: 55px;">
+                <div class=""><strong class="f-size-20 w-100 d-block ms-1 text-left">Banners</strong>
+                  <div class="d-flex align-items-center text-left justify-content-start w-50 d-block"><img
+                      src="assets/images/star.svg" alt="star"><img src="assets/images/star.svg" alt="star"><img
+                      src="assets/images/star.svg" alt="star"><img src="assets/images/star.svg" alt="star"><img
+                      src="assets/images/star.svg" alt="star"><span class="ms-1 me-2">5.0</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal">
+            <span class="swiper-pagination-bullet"></span><span
+              class="swiper-pagination-bullet swiper-pagination-bullet-active"></span><span
+              class="swiper-pagination-bullet"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="w-100 my-3 text-right w-cm">
+    <h3 class="all-titles text-center w-100 mt-3 mx-auto">Check out our Blog For Printing Tips &amp; Suggestions</h3>
+    <div class="w-100 d-flex my-4 justify-content-around ">
+
+      <ng-container *ngFor="let item of allBlogs">
+        <div class="cursor-pointer text-center w-24">
+          <div class="text-center pt-3"><img height="250" [src]="item.image" alt="alt" class="w-90 rounded-30"></div>
+          <p
+            class="text-left pt-3 pb-1 px-1 f-size-16 mb-0 product-label w-90 mx-auto sub-gray-text font-weight-bolder">
+            {{item.title}}</p>
+          <p class="w-90 mb-0 f-size-14 text-left mx-auto px-1 font-weight-lighter light-grey text-clip">
+            {{item.description}}
+          </p>
+          <div class="w-90 d-flex flex-wrap justify-content-between align-items-center mx-auto px-1 my-2 py-2">
+            <a [routerLink]="['/blog-details', item._id]" routerLinkActive="router-link-active">
+              <button type="button" class="btn btn-outline-primary bg-orange border-0 text-light shop-now-btn"
+                style="padding: 10px 20px;">
+                Read more
+              </button>
+            </a>
+            <span class="f-size-12 dattee">{{item.updatedAt | date:'longDate'}}</span>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="w-100 text-right p-4"><button type="button"
+        class="btn btn-outline-primary bg-orange border-0 text-light shop-now-btn" style="padding: 10px 20px;"
+        [routerLink]="['/blogs']" routerLinkActive="router-link-active">View
+        All</button></div>
+  </div>
+
+
+
+  <div class="w-100 text-left w-cm">
+    <h5 class="pl-3 w-100 mt-3 f-size-20">Check out our Blog For Printing Tips &amp; Suggestions</h5>
+    <p class="pl-3 w-100">BannerBuzz is a leading e-commerce company that is dedicated to making your brand/business
+      visible with quality printed signage solutions. We aspire to be the most customer-focused organization and are
+      proud
+      to be acknowledged every day by our customers for our customized products. Customers can buy and showcase their
+      products in any event in a grandeur way and use the best marketing materials that aid in creatively promoting
+      their
+      brand. To name a few, customized banners are very helpful for directing customers in HoReCa (Hotel, Restaurant,
+      Catering) establishments, as well as for greeting and directing patients and visitors in hospitals. You can
+      customize our products as per your choice that resonates with the brand/event and get them delivered to your</p>
+  </div>
+
+  <div class="w-100 text-center d-flex justify-content-around p-3 w-cm flex-wrap">
+    <div class="w-33 my-3 px-3 quality-box"><img src="assets/images/price-tag (1).png" alt="alt" class=""
+        style="width: 55px;"><span class="f-size-20 font-weight-bold pl-3">Best Price</span>
+      <p class="pt-3">BannerBuzz offers the industry’s best prices while using only the highest</p>
+    </div>
+    <div class="w-33 my-3 px-3 design-center-div quality-box"><img src="assets/images/web-design.png" alt="alt" class=""
+        style="width: 55px;"><span class="f-size-20 font-weight-bold pl-3">Free Design Proof</span>
+      <p class="pt-3">Our industry-leading designers provide free proofs so you can be sure</p>
+    </div>
+    <div class="w-33 px-3 my-3 quality-box"><img src="assets/images/badge (1).png" alt="alt" class=""
+        style="width: 55px;"><span class="f-size-20 font-weight-bold pl-3">Best Quality</span>
+      <p class="pt-3">If you’re not satisfied, we’re not satisfied. We’ll reprint or refund your order - guaranteed</p>
+    </div>
+  </div>
+
+  <div class="w-100 text-center " style="background-color: rgb(67, 131, 184); color: white;">
+    <div class="w-100 text-center d-flex align-items-center justify-content-evenly p-3 Subscribe-box w-cm">
+      <p class="w-33">Subscribe to our newsletter and get 20% OFF on Your First Order + Free Shipping.</p>
+      <input type="text" [(ngModel)]="email" name="email" class="w-45 height-fitcontant form-control">
+      <button type="button" class="height-fitcontant px-2 my-2 btn btn-light" (click)="submit()">SUBSCRIBE</button>
+    </div>
+  </div>

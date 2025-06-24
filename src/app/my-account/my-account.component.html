@@ -1,0 +1,619 @@
+<div class="my-5 w-90 d-flex mx-auto justify-content-around">
+  <div class="w-15 d-flex flex-wrap">
+    <div class="w-100">
+      <div class="w-100 border-1 d-flex flex-wrap justify-content-center mt-2 px-3 py-4 cursor-pointer dashboard-shadow"
+        (click)="changeTab(1)" [ngClass]="{'active-box': tabType == '1'}">
+        <img src="assets/images/dashboard-svgrepo-com.svg" alt="dashboardIcon" class="w-18">
+        <p class="w-100 text-center py-1 mb-0">Dashboard</p>
+      </div>
+      <div class="w-100 border-1 d-flex flex-wrap justify-content-center mt-2 px-3 py-4 cursor-pointer dashboard-shadow"
+        (click)="changeTab(2)" [ngClass]="{'active-box': tabType == '2'}">
+        <img src="assets/images/profile-1341-svgrepo-com.svg" alt="dashboardIcon" class="w-18">
+        <p class="w-100 text-center py-1 mb-0">Profile</p>
+      </div>
+      <div class="w-100 border-1 d-flex flex-wrap justify-content-center mt-2 px-3 py-4 cursor-pointer dashboard-shadow"
+        (click)="changeTab(3)" [ngClass]="{'active-box': tabType == '3'}">
+        <img src="assets/images/address-book-svgrepo-com.svg" alt="dashboardIcon" class="w-18">
+        <p class="w-100 text-center py-1 mb-0">Address Book</p>
+      </div>
+      <div class="w-100 border-1 d-flex flex-wrap justify-content-center mt-2 px-3 py-4 cursor-pointer dashboard-shadow"
+        (click)="changeTab(4)" [ngClass]="{'active-box': tabType == '4'}">
+        <img src="assets/images/cart-large-minimalistic-svgrepo-com.svg" alt="dashboardIcon" class="w-18"
+          style="fill: rgb(0, 0, 0);">
+        <p class="w-100 text-center py-1 mb-0">Orders</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-75" *ngIf="tabType == 1">
+
+    <div class="card-profile py-3">
+      <div class="media flex-wrap w-100"><img src="https://imgur.com/ZnxJ2SY.png" class="me-3">
+        <div class="media-body w-100 d-flex flex-wrap">
+          <h4 class="mt-2 mb-0 w-fit-content">Hey there, {{formObj?.firstname}} {{formObj?.lastname}}</h4>
+          <div class="d-flex flex-row align-text-center"><small
+              class="text-muted cursor-pointer me-3">{{formObj?.email}} </small></div>
+        </div>
+      </div>
+    </div>
+    <div class="w-100 d-flex my-4">
+      <div class="w-45 light-grey cursor-pointer main-order-box"><img
+          src="assets/images/cart-large-minimalistic-svgrepo-com.svg" alt="icons" class="w-35 me-2">{{orderArray.length
+        || 0}} Orders
+      </div>
+      <div class="w-45 light-grey cursor-pointer ms-2 main-order-box"><img src="assets/images/register-svgrepo-com.svg"
+          alt="icons" class="w-35 me-2">0 Quotes Requested</div>
+    </div>
+    <h2 class="text-left pt-3 mt-5 heading-color">Your Latest Choice</h2>
+    <p class="text-muted black-color light-grey text-left f-size-15 my-4 sub-gray-text">No order placed</p>
+    <h2 class="text-left pt-3 mt-5 heading-color">Addresses</h2>
+    <p class="text-muted black-color light-grey text-left f-size-15 my-4 sub-gray-text">No address placed</p>
+  </div>
+
+  <div class="w-75" *ngIf="tabType == 2">
+
+    <div class="card-profile py-3">
+      <div class="media flex-wrap w-100"><img src="https://imgur.com/ZnxJ2SY.png" class="me-3">
+        <div class="media-body w-100 d-flex flex-wrap">
+          <h4 class="mt-2 mb-0 w-fit-content">Hey there, {{formObj?.firstname}} {{formObj?.lastname}}</h4>
+
+          <div class="d-flex flex-row align-text-center"><small
+              class="text-muted cursor-pointer me-3">{{formObj?.email}} </small></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-70 py-5">
+      <ul class="mb-3 nav nav-tabs nav-fill" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane"
+            type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Edit Profile</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane"
+            type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Change My Password</button>
+        </li>
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab"
+          tabindex="0">
+          <div class="form-row mt-5">
+            <div class="form-group col-md-6 mb-3">
+              <label for="inputEmail4" class="mb-1">First Name*</label>
+              <input type="text" [(ngModel)]="formObj.firstname" name="firstname" class="form-control" id="inputEmail4">
+            </div>
+            <div class="form-group col-md-6 mb-3">
+              <label for="inputPassword4" class="mb-1">Last Name*</label>
+              <input type="text" [(ngModel)]="formObj.lastname" name="lastname" class="form-control">
+            </div>
+            <div class="form-group col-md-6 mb-3">
+              <label for="inputPassword4" class="mb-1">Cell Phone Number*</label>
+              <input type="text" [(ngModel)]="formObj.phone_no" name="phone_no" class="form-control">
+            </div>
+            <!-- <div class="form-check col-md-12 ms-3">
+              <input class="form-check-input" type="checkbox" id="flexCheckDefault" value="">
+              <label class="form-check-label f-size-14" for="flexCheckDefault">
+                I’d like to be updated via SMS/TEXT
+              </label>
+            </div>
+            <div class="form-check col-md-12 ms-3">
+              <input class="form-check-input" type="checkbox" id="flexCheckDefault" value="">
+              <label class="form-check-label f-size-14" for="flexCheckDefault">Change Email</label>
+            </div> -->
+            <div class="form-group col-md-6 mb-3"><label for="inputPassword4" class="mb-1">Email Address*</label>
+              <input type="text" [(ngModel)]="formObj.email" name="email" class="form-control">
+            </div>
+            <!-- <div class="form-group col-md-6 mt-3"><label for="inputPassword4">Current Password*</label>
+              <input type="password" [(ngModel)]="formObj.password" name="password" class="form-control">
+            </div> -->
+            <button type="submit" class="btn btn-primary px-4" (click)="updateUser('user')">OK SUBMIT</button>
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+          <div class="form-row mt-5">
+            <div class="form-group col-md-6 mb-3">
+              <label for="inputEmail4" class="mb-1">Current Password*</label>
+              <input type="password" class="form-control" [(ngModel)]="newPaasObj.old_pass" name="old_pass">
+            </div>
+            <div class="form-group col-md-6 mb-3">
+              <label for="inputPassword4" class="mb-1">New Password*</label>
+              <input type="password" class="form-control" [(ngModel)]="newPaasObj.new_pass" name="new_pass">
+            </div>
+            <div class="form-group col-md-6 mb-3">
+              <label for="inputPassword4" class="mb-1">Confirm Password*</label>
+              <input type="password" class="form-control" [(ngModel)]="newPaasObj.confirm_pass" name="confirm_pass">
+            </div>
+            <p class="text-left w-100 font-weight-bold f-size-14 mb-0">Password must meet the following requirements:
+            </p>
+            <p class="text-left f-size-12 sub-gray-text" style="display: list-item; margin-left: 15px;">Password must
+              have at least 6 characters.</p>
+          </div>
+          <button type="submit" class="btn btn-primary px-4" (click)="updatePassword()">Update Pass</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-75" *ngIf="tabType == 3">
+
+    <div class="card-profile py-3">
+      <div class="media flex-wrap w-100"><img src="https://imgur.com/ZnxJ2SY.png" class="me-3">
+        <div class="media-body w-100 d-flex flex-wrap">
+          <h4 class="mt-2 mb-0 w-fit-content">Hey there, {{formObj?.firstname}} {{formObj?.lastname}}</h4>
+
+          <div class="d-flex flex-row align-text-center"><small
+              class="text-muted cursor-pointer me-3">{{formObj?.email}} </small></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+
+      <!-- <div class="text-end mb-4">
+        <button class="btn btn-primary text-end" (click)="showModal('add')">
+          + Add More
+        </button>
+      </div> -->
+
+      <div class="text-center" *ngIf="!addressArray.length">
+        <h2>No address added yet</h2>
+      </div>
+
+      <div class="address-row row gap-10" *ngIf="addressArray.length > 0">
+        <div class="address-box">
+          <div class="add-new-card" (click)="showModal('add')">
+            <span class="h4">+</span>
+            <p>Add My New Address</p>
+          </div>
+        </div>
+
+        <div class="address-box position-relative p-0" *ngFor="let addr of addressArray">
+          <div class="address-card">
+            <div class="action-buttons">
+              <button class="btn btn-outline-secondary btn-small" (click)="showModal('Edit',addr)">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button class="btn btn-outline-danger btn-small" (click)="delete(addr?._id)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+            <h5>{{addr?.firstname}} {{addr?.lastname}}</h5>
+            <p>{{addr?.address}}<br>{{addr?.city}}<br>{{addr?.state}}, {{addr?.country}}, {{addr?.pincode}}<br>P:
+              {{addr?.phone_no}}</p>
+            <button *ngIf="addr?.isBilling" class="btn btn-light billing-btn mt-3">Billing</button>
+            <button *ngIf="addr?.isShipping" class="btn btn-light billing-btn mt-3">Shipping</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-75" *ngIf="tabType == 4">
+
+    <div class="card-profile py-3">
+      <div class="media flex-wrap w-100"><img src="https://imgur.com/ZnxJ2SY.png" class="me-3">
+        <div class="media-body w-100 d-flex flex-wrap">
+          <h4 class="mt-2 mb-0 w-fit-content">Hey there, {{formObj?.firstname}} {{formObj?.lastname}}</h4>
+
+          <div class="d-flex flex-row align-text-center"><small
+              class="text-muted cursor-pointer me-3">{{formObj?.email}} </small></div>
+        </div>
+      </div>
+    </div>
+
+
+    <ng-container *ngIf="!orderArray.length">
+      <h2 class="text-left pt-3 mt-5 heading-color">Orders</h2>
+      <p class="text-muted black-color light-grey text-left f-size-15 my-4 sub-gray-text">No order placed</p>
+    </ng-container>
+
+    <table class="table" *ngIf="addressArray.length">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Order Num</th>
+          <th scope="col">Status</th>
+          <th scope="col">Price</th>
+          <th scope="col">Name</th>
+          <th scope="col">Phone</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of orderArray; index as k">
+          <th scope="row">{{k+1}}</th>
+          <td>{{item?.order_id}}</td>
+          <td>{{item?.order_status}}</td>
+          <td>{{item?.price}}</td>
+          <td>{{item?.billing_address?.firstname}} {{item?.billing_address?.lastname}}</td>
+          <td>{{item?.billing_address?.phone_no}}</td>
+          <td class="pointer">
+            <span class="pointer underLine" (click)="showOrderModal('edit', item)">View</span>
+            <span class="pointer underLine" (click)="queryOrder(item, k, 'query')">Query</span>
+            <!-- <span class="pointer underLine" (click)="queryOrder(item, k, 'cancel')">Cancal Order</span> -->
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addressModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row g-3">
+            <input type="hidden" [ngModelOptions]="{standalone: true}" [(ngModel)]="addressObj._id">
+            <div class="col-sm-6">
+              <label for="firstName" class="form-label">First name</label>
+              <input type="text" name="firstname" [(ngModel)]="addressObj.firstname" class="form-control" id="firstName"
+                placeholder="Firstname">
+              <div class="invalid-feedback">Valid first name is required.</div>
+            </div>
+            <div class="col-sm-6">
+              <label for="lastName" class="form-label">Last name</label>
+              <input type="text" name="lastname" [(ngModel)]="addressObj.lastname" class="form-control" id="lastName"
+                placeholder="Lastname">
+              <div class="invalid-feedback">Valid last name is required.</div>
+            </div>
+            <div class="col-12">
+              <label for="email" class="form-label">Phone</label>
+              <input type="text" name="phone" [(ngModel)]="addressObj.phone_no" class="form-control" id="phone"
+                placeholder="phone no">
+              <div class="invalid-feedback">Please enter a valid email address for shipping updates.</div>
+            </div>
+
+            <div class="col-12">
+              <label for="address" class="form-label">Address</label>
+              <input type="text" name="address" [(ngModel)]="addressObj.address" class="form-control" id="address"
+                placeholder="address">
+              <div class="invalid-feedback">Please enter your shipping address.</div>
+            </div>
+            <div class="col-12">
+              <label for="city" class="form-label">City</label>
+              <input type="text" name="city" [(ngModel)]="addressObj.city" class="form-control" id="city"
+                placeholder="city">
+            </div>
+            <div class="col-md-4">
+              <label for="state" class="form-label">State</label>
+              <input type="text" name="state" [(ngModel)]="addressObj.state" class="form-control" id="state"
+                placeholder="state">
+              <div class="invalid-feedback">Please provide a valid state.</div>
+            </div>
+            <div class="col-md-5">
+              <label for="country" class="form-label">Country</label>
+              <input type="text" name="country" [(ngModel)]="addressObj.country" class="form-control" id="country"
+                placeholder="country">
+              <div class="invalid-feedback">Please provide a valid country.</div>
+            </div>
+            <div class="col-md-3">
+              <label for="Pincode" class="form-label">Pincode</label><input [(ngModel)]="addressObj.pincode"
+                name="Pincode" placeholder="Pincode" type="text" class="form-control" id="Pincode"
+                placeholder="Pincode">
+              <div class="invalid-feedback">Pincode required.</div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="addressObj.isBilling" name="billing"
+                  id="billing">
+                <label class="form-check-label" for="billing">
+                  Use this address for billing
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="addressObj.isShipping" name="shipping"
+                  id="shipping">
+                <label class="form-check-label" for="shipping">
+                  Use this address for shipping
+                </label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="submit()"
+          *ngIf="addressKeyType == 'Add a New '">Submit</button>
+        <button type="button" class="btn btn-primary" (click)="update()"
+          *ngIf="addressKeyType == 'Edit'">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="orderModalLabel">Order Info</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <form>
+          <div class="row mb-5">
+            <div class="mt-3 col-md-4">
+              <label>Order Number</label>
+              <input type="text" class="form-control" [disabled]="isDisable" [value]="orderObj?.order_id"
+                name="order_id" placeholder="Order">
+            </div>
+
+            <div class="mt-3 col-md-4">
+              <label>Order Status</label>
+              <input type="text" class="form-control" [disabled]="isDisable" [value]="orderObj?.order_status"
+                name="order_status" placeholder="order_status">
+            </div>
+
+            <div class="mt-3 col-md-4">
+              <label>Price</label>
+              <input type="text" class="form-control" [disabled]="isDisable" [value]="orderObj?.price" name="price"
+                placeholder="price">
+            </div>
+
+            <div class="my-3 col-md-12">
+              <label class="otherFont">Billing Address</label>
+            </div>
+
+            <div class="mt-3 col-md-3">
+              <label>Firstname</label>
+              <input type="text" class="form-control" [disabled]="isDisable"
+                [value]="orderObj?.billing_address?.firstname" name="firstnameqq" placeholder="firstname">
+            </div>
+
+            <div class="mt-3 col-md-3">
+              <label>Lastname</label>
+              <input type="text" class="form-control" [disabled]="isDisable"
+                [value]="orderObj?.billing_address?.lastname" name="lastnameqq" placeholder="lastname">
+            </div>
+
+            <div class="mt-3 col-md-3">
+              <label>Email</label>
+              <input type="text" class="form-control" [disabled]="isDisable" [value]="orderObj?.user_id?.email"
+                name="emaiqql" placeholder="email">
+            </div>
+
+            <div class="mt-3 col-md-3">
+              <label>Phone</label>
+              <input type="text" class="form-control" [disabled]="isDisable"
+                [value]="orderObj?.billing_address?.phone_no" name="phonqqe" placeholder="phone">
+            </div>
+
+            <div class="mt-3 col-md-4">
+              <label>Country</label>
+              <input type="text" class="form-control" [disabled]="isDisable"
+                [value]="orderObj?.billing_address?.country" name="countqqry" placeholder="country">
+            </div>
+
+            <div class="mt-3 col-md-4">
+              <label>State</label>
+              <input type="text" class="form-control" [disabled]="isDisable" [value]="orderObj?.billing_address?.state"
+                name="stqqate" placeholder="state">
+            </div>
+
+            <div class="mt-3 col-md-4">
+              <label>Zip code</label>
+              <input type="text" class="form-control" [disabled]="isDisable"
+                [value]="orderObj?.billing_address?.pincode" name="zip_codeqq" placeholder="zip_code">
+            </div>
+
+            <div class="mt-3 col-md-6">
+              <label>Address</label>
+              <textarea type="text" class="form-control" [disabled]="isDisable"
+                [value]="orderObj?.billing_address?.address" name="addresqqqs" placeholder="address" cols="60"
+                rows="3"></textarea>
+            </div>
+
+            <div class="my-3 col-md-12">
+              <label class="otherFont">Shipping Address</label>
+            </div>
+
+            <div class="mt-3 col-md-3">
+              <label>Firstname</label>
+              <input type="text" class="form-control" [disabled]="isDisable"
+                [value]="orderObj?.shipping_address?.firstname" name="firstnameqq" placeholder="firstname">
+            </div>
+
+            <div class="mt-3 col-md-3">
+              <label>Lastname</label>
+              <input type="text" class="form-control" [disabled]="isDisable"
+                [value]="orderObj?.shipping_address?.lastname" name="lastnameqq" placeholder="lastname">
+            </div>
+
+            <div class="mt-3 col-md-3">
+              <label>Email</label>
+              <input type="text" class="form-control" [disabled]="isDisable" [value]="orderObj?.user_id?.email"
+                name="emaiqql" placeholder="email">
+            </div>
+
+            <div class="mt-3 col-md-3">
+              <label>Phone</label>
+              <input type="text" class="form-control" [disabled]="isDisable"
+                [value]="orderObj?.shipping_address?.phone_no" name="phonqqe" placeholder="phone">
+            </div>
+
+            <div class="mt-3 col-md-4">
+              <label>Country</label>
+              <input type="text" class="form-control" [disabled]="isDisable"
+                [value]="orderObj?.shipping_address?.country" name="countqqry" placeholder="country">
+            </div>
+
+            <div class="mt-3 col-md-4">
+              <label>State</label>
+              <input type="text" class="form-control" [disabled]="isDisable" [value]="orderObj?.shipping_address?.state"
+                name="stqqate" placeholder="state">
+            </div>
+
+            <div class="mt-3 col-md-4">
+              <label>Zip code</label>
+              <input type="text" class="form-control" [disabled]="isDisable"
+                [value]="orderObj?.shipping_address?.pincode" name="zip_codeqq" placeholder="zip_code">
+            </div>
+
+            <div class="mt-3 col-md-6">
+              <label>Address</label>
+              <textarea type="text" class="form-control" [disabled]="isDisable"
+                [value]="orderObj?.shipping_address?.address" name="addresqqqs" placeholder="address" cols="60"
+                rows="3"></textarea>
+            </div>
+
+
+            <div class="my-3 col-md-12">
+              <label class="otherFont">Order Details (product is {{orderObj?.cart_id?.length || 0}})</label>
+            </div>
+
+            <div class="row" *ngIf="orderObj?.cart_id?.length > 0">
+              <ng-container *ngFor="let item of orderObj.cart_id; index as i">
+
+                <div class="mt-3 col-md-6">
+                  <label>Product name</label>
+                  <input type="text" class="form-control" [disabled]="isDisable" [value]="item?.product_id?.productname"
+                    name="qproductname-{{i}}" placeholder="productname">
+                </div>
+
+                <div class="mt-3 col-md-3">
+                  <label>Orignal price</label>
+                  <input type="text" class="form-control" [disabled]="isDisable" [value]="item?.orignal_price"
+                    name="qorignal_price-{{i}}" placeholder="orignal_price">
+                </div>
+
+                <div class="mt-3 col-md-3">
+                  <label>Discount price</label>
+                  <input type="text" class="form-control" [disabled]="isDisable" [value]="item?.discount_amount"
+                    name="qdiscount_amount-{{i}}" placeholder="discount_amount">
+                </div>
+
+                <div class="mt-3 col-md-3">
+                  <label>Discount %</label>
+                  <input type="text" class="form-control" [disabled]="isDisable" [value]="item?.discount_percentage"
+                    name="qdiscount_percentage-{{i}}" placeholder="discount_percentage">
+                </div>
+
+                <div class="mt-3 col-md-3">
+                  <label>Final Price</label>
+                  <input style="border: 3px solid green;" type="text" class="form-control" [disabled]="isDisable"
+                    [value]="item?.after_discount_price" name="qafter_discount_price-{{i}}"
+                    placeholder="after_discount_price">
+                </div>
+
+                <div class="mt-3 col-md-3">
+                  <label>Qty</label>
+                  <input style="border: 3px solid green;" type="text" class="form-control" [disabled]="isDisable"
+                    [value]="item?.qty" name="qqty-{{i}}" placeholder="qty">
+                </div>
+
+                <div class="mt-3 col-md-3">
+                  <label>Shape</label>
+                  <input type="text" class="form-control" [disabled]="isDisable" [value]="item?.shape"
+                    name="qshape-{{i}}" placeholder="shape">
+                </div>
+
+                <div class="mt-3 col-md-3">
+                  <label>Size</label>
+                  <input style="border: 3px solid green;" type="text" class="form-control" [disabled]="isDisable"
+                    [value]="item?.size" name="qsize-{{i}}" placeholder="size">
+                </div>
+
+                <div class="mt-3 col-md-3">
+                  <label>Custom Size</label>
+                  <input type="text" class="form-control" [disabled]="isDisable" [value]="item?.custom_size"
+                    name="qcustom_size-{{i}}" placeholder="custom_size">
+                </div>
+
+                <div class="mt-3 col-md-3">
+                  <label>Upload art</label>
+                  <input type="text" class="form-control" [disabled]="isDisable" [value]="item?.upload_art || ''"
+                    name="qupload_art-{{i}}" placeholder="upload_art">
+                </div>
+
+                <div class="mt-3 col-md-3" *ngIf="item.upload_art_image">
+                  <img [src]="item?.upload_art_image" width="80" height="80">
+                </div>
+
+                <ng-container *ngFor="let dd of item.details">
+                  <div class="mt-3 col-md-4">
+                    <h2>{{dd?.main_title}}</h2>
+                    <ng-container *ngFor="let tt of dd.details">
+                      <img [src]="tt?.filename" width="120" height="120">
+                      <span class="d-block mt-2">{{tt?.name}}</span>
+                    </ng-container>
+                  </div>
+                </ng-container>
+
+                <div style="border-top: 2px dotted black; margin-top: 20px;"></div>
+              </ng-container>
+            </div>
+          </div>
+        </form>
+
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="submit()"
+          *ngIf="orderKeyType == 'Add a New '">Submit</button>
+        <button type="button" class="btn btn-primary" (click)="update()" *ngIf="orderKeyType == 'Edit '">Update</button>
+      </div> -->
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="imageModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Image Modal</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+        <img [src]="gs.imageUrl + imageName" width="100%">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="reasonModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Query</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+        <div class="container">
+          <div class="row my-2">
+            <div class="col-md-12 mt-3">
+              <label>Subject</label>
+              <input type="text" class="form-control " [(ngModel)]="queryObj.subject" name="subject">
+            </div>
+
+            <div class="col-md-12 mt-3">
+              <label>Description</label>
+              <textarea type="text" class="form-control " [(ngModel)]="queryObj.description" name="description"
+                cols="10" rows="3"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" *ngIf="!this.queryObj.query_id"
+          (click)="submitReason()">Submit</button>
+        <button type="button" class="btn btn-primary" *ngIf="this.queryObj.query_id"
+          (click)="updateReason()">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
