@@ -1,107 +1,138 @@
-import { Component } from '@angular/core';
-import { window } from 'rxjs';
-import { Api1Service } from 'src/app/service/api1.service';
-import { GlobleService } from 'src/app/service/globle.service';
-import { HttpService } from 'src/app/service/http.service';
-import { APIURLs } from 'src/environments/apiUrls';
+import { Component, type OnInit } from "@angular/core"
+import { FormControl } from "@angular/forms"
+import { Api1Service } from "src/app/service/api1.service"
+import { GlobleService } from "src/app/service/globle.service"
+import { HttpService } from "src/app/service/http.service"
+import { APIURLs } from "src/environments/apiUrls"
+
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss', './home.sass']
+  selector: "app-home",
+  templateUrl: "./home.component.html",
+  styleUrls: ["./home.component.scss", "./home.sass"],
 })
+export class HomeComponent implements OnInit {
+  searchControl = new FormControl("")
+  showSearchDropdown = false
 
+  // Mobile menu state
+  mobileSubmenuOpen: boolean[] = []
 
-export class HomeComponent {
-  private window!: Window;
-
-  slideConfigForML = {
-    slidesToShow: 3,
+  // Blog Banner Slider Configuration
+  blogBannerSlideConfig = {
+    slidesToShow: 1,
     slidesToScroll: 1,
     dots: true,
     infinite: true,
-    autoplay: false,
-    autoplaySpeed: 3000,
+    autoplay: true,
+    autoplaySpeed: 4000,
     arrows: true,
-    centerMode: true,
-    centerPadding: '30px',
-    prevArrow: '<button class="slick-arrow slick-prev-custom">‹</button>',
-    nextArrow: '<button class="slick-arrow slick-next-custom">›</button>',
+    fade: true,
+    prevArrow: '<button class="slick-arrow slick-prev"><i class="bi bi-chevron-left"></i></button>',
+    nextArrow: '<button class="slick-arrow slick-next"><i class="bi bi-chevron-right"></i></button>',
+  }
+
+  // Fixed Slider configurations
+  slideConfigForML = {
+    slidesToShow: 2,
+    slidesToScroll: 1,
+    dots: true,
+    infinite: true,
+    autoplay: true,
+    autoplaySpeed: 4000,
+    arrows: true,
+    centerMode: false,
+    prevArrow: '<button class="slick-arrow slick-prev"><i class="bi bi-chevron-left"></i></button>',
+    nextArrow: '<button class="slick-arrow slick-next"><i class="bi bi-chevron-right"></i></button>',
     responsive: [
       {
         breakpoint: 998,
-        settings: { slidesToShow: 2 }
+        settings: {
+          slidesToShow: 1,
+          centerMode: false,
+          arrows: true,
+        },
       },
       {
         breakpoint: 650,
-        settings: { slidesToShow: 1 }
-      }
-    ]
-  };
+        settings: {
+          slidesToShow: 1,
+          arrows: false,
+          dots: true,
+        },
+      },
+    ],
+  }
 
   slideConfig = {
-    slidesToShow: 3,
+    slidesToShow: 4,
     slidesToScroll: 1,
     dots: true,
     infinite: true,
-    autoplay: false,
-    autoplaySpeed: 3000,
+    autoplay: true,
+    autoplaySpeed: 3500,
     arrows: true,
-    centerMode: true,
-    prevArrow: '<button class="slick-arrow slick-prev-custom">‹</button>',
-    nextArrow: '<button class="slick-arrow slick-next-custom">›</button>',
+    centerMode: false,
+    prevArrow: '<button class="slick-arrow slick-prev"><i class="bi bi-chevron-left"></i></button>',
+    nextArrow: '<button class="slick-arrow slick-next"><i class="bi bi-chevron-right"></i></button>',
     responsive: [
       {
-        breakpoint: 1024,
-        settings: { slidesToShow: 3 }
+        breakpoint: 1200,
+        settings: { slidesToShow: 3 },
       },
       {
-        breakpoint: 767,
-        settings: { slidesToShow: 2 }
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 2,
+          arrows: false,
+          dots: true,
+        },
       },
       {
-        breakpoint: 400,
-        settings: { slidesToShow: 1 }
-      }
-    ]
-  };
+        breakpoint: 576,
+        settings: {
+          slidesToShow: 1,
+          arrows: false,
+          dots: true,
+        },
+      },
+    ],
+  }
 
-  currentIndex = 0;
-  itemsPerView = 4;
-
-  // most loved
-  currentIndexML = 0;
-  itemsPerViewML = 2;
-
-  // most popular
-  currentIndexMP = 0;
-  itemsPerViewMP = 3;
-
-  // offering custome banners
-  currentIndexCB = 0;
-  itemsPerViewCB = 3;
-
-  products: any = [];
-  bestSellings: any = [];
-  mostLoved: any = [];
-  mostPopular: any = [];
-  mainCategory: any = [];
-  customeBannerList: any = [];
-  blogBannerList: any = [];
-  subCategory: any = [];
-  subCatValue: any = '0';
-  selectedMainCategory: string = '';
-
+  // Data arrays
+  products: any = []
+  bestSellings: any = []
+  mostLoved: any = []
+  mostPopular: any = []
+  mainCategory: any = []
+  customeBannerList: any = []
+  blogBannerList: any = []
+  subCategory: any = []
+  searchProductList: any = []
   allBlogs: any = []
+
+  // Form data
+  subCatValue: any = "0"
+  selectedMainCategory = ""
   email: any = ""
+
+  // Mock data for demo
+  cartItems = 0
+  finalPrice = 0.0
+  profileData: any = null
+
   constructor(
     private api1: Api1Service,
     public gs: GlobleService,
-    private httpService: HttpService
-  ) {
-
-  }
+    private httpService: HttpService,
+  ) {}
 
   ngOnInit(): void {
+    this.initializeData()
+    this.setupSearchControl()
+    this.initializeMobileMenu()
+  }
+
+  initializeData(): void {
     this.getBlogs()
     this.getLatestProd()
     this.getBestSelling()
@@ -112,188 +143,210 @@ export class HomeComponent {
     this.getAllBlogbanners()
   }
 
-
-  nextSlide() {
-    if (this.currentIndex < this.products.length - this.itemsPerView) {
-      this.currentIndex++;
-    } else {
-      this.currentIndex = 0;  // Loop back to the first slide
-    }
+  initializeMobileMenu(): void {
+    // Initialize mobile submenu state
+    this.mobileSubmenuOpen = new Array(10).fill(false)
   }
 
-  prevSlide() {
-    if (this.currentIndex > 0) {
-      this.currentIndex--;
-    } else {
-      this.currentIndex = this.products.length - this.itemsPerView;  // Loop back to the last slide
-    }
-  }
-
-  prevSlideMostLoved() {
-    if (this.currentIndexML > 0) {
-      this.currentIndexML--;
-    } else {
-      this.currentIndexML = this.mostLoved.length - this.itemsPerViewML;
-    }
-  }
-
-  nextSlideMostLoved() {
-    if (this.currentIndexML < this.mostLoved.length - this.itemsPerViewML) {
-      this.currentIndexML++;
-    } else {
-      this.currentIndexML = 0;
-    }
-  }
-
-  prevSlideMostPopular() {
-    if (this.currentIndexMP > 0) {
-      this.currentIndexMP--;
-    } else {
-      this.currentIndexMP = this.mostPopular.length - this.itemsPerViewMP;
-    }
-  }
-
-  nextSlideMostPopular() {
-    if (this.currentIndexMP < this.mostPopular.length - this.itemsPerViewMP) {
-      this.currentIndexMP++;
-    } else {
-      this.currentIndexMP = 0;
-    }
-  }
-
-  prevSlideCustomeBanner() {
-    if (this.currentIndexCB > 0) {
-      this.currentIndexCB--;
-    } else {
-      this.currentIndexCB = this.customeBannerList.length - this.itemsPerViewCB;
-    }
-  }
-
-  nextSlideCustomeBanner() {
-    if (this.currentIndexCB < this.customeBannerList.length - this.itemsPerViewCB) {
-      this.currentIndexCB++;
-    } else {
-      this.currentIndexCB = 0;
-    }
-  }
-
-  submit() {
-
-    if (this.email) {
-      this.httpService.post(APIURLs.subscribeNewsLetterAPI, { email: this.email }).subscribe((res: any) => {
-        this.gs.successToaster(res?.msg);
-      }, (err) => {
-        this.gs.errorToaster(err?.error?.msg || "something went wrong !!");
-      })
-    }
-  }
-
-  getBlogs() {
-    this.httpService.get(APIURLs.getLatestBlogAPI).subscribe((res: any) => {
-      this.allBlogs = res.data;
-    }, (err) => {
-      this.gs.errorToaster(err?.error?.msg || "something went wrong !!");
-      this.allBlogs = []
-    })
-  }
-
-  getLatestProd() {
-    this.httpService.get(APIURLs.getLatestProductAPI).subscribe((res: any) => {
-      this.products = res.data;
-      for (let i in this.products) {
-        this.products[i].min_size_obj = {};
-        if (this.products[i].sizes.length) {
-          for (let j in this.products[i].sizes) {
-            this.products[i].sizes[j].total_price = parseFloat(this.products[i].sizes[j].sq_ft) * parseFloat(this.products[i].sizes[j].price)
-          }
-        }
-        this.products[i].min_size_obj = this.products[i].sizes.reduce((prev: any, curr: any) => (curr.total_price < prev.total_price ? curr : prev))
+  setupSearchControl(): void {
+    this.searchControl.valueChanges.subscribe((value) => {
+      if (value && value.length > 2) {
+        // Simulate search API call
+        this.searchProductList = this.products
+          .filter((item: any) => item.productname.toLowerCase().includes(value.toLowerCase()))
+          .slice(0, 6)
+      } else {
+        this.searchProductList = []
       }
-    }, (err) => {
-      this.gs.errorToaster(err?.error?.msg || "something went wrong !!")
     })
   }
 
-  getBestSelling() {
-    this.httpService.get(APIURLs.getAllBestSellerAPI).subscribe((res: any) => {
-      this.bestSellings = res.data;
-    }, (err) => {
-      console.log("err -->", err)
-    })
+  // Search dropdown methods
+  hideSearchDropdown(): void {
+    setTimeout(() => {
+      this.showSearchDropdown = false
+    }, 200)
   }
 
-  getMostLoved() {
-    this.httpService.get(APIURLs.getAllMostLovedAPI).subscribe((res: any) => {
-      this.mostLoved = res.data;
-    }, (err) => {
-      console.log("err -->", err)
-    })
+  selectSearchItem(item: any): void {
+    this.showSearchDropdown = false
+    // Navigate to product details
   }
 
-  getMostPopular() {
-    this.httpService.get(APIURLs.getAllMostPopularAPI).subscribe((res: any) => {
-      this.mostPopular = res.data;
-    }, (err) => {
-      console.log("err -->", err)
-    })
+  // Mobile menu toggle
+  toggleMobileSubmenu(index: number): void {
+    this.mobileSubmenuOpen[index] = !this.mobileSubmenuOpen[index]
   }
 
-  getAllMainCategory() {
-    this.httpService.get(APIURLs.getAllMainCatAPI).subscribe((res: any) => {
-      this.mainCategory = res.data;
-    }, (err) => {
-      console.log("err -->", err)
-    })
+  // Newsletter subscription
+  submit(): void {
+    if (this.email) {
+      this.httpService.post(APIURLs.subscribeNewsLetterAPI, { email: this.email }).subscribe(
+        (res: any) => {
+          this.gs.successToaster(res?.msg)
+          this.email = ""
+        },
+        (err) => {
+          this.gs.errorToaster(err?.error?.msg || "Something went wrong!")
+        },
+      )
+    }
   }
 
-  getAllbanners() {
-    this.httpService.get(APIURLs.getAllBannersAPI).subscribe((res: any) => {
-      this.customeBannerList = res.data;
-    }, (err) => {
-      console.log("err -->", err)
-    })
+  // API Calls
+  getBlogs(): void {
+    this.httpService.get(APIURLs.getLatestBlogAPI).subscribe(
+      (res: any) => {
+        this.allBlogs = res.data
+      },
+      (err) => {
+        this.gs.errorToaster(err?.error?.msg || "Something went wrong!")
+        this.allBlogs = []
+      },
+    )
   }
 
-  changeCategory(event: any) {
+  getLatestProd(): void {
+    this.httpService.get(APIURLs.getLatestProductAPI).subscribe(
+      (res: any) => {
+        this.products = res.data
+        this.processProductPrices()
+      },
+      (err) => {
+        this.gs.errorToaster(err?.error?.msg || "Something went wrong!")
+      },
+    )
+  }
+
+  processProductPrices(): void {
+    for (const i in this.products) {
+      this.products[i].min_size_obj = {}
+      if (this.products[i].sizes && this.products[i].sizes.length) {
+        for (const j in this.products[i].sizes) {
+          this.products[i].sizes[j].total_price =
+            Number.parseFloat(this.products[i].sizes[j].sq_ft) * Number.parseFloat(this.products[i].sizes[j].price)
+        }
+        this.products[i].min_size_obj = this.products[i].sizes.reduce((prev: any, curr: any) =>
+          curr.total_price < prev.total_price ? curr : prev,
+        )
+      }
+    }
+  }
+
+  getBestSelling(): void {
+    this.httpService.get(APIURLs.getAllBestSellerAPI).subscribe(
+      (res: any) => {
+        this.bestSellings = res.data
+      },
+      (err) => {
+        console.log("Error fetching best sellers:", err)
+      },
+    )
+  }
+
+  getMostLoved(): void {
+    this.httpService.get(APIURLs.getAllMostLovedAPI).subscribe(
+      (res: any) => {
+        this.mostLoved = res.data
+      },
+      (err) => {
+        console.log("Error fetching most loved:", err)
+      },
+    )
+  }
+
+  getMostPopular(): void {
+    this.httpService.get(APIURLs.getAllMostPopularAPI).subscribe(
+      (res: any) => {
+        this.mostPopular = res.data
+      },
+      (err) => {
+        console.log("Error fetching most popular:", err)
+      },
+    )
+  }
+
+  getAllMainCategory(): void {
+    this.httpService.get(APIURLs.getAllMainCatAPI).subscribe(
+      (res: any) => {
+        this.mainCategory = res.data
+        this.initializeMobileMenu()
+      },
+      (err) => {
+        console.log("Error fetching categories:", err)
+      },
+    )
+  }
+
+  getAllbanners(): void {
+    this.httpService.get(APIURLs.getAllBannersAPI).subscribe(
+      (res: any) => {
+        this.customeBannerList = res.data
+      },
+      (err) => {
+        console.log("Error fetching banners:", err)
+      },
+    )
+  }
+
+  getAllBlogbanners(): void {
+    this.httpService.get(APIURLs.bannersListAPI).subscribe(
+      (res: any) => {
+        this.blogBannerList = res.data
+      },
+      (err) => {
+        console.log("Error fetching blog banners:", err)
+      },
+    )
+  }
+
+  // Category and subcategory handling
+  changeCategory(event: any): void {
     this.selectedMainCategory = event.target.value
     this.getSubCategory(event.target.value)
-    this.getProductBycategory({ "catid": event.target.value })
+    this.getProductBycategory({ catid: event.target.value })
   }
 
-  getSubCategory(id: string) {
-    this.httpService.post(APIURLs.subCatByMainAPI, { id }).subscribe((res: any) => {
-      this.subCatValue = '0'
-      this.subCategory = res.data;
-    }, (err) => {
-      this.subCategory = []
-      this.subCatValue = '0'
-      console.log("err -->", err)
+  getSubCategory(id: string): void {
+    this.httpService.post(APIURLs.subCatByMainAPI, { id }).subscribe(
+      (res: any) => {
+        this.subCatValue = "0"
+        this.subCategory = res.data
+      },
+      (err) => {
+        this.subCategory = []
+        this.subCatValue = "0"
+        console.log("Error fetching subcategories:", err)
+      },
+    )
+  }
+
+  changeSubCategory(event: any): void {
+    this.getProductBycategory({
+      catid: this.selectedMainCategory,
+      subCatid: event.target.value,
     })
   }
 
-  changeSubCategory(event: any) {
-    this.getProductBycategory({ "catid": this.selectedMainCategory, "subCatid": event.target.value })
+  getProductBycategory(payload: any): void {
+    this.httpService.post(APIURLs.getProductByCatAPI, payload).subscribe(
+      (res: any) => {
+        this.customeBannerList = res.data
+      },
+      (err) => {
+        console.log("Error fetching products by category:", err)
+        this.customeBannerList = []
+      },
+    )
   }
 
-  getProductBycategory(payload: any) {
-    this.httpService.post(APIURLs.getProductByCatAPI, payload).subscribe((res: any) => {
-      this.customeBannerList = res.data
-    }, (err) => {
-      console.log("err -->", err)
-      this.customeBannerList = []
-    })
+  // Utility functions
+  redirectbannerTo(link: any): void {
+    window.open(link, "_blank")
   }
 
-  getAllBlogbanners() {
-    this.httpService.get(APIURLs.bannersListAPI).subscribe((res: any) => {
-      this.blogBannerList = res.data;
-    }, (err) => {
-      console.log("err -->", err)
-    })
+  logout(): void {
+    // Implement logout logic
+    this.gs.successToaster("Logged out successfully")
   }
-
-  redirectbannerTo(link: any) {
-    this.window.open(link, "_blank")
-  }
-
 }

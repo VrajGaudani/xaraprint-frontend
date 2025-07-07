@@ -16,48 +16,52 @@ export class LoginComponent implements OnInit {
   formObj: any = {};
   isSubmitted : boolean = false;
   loginForm! : FormGroup;
+  isLoading = false
+  showPassword = false
   constructor(
     private api1: Api1Service,
+    private fb: FormBuilder,
     public gs: GlobleService,
     private router: Router,
     private httpService: HttpService,
   ) { }
 
   ngOnInit(): void {
-    this.loginForm = new FormGroup({
-      "email" : new FormControl('',[Validators.required,Validators.email]),
-      "password" : new FormControl('',[Validators.required,Validators.minLength(6)]),
+    this.initializeForm()
+  }
+
+  initializeForm() {
+    this.loginForm = this.fb.group({
+      email: ["", [Validators.required, Validators.email]],
+      password: ["", [Validators.required, Validators.minLength(6)]],
     })
   }
 
   login() {
-    this.isSubmitted = true;
-    this.formObj.social_id = "";
-    this.formObj.firstname = "";
-    // this.api1.user("/login", this.formObj).subscribe((res: any) => {
-    //   if (res && res.status) {
-    //     this.gs.setItem("userData", res.data);
-    //     this.gs.userDataObj = res.data
-    //     this.router.navigate(['/home']);
-    //     this.gs.successToaster(res.message);
-    //   } else {
-    //     this.gs.errorToaster(res.message);
-    //   }
-    // })
+    this.isSubmitted = true
 
-    if(this.loginForm.valid){
-      this.httpService.postWithoutSec(APIURLs.loginAPI, this.loginForm.value).subscribe((res:any) => {
-        // this.gs.setItem("userData", res.data);
-        this.gs.setItem("token", res?.data?.token);
+    if (this.loginForm.invalid) {
+      this.gs.errorToaster("Please fill all required fields correctly")
+      return
+    }
+
+    this.isLoading = true
+    const loginData = this.loginForm.value
+
+    this.httpService.post(APIURLs.loginAPI, loginData).subscribe(
+      (res: any) => {
+        this.isLoading = false
+          this.gs.setItem("token", res?.data?.token);
         this.gs.userDataObj = res.data
         this.router.navigate(['/home']);
         this.gs.successToaster(res?.msg);
         this.isSubmitted = false;
-      },(err) => {
-        this.gs.errorToaster(err?.error?.msg || "something went wrong !!");
-      })
-    }
-
+      },
+      (err) => {
+        this.isLoading = false
+        this.gs.errorToaster(err?.error?.message || "Login failed. Please try again.")
+      },
+    )
   }
 
   socialLogin() {
@@ -82,5 +86,32 @@ export class LoginComponent implements OnInit {
       })
     }).catch((error) => console.log("google error: ", error));
 
+  }
+
+  forgotPassword() {
+    // Implement forgot password logic
+    this.router.navigate(["/forgot-password"])
+  }
+
+  loginWithOTP() {
+    // Implement OTP login logic
+    this.router.navigate(["/login-otp"])
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword
+  }
+
+  // Quick actions
+  guestCheckout() {
+    this.router.navigate(["/checkout"])
+  }
+
+  getHelp() {
+    this.router.navigate(["/support"])
+  }
+
+  createAccount() {
+    this.router.navigate(["/sign-up"])
   }
 }

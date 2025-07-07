@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Api1Service } from '../service/api1.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { APIURLs } from 'src/environments/apiUrls';
 import { HttpService } from '../service/http.service';
 import { GlobleService } from '../service/globle.service';
@@ -16,21 +16,19 @@ export class SignUpComponent implements OnInit {
   isSubmitted : boolean = false;
   signupForm! : FormGroup;
 
-  // formObj: any = {
-  //   firstname: "",
-  //   lastname: "",
-  //   email: "",
-  //   password: "",
-  //   company_name: "",
-  //   country_code: "",
-  //   phone_no: "",
-  //   type: "",
-  //   social_id: "",
-  // }
+  isLoading = false
+  showPassword = false
+  passwordChecks = {
+    length: false,
+    uppercase: false,
+    lowercase: false,
+    number: false,
+  }
 
 
   constructor(
     private api1: Api1Service,
+    private fb: FormBuilder,
     private httpService: HttpService,
     public gs: GlobleService,
     private router: Router,
@@ -39,14 +37,32 @@ export class SignUpComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.signupForm = new FormGroup({
-      "firstname" : new FormControl('',[Validators.required]),
-      "lastname" : new FormControl('',[Validators.required]),
-      "email" : new FormControl('',[Validators.required,Validators.email]),
-      "password" : new FormControl('',[Validators.required,Validators.minLength(6)]),
-      "country_code" : new FormControl('',[Validators.required]),
-      "phone_no" : new FormControl('',[Validators.required]),
-      "company_name" : new FormControl('',[Validators.required]),
+    this.initializeForm()
+    this.setupPasswordValidation()
+  }
+
+  initializeForm() {
+    this.signupForm = this.fb.group({
+      email: ["", [Validators.required, Validators.email]],
+      firstname: ["", [Validators.required, Validators.minLength(2)]],
+      lastname: ["", [Validators.required, Validators.minLength(2)]],
+      company_name: [""],
+      country_code: ["", [Validators.required]],
+      phone_no: ["", [Validators.required, Validators.pattern(/^[0-9]{7,15}$/)]],
+      password: ["", [Validators.required, Validators.minLength(6)]],
+    })
+  }
+
+  setupPasswordValidation() {
+    this.signupForm.get("password")?.valueChanges.subscribe((password) => {
+      if (password) {
+        this.passwordChecks = {
+          length: password.length >= 6,
+          uppercase: /[A-Z]/.test(password),
+          lowercase: /[a-z]/.test(password),
+          number: /[0-9]/.test(password),
+        }
+      }
     })
   }
 
@@ -81,40 +97,69 @@ export class SignUpComponent implements OnInit {
 
   submit() {
     this.isSubmitted = true
-    // console.log(">>>", this.formObj)
 
-    // this.formObj = {
-    //   "firstname": "aamir",
-    //   "lastname": "bhimani",
-    //   "email": "aamirbhimani01@gmail.com",
-    //   "password": "123123",
-    //   "company_name": "gold infotech",
-    //   "country_code": "+91",
-    //   "phone_no": "+919737863281",
-    //   "type": "",
-    //   "social_id": ""
-    // }
-
-    // this.api1.user("/sign-up", this.formObj).subscribe((res: any) => {
-    //   console.log("<<<", res);
-    //   if (res && res.status) {
-
-    //   } else {
-
-    //   }
-    // })
-
-    if(this.signupForm.valid){
-      this.httpService.postWithoutSec(APIURLs.registerAPI, this.signupForm.value).subscribe((res:any) => {
-        this.router.navigate(['/login']);
-        this.gs.successToaster(res?.msg);
-        this.isSubmitted = false;
-      },(err) => {
-        this.gs.errorToaster(err?.error?.msg || "something went wrong !!");
-      })
+    if (this.signupForm.invalid) {
+      this.gs.errorToaster("Please fill all required fields correctly")
+      return
     }
 
+    // Check terms acceptance
+    const termsAccepted = (document.getElementById("termsAccept") as HTMLInputElement)?.checked
+    if (!termsAccepted) {
+      this.gs.errorToaster("Please accept the Terms & Conditions")
+      return
+    }
 
+    this.isLoading = true
+    const signupData = this.signupForm.value
+
+    this.httpService.post(APIURLs.registerAPI, signupData).subscribe(
+      (res: any) => {
+        this.isLoading = false
+        if (res.success) {
+          this.gs.successToaster("Account created successfully! Please verify your email.")
+          // Redirect to login or verification page
+          this.router.navigate(["/login"])
+        } else {
+          this.gs.errorToaster(res.message || "Registration failed")
+        }
+      },
+      (err) => {
+        this.isLoading = false
+        this.gs.errorToaster(err?.error?.message || "Registration failed. Please try again.")
+      },
+    )
+  }
+
+  socialSignup(provider: string) {
+    // Implement social signup logic
+    this.gs.successToaster(`${provider} signup feature coming soon!`)
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword
+  }
+
+  // Validation helpers
+  isFieldInvalid(fieldName: string): boolean {
+    const field = this.signupForm.get(fieldName)
+    return !!(field && field.invalid && (field.dirty || field.touched || this.isSubmitted))
+  }
+
+  isFieldValid(fieldName: string): boolean {
+    const field = this.signupForm.get(fieldName)
+    return !!(field && field.valid && (field.dirty || field.touched))
+  }
+
+  getFieldError(fieldName: string): string {
+    const field = this.signupForm.get(fieldName)
+    if (field?.errors) {
+      if (field.errors["required"]) return `${fieldName} is required`
+      if (field.errors["email"]) return "Please enter a valid email"
+      if (field.errors["minlength"]) return `Minimum ${field.errors["minlength"].requiredLength} characters required`
+      if (field.errors["pattern"]) return "Please enter a valid format"
+    }
+    return ""
   }
 
 }

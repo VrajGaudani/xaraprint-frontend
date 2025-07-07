@@ -1,0 +1,246 @@
+// Order Success Section
+.order-success-section {
+  padding: 80px 0;
+  background: #f8f9fa;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  
+  .success-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    
+    .success-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      overflow: hidden;
+      
+      .success-content {
+        padding: 60px 40px;
+        text-align: center;
+        
+        .success-icon {
+          margin-bottom: 30px;
+          
+          i {
+            font-size: 4rem;
+            color: #28a745;
+            animation: successPulse 2s ease-in-out infinite;
+          }
+        }
+        
+        .success-message {
+          margin-bottom: 30px;
+          
+          .success-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #333;
+            margin-bottom: 12px;
+          }
+          
+          .success-subtitle {
+            font-size: 1.1rem;
+            color: #6c757d;
+            margin-bottom: 16px;
+            font-weight: 600;
+          }
+          
+          .success-description {
+            font-size: 1rem;
+            color: #333;
+            margin: 0;
+          }
+        }
+        
+        .order-info {
+          margin-bottom: 40px;
+          
+          .info-notice {
+            background: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            border-radius: 8px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0066cc;
+            font-size: 0.9rem;
+            
+            i {
+              color: #007bff;
+              flex-shrink: 0;
+            }
+          }
+        }
+        
+        .success-actions {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+          
+          .review-order-btn {
+            padding: 14px 32px;
+            font-weight: 700;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: none;
+            transition: all 0.3s ease;
+            
+            &:hover {
+              background: #0056b3;
+              transform: translateY(-2px);
+              box-shadow: 0 8px 25px rgba(0,123,255,0.3);
+            }
+          }
+          
+          .continue-shopping-btn {
+            padding: 12px 32px;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 2px solid #007bff;
+            transition: all 0.3s ease;
+            
+            &:hover {
+              background: #007bff;
+              color: white;
+              transform: translateY(-2px);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Newsletter Section
+.newsletter-section {
+  background: #007bff;
+  color: white;
+  padding: 40px 0;
+  
+  .newsletter-container {
+    .newsletter-content {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      
+      .newsletter-text {
+        flex: 1;
+        
+        .newsletter-title {
+          font-weight: 700;
+          margin-bottom: 0;
+          font-size: 1.2rem;
+          line-height: 1.4;
+        }
+      }
+      
+      .newsletter-form {
+        flex: 1;
+        max-width: 400px;
+        
+        .input-group {
+          .newsletter-input {
+            border: none;
+            padding: 12px 16px;
+            border-radius: 6px 0 0 6px;
+            
+            &:focus {
+              box-shadow: none;
+              outline: none;
+            }
+          }
+          
+          .newsletter-btn {
+            border: none;
+            padding: 12px 24px;
+            border-radius: 0 6px 6px 0;
+            font-weight: 700;
+            color: #007bff;
+            transition: all 0.3s ease;
+            
+            &:hover {
+              background: #f8f9fa;
+              transform: translateX(2px);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Success Animation
+@keyframes successPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+// Responsive Design
+@media (max-width: 767.98px) {
+  .order-success-section {
+    padding: 40px 0;
+    
+    .success-container .success-card .success-content {
+      padding: 40px 24px;
+      
+      .success-icon i {
+        font-size: 3rem;
+      }
+      
+      .success-message .success-title {
+        font-size: 1.8rem;
+      }
+      
+      .success-actions {
+        .review-order-btn,
+        .continue-shopping-btn {
+          width: 100%;
+        }
+      }
+    }
+  }
+  
+  .newsletter-section {
+    .newsletter-content {
+      flex-direction: column;
+      gap: 20px;
+      text-align: center;
+      
+      .newsletter-form {
+        width: 100%;
+        max-width: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 575.98px) {
+  .order-success-section {
+    .success-container .success-card .success-content {
+      padding: 30px 20px;
+      
+      .success-message .success-title {
+        font-size: 1.5rem;
+      }
+      
+      .order-info .info-notice {
+        padding: 12px 16px;
+        font-size: 0.8rem;
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+      }
+    }
+  }
+}

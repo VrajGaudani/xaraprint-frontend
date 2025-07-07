@@ -1,1076 +1,547 @@
-<div class="">
-  <div class="col-12 p-3 d-flex align-items-center z-n1">
-    <div class="breadcrum-box"><span>Home</span></div>
-    <div class="breadcrum-box"><span>StandPage</span></div><span class="breadcrum-color">Magnetic Signs</span>
+<!-- Breadcrumb Section -->
+<section class="breadcrumb-section">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/home">
+            <i class="bi bi-house-door me-1"></i>
+            Home
+          </a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="#">StandPage</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">{{imageData?.productname}}</li>
+      </ol>
+    </nav>
   </div>
-  <div class="container-fluid">
+</section>
+
+<!-- Product Details Section -->
+<section class="product-details-section">
+  <div class="container">
     <div class="row">
-      <div class="col-12 col-md-5">
-        <div class="position-sticky top-0">
-          <div class="ThumbsSlider">
-            <div class="slider">
-              <button class="arrow left" (click)="previous()">
-                <img src="https://cdn-icons-png.flaticon.com/512/2609/2609370.png" height="40" width="40">
+      <!-- Product Images -->
+      <div class="col-lg-6 col-md-6">
+        <div class="product-images-container">
+          <!-- Main Image Display -->
+          <div class="main-image-container">
+            <div class="main-image-wrapper">
+              <img [src]="images[currentIndex]" [alt]="imageData?.productname" class="main-product-image" />
+              
+              <!-- Navigation Arrows -->
+              <button class="image-nav-btn prev-btn" (click)="previous()" *ngIf="images.length > 1">
+                <i class="bi bi-chevron-left"></i>
               </button>
-              <img [src]="images[currentIndex]" alt="Slide" class="swiper-slide">
-              <button class="arrow right" (click)="next()">
-                <img src="https://cdn-icons-png.flaticon.com/512/318/318476.png" height="40" width="40">
+              <button class="image-nav-btn next-btn" (click)="next()" *ngIf="images.length > 1">
+                <i class="bi bi-chevron-right"></i>
+              </button>
+              
+              <!-- Image Counter -->
+              <div class="image-counter" *ngIf="images.length > 1">
+                {{currentIndex + 1}} / {{images.length}}
+              </div>
+              
+              <!-- Zoom Icon -->
+              <button class="zoom-btn" (click)="imageViewModal(images[currentIndex])">
+                <i class="bi bi-zoom-in"></i>
               </button>
             </div>
-            <div class="thumbnails-container">
-              <div class="thumbnails">
-                <img *ngFor="let image of images; let i = index" [src]="image" alt="Thumbnail"
-                  (click)="setCurrentIndex(i)">
+          </div>
+          
+          <!-- Thumbnail Images -->
+          <div class="thumbnails-container" *ngIf="images.length > 1">
+            <div class="thumbnails-wrapper">
+              <div class="thumbnail-item" 
+                   *ngFor="let image of images; let i = index"
+                   [class.active]="i === currentIndex"
+                   (click)="setCurrentIndex(i)">
+                <img [src]="image" [alt]="'Product image ' + (i + 1)" class="thumbnail-image" />
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-12 col-md-7">
-        <h1>{{imageData?.productname}}</h1>
-        <div class="d-flex flex-wrap align-items-center">
-          <div class="me-4 d-flex align-items-center">
-            <div class="stars">
-              <i *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" class="bi"
-              [ngClass]="{'bi-star-fill text-warning': i < reviewSummaryData?.averageRating, 'bi-star': i >= reviewSummaryData?.averageRating}"></i>
-            </div>
-          </div>
-          <div><span class="text-primary">{{reviewSummaryData?.totalReviews || 0}} Reviews</span> <span> | </span><span class="text-primary">
-              Product Specifications </span> <span> | </span><span class="text-primary"> Ask a
-              Question </span><span> | </span><span>SKU : BBPTMT01</span></div>
-        </div>
-        <div class="p-2 d-inline-block my-2" style="background-color: rgb(255, 242, 211);"><span>Priority
-            Overnight by 26 Oct, Thursday | 30102, US | </span><button type="button"
-            class="btn btn-light">Check</button></div>
-        <div class="d-flex flex-wrap justify-content-around py-4">
-          <div class="text-center"><img src="../../../assets/images/free-shipping.png">
-            <p class="font-monospace mt-3">Free Shipping</p>
-          </div>
-          <div class="text-center"><img src="../../../assets/images/premium-quality.png">
-            <p class="font-monospace mt-3">Premium Quality</p>
-          </div>
-          <div class="text-center"><img src="../../../assets/images/free-design-proof.png">
-            <p class="font-monospace mt-3">Free Design Proof</p>
-          </div>
-          <div class="text-center"><img src="../../../assets/images/design-support.png">
-            <p class="font-monospace mt-3">Design Support</p>
-          </div>
-        </div>
-        <!-- <p class="fw-bold">Choose Material</p>
-        <div class="d-flex">
-          <div class="text-center me-3">
-            <div class="Material-box square-116 active"></div>
-            Viny!
-          </div>
-          <div class="text-center">
-            <div class="Material-box square-116"></div>
-            Polyester
-          </div>
-        </div> -->
 
-        <div class="d-flex align-items-center my-4" style="justify-content: space-between;">
-          <span class="me-4">Size (W X H)</span>
-          <span class="me-4">{{size_mode}}</span>
-        </div>
-
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-          <li class="nav-item" role="presentation">
-            <button (click)="clearCustom()" class="nav-link active" #popularTab id="tab1" data-bs-toggle="tab"
-              data-bs-target="#popular" type="button" role="tab" aria-controls="home" aria-selected="true">
-              Popular Sizes
-            </button>
-          </li>
-          <li *ngIf="formObj.add_custom_size" class="nav-item" role="presentation">
-            <button class="nav-link" id="tab2" #customTab data-bs-toggle="tab" data-bs-target="#custom" type="button"
-              role="tab" aria-controls="profile" aria-selected="false">Custom
-              Size</button>
-          </li>
-        </ul>
-
-        <div class="tab-content" id="myTabContent">
-          <div class="d-flex flex-wrap clip-box tab-pane fade show active" id="popular" role="tabpanel"
-            aria-labelledby="tab1">
-            <ng-container *ngFor="let item of formObj.sizes; index as i">
-              <div (click)="sizePrice(item, i)" class="clip-border" [class]="item.ngClass">{{item.size}}</div>
-            </ng-container>
-          </div>
-          <div *ngIf="formObj.add_custom_size" class="d-flex flex-wrap clip-box tab-pane fade" id="custom"
-            role="tabpanel" aria-labelledby="tab2">
-            <div>
-              <label>Height</label>
-              <input type="text" class="clip-border" [(ngModel)]="custom_size.height" name="height"
-                (change)="customCalculation('height',custom_size.height)">
-            </div>
-
-            <div>
-              <label>Width</label>
-              <input type="text" class="clip-border" [(ngModel)]="custom_size.width" name="width"
-                (change)="customCalculation('width',custom_size.width)">
-            </div>
-
-          </div>
-        </div>
-
-        <ng-container *ngFor="let item of formObj.otherObj; index as i">
-          <p class="fw-bold mt-5 mb-4">{{item.main_title}}</p>
-          <div class="d-flex flex-wrap">
-            <ng-container *ngFor="let data of item.details; index as j">
-              <div class="text-center me-2">
-                <img [src]="data.filename" [class]="data.ngClass" height="80" alt="Banner" class="banner-box pointer"
-                  (click)="addActiveClass(i, j)">
-                <div class="sale-box">{{data.name}}</div>
-                <p>{{data.name}}</p>
-                <span class="price-box active">${{data.price}}</span>
-                <!-- <span *ngIf="data.new_price" class="price-box active">$ {{data.new_price}}</span> -->
+      <!-- Product Information -->
+      <div class="col-lg-6 col-md-6">
+        <div class="product-info-container">
+          <!-- Product Title & Rating -->
+          <div class="product-header">
+            <h1 class="product-title">{{imageData?.productname}}</h1>
+            <div class="product-meta">
+              <div class="rating-section">
+                <div class="rating-stars">
+                  <i *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" class="bi"
+                     [ngClass]="{'bi-star-fill': i < (reviewSummaryData?.averageRating || 0), 'bi-star': i >= (reviewSummaryData?.averageRating || 0)}"></i>
+                </div>
+                <span class="rating-count">({{reviewSummaryData?.totalReviews || 0}} Reviews)</span>
               </div>
-            </ng-container>
-          </div>
-        </ng-container>
-
-
-        <!-- <p class="fw-bold mt-5 mb-4">Pantone + Color Bridge Coated (Optional)</p><input type="text"
-          class="form-control">
-        <p class="fw-bold mt-5 mb-4">Pantone + Color Bridge Coated (Optional)</p><textarea rows="3"
-          class="form-control"></textarea> -->
-        <div
-          class="d-flex align-items-center justify-content-between flex-wrap border p-3 my-3 bg-white position-sticky bottom-0"
-          style="z-index:99;">
-          <div class="d-flex align-items-center flex-wrap">
-            <p *ngIf="!discount" class="m-0 me-4">$ {{product_price}}</p>
-            <p *ngIf="discount" class="m-0 me-4">$ {{discount_price}}</p>
-            <div class="me-4">
-              <p *ngIf="discount" class="text-decoration-line-through m-0">$ {{product_price}}</p>
-              <span *ngIf="discount" class="badge bg-success">{{discount}} % off</span>
-            </div>
-            <div class="quantity">
-              <button (click)="minus()" class="minus" aria-label="Decrease">−</button>
-              <input [(ngModel)]="prod_qty" name="prod_qty" type="number" class="input-box-1">
-              <button (click)="plus()" class="plus" aria-label="Increase">+</button>
-            </div>
-
-            <div class="px-4">
-              <button class="btn btn-primary" (click)="addToCart()">add to cart</button>
+              <div class="product-links">
+                <a href="#" class="product-link">Product Specifications</a>
+                <span class="separator">|</span>
+                <a href="#" class="product-link">Ask a Question</a>
+                <span class="separator">|</span>
+                <span class="sku">SKU: BBPTMT01</span>
+              </div>
             </div>
           </div>
-          <!-- <button *ngIf="!isInCart" (click)="openDesignModal()" data-target="#selectDesignModal"
-            class="btn btn-primary mt-2 mt-sm-0">Select Design Method</button> -->
 
-          <button *ngIf="isInCart" (click)="updateCart()" class="btn btn-primary mt-2 mt-sm-0">
-            Update cart
+          <!-- Delivery Info -->
+          <div class="delivery-info">
+            <div class="delivery-badge">
+              <i class="bi bi-truck me-2"></i>
+              <span>Priority Overnight by 26 Oct, Thursday | 30102, US</span>
+              <button class="btn btn-sm btn-outline-primary ms-2">Check</button>
+            </div>
+          </div>
+
+          <!-- Product Features -->
+          <div class="product-features">
+            <div class="features-grid">
+              <div class="feature-item">
+                <div class="feature-icon">
+                  <img src="assets/images/free-shipping.png" alt="Free Shipping" />
+                </div>
+                <span class="feature-text">Free Shipping</span>
+              </div>
+              <div class="feature-item">
+                <div class="feature-icon">
+                  <img src="assets/images/premium-quality.png" alt="Premium Quality" />
+                </div>
+                <span class="feature-text">Premium Quality</span>
+              </div>
+              <div class="feature-item">
+                <div class="feature-icon">
+                  <img src="assets/images/free-design-proof.png" alt="Free Design Proof" />
+                </div>
+                <span class="feature-text">Free Design Proof</span>
+              </div>
+              <div class="feature-item">
+                <div class="feature-icon">
+                  <img src="assets/images/design-support.png" alt="Design Support" />
+                </div>
+                <span class="feature-text">Design Support</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Size Selection -->
+          <div class="size-selection-section">
+            <div class="size-header">
+              <h6 class="section-title">Size (W × H)</h6>
+              <span class="size-shape">{{size_mode}}</span>
+            </div>
+
+            <!-- Size Tabs -->
+            <div class="size-tabs">
+              <ul class="nav nav-pills size-nav" id="sizeTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active size-tab-btn" 
+                          id="popular-sizes-tab" 
+                          data-bs-toggle="pill" 
+                          data-bs-target="#popular-sizes" 
+                          type="button" 
+                          role="tab"
+                          (click)="clearCustom()">
+                    <i class="bi bi-grid-3x3-gap me-2"></i>
+                    Popular Sizes
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation" *ngIf="formObj.add_custom_size">
+                  <button class="nav-link size-tab-btn" 
+                          id="custom-size-tab" 
+                          data-bs-toggle="pill" 
+                          data-bs-target="#custom-size" 
+                          type="button" 
+                          role="tab">
+                    <i class="bi bi-rulers me-2"></i>
+                    Custom Size
+                  </button>
+                </li>
+              </ul>
+
+              <div class="tab-content size-tab-content" id="sizeTabContent">
+                <!-- Popular Sizes -->
+                <div class="tab-pane fade show active" id="popular-sizes" role="tabpanel">
+                  <div class="sizes-grid">
+                    <div class="size-option" 
+                         *ngFor="let item of formObj.sizes; index as i"
+                         [class.active]="item.ngClass === 'active'"
+                         (click)="sizePrice(item, i)">
+                      <span class="size-label">{{item.size}}</span>
+                      <span class="size-price">${{item.total_price}}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Custom Size -->
+                <div class="tab-pane fade" id="custom-size" role="tabpanel" *ngIf="formObj.add_custom_size">
+                  <div class="custom-size-inputs">
+                    <div class="input-group">
+                      <label class="input-label">Height</label>
+                      <input type="number" 
+                             class="form-control size-input" 
+                             [(ngModel)]="custom_size.height" 
+                             (change)="customCalculation('height', custom_size.height)"
+                             placeholder="0">
+                      <span class="input-unit">ft</span>
+                    </div>
+                    <div class="input-separator">×</div>
+                    <div class="input-group">
+                      <label class="input-label">Width</label>
+                      <input type="number" 
+                             class="form-control size-input" 
+                             [(ngModel)]="custom_size.width" 
+                             (change)="customCalculation('width', custom_size.width)"
+                             placeholder="0">
+                      <span class="input-unit">ft</span>
+                    </div>
+                  </div>
+                  <div class="custom-size-info" *ngIf="custom_size.totalft">
+                    <span class="total-area">Total Area: {{custom_size.totalft}} sq ft</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Options -->
+          <div class="product-options-section" *ngFor="let item of formObj.otherObj; index as i">
+            <div class="option-header">
+              <h6 class="option-title">{{item.main_title}}</h6>
+            </div>
+            <div class="options-grid">
+              <div class="option-item" 
+                   *ngFor="let data of item.details; index as j"
+                   [class.active]="data.ngClass === 'active'"
+                   (click)="addActiveClass(i, j)">
+                <div class="option-image">
+                  <img [src]="data.filename" [alt]="data.name" />
+                </div>
+                <div class="option-content">
+                  <span class="option-name">{{data.name}}</span>
+                  <span class="option-price">${{data.price}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Sticky Purchase Bar -->
+<div class="sticky-purchase-bar">
+  <div class="container">
+    <div class="purchase-bar-content">
+      <div class="price-section">
+        <div class="price-display">
+          <span class="current-price" *ngIf="!discount">${{product_price}}</span>
+          <span class="current-price" *ngIf="discount">${{discount_price}}</span>
+          <div class="price-details" *ngIf="discount">
+            <span class="original-price">${{product_price}}</span>
+            <span class="discount-badge">{{discount}}% OFF</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="quantity-section">
+        <label class="quantity-label">Quantity</label>
+        <div class="quantity-controls">
+          <button class="quantity-btn minus-btn" (click)="minus()" [disabled]="prod_qty <= 1">
+            <i class="bi bi-dash"></i>
+          </button>
+          <input type="number" 
+                 class="quantity-input" 
+                 [(ngModel)]="prod_qty" 
+                 min="1" 
+                 readonly>
+          <button class="quantity-btn plus-btn" (click)="plus()">
+            <i class="bi bi-plus"></i>
           </button>
         </div>
       </div>
-      <!-- <div class="px-2 px-sm-5">
-        <div class="nav nav-tabs">
-          <div class="nav-item"><a href="/home" data-rr-ui-event-key="/home" class="nav-link active">Description</a>
-          </div>
-          <div class="nav-item"><a role="button" data-rr-ui-event-key="link-1" class="nav-link" tabindex="0"
-              href="#">Reviews</a></div>
-          <div class="nav-item"><a role="button" data-rr-ui-event-key="link-1" class="nav-link" tabindex="0"
-              href="#">FAQs</a></div>
-        </div>
-        <div style="background-color: rgb(250, 250, 250);">
-          <div class=" mt-4 right"><img
-              src="https://cdn.bannerbuzz.com/media/wysiwyg/new-description/custom-vinyl-banner.png" width="520px"
-              class="float-start mw-100" alt="">
-            <h2>Buy Premium Custom Vinyl Banners to Maximize Your Brand Visibility</h2>
-            <p>From grand openings to store sales, you can advertise your cause with our versatile vinyl
-              banners. We offer a huge inventory of pre-designed <strong>custom vinyl banners</strong>
-              to suit your advertising needs. You can get the most out of these banners through custom
-              sizing and personalizing. Get creative and create a persistent impression on your
-              potential customers now.</p>
-            <p>Our business banners can last for a long time as they are made of sturdy material. They
-              are durable enough to withstand outdoor elements over a period. We make them with
-              high-quality PVC flex. Their graphic weight is 13 Oz and becomes 16 Oz after upgrading
-              to a UV-resistant print.</p>
-            <p>We offer our vinyl banners and signs in pre-defined sizes and custom sizes to choose
-              from. Depending on your requirement, you can select your ideal banner in fixed sizes
-              available on the website or get it customized in custom sizes. The banners will
-              highlight your product even from a distance due to its clear and vibrant printing.</p>
-            <p>You can create your own personalized vinyl banners with our easy-to-use online design
-              tool, upload an image or hire a professional designer at an additional fee. Our vinyl
-              banner printing techniques include eco solvent printing and UV printing. We print your
-              custom designs in full color, 720 DPI using eco solvent printing technology to ensure
-              impactful visibility. You can then choose between printing your custom design on one or
-              two sides.</p>
-            <p>We use UV printing at 600 DPI for double sided printing. If you choose double-sided
-              printing, the custom graphics on either side can be identical or different. Our vinyl
-              display also comes with finishing options, lamination, hanging options, wind flaps and
-              many more accessories. You can get completely unique promotional banners to suit your
-              needs.</p>
-            <p>Backed by multiple hanging options and accessories, installing vinyl banners is a breeze.
-              From ultra-strong adhesive tabs to pole pockets and metal grommets, we provide different
-              hanging options to choose from. To further facilitate installation, you can get buy
-              accessory kit including zip ties, bungees, nylon ropes, skyhooks, banner clips, pole
-              brackets and more.</p>
-            <p>It is recommended to laminate the banners to increase their longevity. The laminated
-              tough topcoat offers maximum protection against harsh weather, provide additional
-              abrasion resistance. Moreover, it protects the banners from wet and humid conditions an
-              increase the durability up to 2 years without impairing the substrate's flexibility. The
-              banners stay durable both indoors and outdoors generating wider brand awareness and
-              exposure.</p>
-            <p>Get your custom vinyl banners finished with wind flaps if you live in windy regions. The
-              wind flaps are nothing but half cut circles on the banner that allow the wind to pass
-              through them without damaging it.</p>
-            <p>Maintaining these custom vinyl banners is easy and simple. You can simply clean them
-              using a soft, damp cloth without a cleaning solution. So, shop these personalized custom
-              vinyl banners printed using premium vinyl printing now and boost your sales. Now order
-              the banners from BannerBuzz and get doorstep delivery. Place bulk order and enjoy huge
-              discounts.</p>
-          </div>
-          <div class="fancyCheck mb-4"><strong>Product Specification</strong>
-            <ul>
-              <li>Material: High Quality PVC Flex</li>
-              <li>Graphic Weight :13 Oz and 16 Oz after upgrade</li>
-              <li>Graphic Weight:13 Oz (For two sided)</li>
-              <li>Graphic front/back color: Front- white, Back- gray (For single sided)</li>
-              <li>Printing: Full Color, 720DPI, Eco Solvent Printing</li>
-              <li>Printing: Full Color, 600DPI, UV Printing (For two sided)</li>
-              <li>Graphic Size Variance Up to 5 ft : +/- 0.5 inch</li>
-              <li>Graphic Size Variance &gt; 5 ft : +/- 1 Inch</li>
-              <li>Graphic Care Instructions: To clean a vinyl banner, gently wipe it down with a soft,
-                damp cloth with no cleaning solution.</li>
-              <li>Usage: Can be used indoor and outdoor</li>
-              <li>For banner size having width and height more than 10ft, the banner will be made by
-                joining two layers (11 Oz) back-to-back - Applicable for two sided banners only</li>
-            </ul>
-          </div>
-        </div>
-        <div class="my-5">
-          <h2>Printing Options</h2>
-          <div class="col-12 d-flex flex-wrap mt-5">
-            <div class="col-12 col-lg-6 flex-wrap flex-sm-nowrap d-flex my-3"><img
-                src="https://cdn.bannerbuzz.com/media/wysiwyg/new-description/single-sided-banner.jpg" width="160px"
-                class="rounded me-4" height="160px">
-              <div>
-                <h4>Single Sided Printing</h4>
-                <p>The standard single-sided printing option prints on one side, with white on the
-                  front and gray on the back.</p>
-              </div>
-            </div>
-            <div class="col-12 col-lg-6 flex-wrap flex-sm-nowrap d-flex my-3"><img
-                src="https://cdn.bannerbuzz.com/media/wysiwyg/new-description/single-sided-banner.jpg" width="160px"
-                class="rounded me-4" height="160px">
-              <div>
-                <h4>Single Sided Printing</h4>
-                <p>The standard single-sided printing option prints on one side, with white on the
-                  front and gray on the back.</p>
-              </div>
-            </div>
-            <div class="col-12 col-lg-6 flex-wrap flex-sm-nowrap d-flex my-3"><img
-                src="https://cdn.bannerbuzz.com/media/wysiwyg/new-description/single-sided-banner.jpg" width="160px"
-                class="rounded me-4" height="160px">
-              <div>
-                <h4>Single Sided Printing</h4>
-                <p>The standard single-sided printing option prints on one side, with white on the
-                  front and gray on the back.</p>
-              </div>
+
+      <div class="action-section">
+        <button class="btn btn-primary add-to-cart-btn" (click)="addToCart()" *ngIf="!isInCart">
+          <i class="bi bi-cart-plus me-2"></i>
+          Add to Cart
+        </button>
+        <button class="btn btn-primary add-to-cart-btn" (click)="updateCart()" *ngIf="isInCart">
+          <i class="bi bi-arrow-repeat me-2"></i>
+          Update Cart
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Product Details Tabs -->
+<section class="product-tabs-section">
+  <div class="container">
+    <div class="tabs-container">
+      <!-- Tab Navigation -->
+      <ul class="nav nav-pills product-tabs" id="productTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active product-tab-btn" 
+                  id="description-tab" 
+                  data-bs-toggle="pill" 
+                  data-bs-target="#description" 
+                  type="button" 
+                  role="tab">
+            <i class="bi bi-file-text me-2"></i>
+            Description
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link product-tab-btn" 
+                  id="faqs-tab" 
+                  data-bs-toggle="pill" 
+                  data-bs-target="#faqs" 
+                  type="button" 
+                  role="tab">
+            <i class="bi bi-question-circle me-2"></i>
+            FAQs
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link product-tab-btn" 
+                  id="reviews-tab" 
+                  data-bs-toggle="pill" 
+                  data-bs-target="#reviews" 
+                  type="button" 
+                  role="tab">
+            <i class="bi bi-star me-2"></i>
+            Reviews ({{reviewSummaryData?.totalReviews || 0}})
+          </button>
+        </li>
+      </ul>
+
+      <!-- Tab Content -->
+      <div class="tab-content product-tab-content" id="productTabsContent">
+        <!-- Description Tab -->
+        <div class="tab-pane fade show active" id="description" role="tabpanel">
+          <div class="description-content">
+            <div class="description-text">
+              <p>{{formObj?.product_description}}</p>
             </div>
           </div>
         </div>
-        <div class="my-5">
-          <h2>Customer Reviews</h2>
-          <div class="d-flex justify-content-between flex-wrap">
-            <div class="col-md-5 col-12">
-              <div class="inner">
-                <div class="rating"><span class="rating-num">4.0</span>
-                  <div class="rating-stars"><span><i class="active icon-star"></i></span><span><i
-                        class="active icon-star"></i></span><span><i class="active icon-star"></i></span><span><i
-                        class="active icon-star"></i></span><span><i class="icon-star"></i></span></div>
-                  <div class="rating-users"><i class="icon-user"></i> 1,014,004 total</div>
+
+        <!-- FAQs Tab -->
+        <div class="tab-pane fade" id="faqs" role="tabpanel">
+          <div class="faqs-content">
+            <h4 class="faqs-title">Frequently Asked Questions</h4>
+            <div class="accordion" id="faqsAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                    What type of vinyl is used for banners?
+                  </button>
+                </h2>
+                <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqsAccordion">
+                  <div class="accordion-body">
+                    The most commonly used material is a heavy weight vinyl technically known as PVC.
+                  </div>
                 </div>
-                <div class="histo">
-                  <div class="five histo-rate"><span class="histo-star"><i class="active icon-star"></i> 5 </span><span
-                      class="bar-block"><span id="bar-five" class="bar"><span>566,784</span>&nbsp;</span></span>
-                  </div>
-                  <div class="four histo-rate"><span class="histo-star"><i class="active icon-star"></i> 4 </span><span
-                      class="bar-block"><span id="bar-four" class="bar"><span>171,298</span>&nbsp;</span></span>
-                  </div>
-                  <div class="three histo-rate"><span class="histo-star"><i class="active icon-star"></i> 3 </span><span
-                      class="bar-block"><span id="bar-three" class="bar"><span>94,940</span>&nbsp;</span></span>
-                  </div>
-                  <div class="two histo-rate"><span class="histo-star"><i class="active icon-star"></i> 2 </span><span
-                      class="bar-block"><span id="bar-two" class="bar"><span>44,525</span>&nbsp;</span></span>
-                  </div>
-                  <div class="one histo-rate"><span class="histo-star"><i class="active icon-star"></i> 1 </span><span
-                      class="bar-block"><span id="bar-one" class="bar"><span>136,457</span>&nbsp;</span></span>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                    Are vinyl banners suitable for outdoor use?
+                  </button>
+                </h2>
+                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqsAccordion">
+                  <div class="accordion-body">
+                    Yes, our vinyl banners are perfectly suitable for both indoor and outdoor display, making them a great option for promotional advertising.
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-12 col-md-7 d-flex flex-column align-items-end">
-              <button class="btn btn-light my-2">
-                <img src="assets/images/blogs.svg"> Write a Review</button>
-              <button class="btn btn-light"><img src="assets/images/chat-now.svg"> ask a Question</button>
-            </div>
           </div>
-          <div class="review-list">
-            <ul>
-              <li>
-                <div class="d-flex">
-                  <div class="left"><span><img src="https://bootdey.com/img/Content/avatar/avatar1.png"
-                        class="profile-pict-img img-fluid" alt=""></span></div>
-                  <div class="right">
-                    <h4>Askbootstrap<span class="gig-rating text-body-2"><svg xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 1792 1792" width="15" height="15">
-                          <path fill="currentColor"
-                            d="M1728 647q0 22-26 48l-363 354 86 500q1 7 1 20 0 21-10.5 35.5t-30.5 14.5q-19 0-40-12l-449-236-449 236q-22 12-40 12-21 0-31.5-14.5t-10.5-35.5q0-6 2-20l86-500-364-354q-25-27-25-48 0-37 56-46l502-73 225-455q19-41 49-41t49 41l225 455 502 73q56 9 56 46z">
-                          </path>
-                        </svg>5.0</span></h4>
-                    <div class="country d-flex align-items-center"><span>
-                        <img class="country-flag img-fluid" src="https://bootdey.com/img/Content/avatar/avatar6.png">
+        </div>
+
+        <!-- Reviews Tab -->
+        <div class="tab-pane fade" id="reviews" role="tabpanel">
+          <div class="reviews-content">
+            <!-- Reviews Summary -->
+            <div class="reviews-summary">
+              <div class="row align-items-center">
+                <div class="col-md-4">
+                  <div class="rating-overview">
+                    <div class="overall-rating">{{reviewSummaryData?.averageRating || 0}}</div>
+                    <div class="rating-stars">
+                      <i *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" class="bi"
+                         [ngClass]="{'bi-star-fill': i < (reviewSummaryData?.averageRating || 0), 'bi-star': i >= (reviewSummaryData?.averageRating || 0)}"></i>
+                    </div>
+                    <div class="rating-text">Based on {{reviewSummaryData?.totalReviews || 0}} reviews</div>
+                  </div>
+                </div>
+                <div class="col-md-5">
+                  <div class="rating-breakdown">
+                    <div class="rating-row" *ngFor="let rating of [5, 4, 3, 2, 1]">
+                      <span class="rating-label">{{rating}} <i class="bi bi-star-fill"></i></span>
+                      <div class="rating-bar">
+                        <div class="rating-fill" [style.width.%]="ratingData[rating].progress"></div>
+                      </div>
+                      <span class="rating-count">{{ratingData[rating].count}}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <button class="btn btn-primary write-review-btn" data-bs-toggle="modal" data-bs-target="#reviewAddmodal">
+                    <i class="bi bi-pencil me-2"></i>
+                    Write a Review
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Reviews List -->
+            <div class="reviews-list">
+              <div class="review-item" *ngFor="let review of reviewList">
+                <div class="review-header">
+                  <div class="reviewer-info">
+                    <div class="reviewer-avatar">
+                      <i class="bi bi-person-circle"></i>
+                    </div>
+                    <div class="reviewer-details">
+                      <h6 class="reviewer-name">{{review?.userName}}</h6>
+                      <span class="verified-badge">
+                        <i class="bi bi-patch-check-fill me-1"></i>
+                        Verified Buyer
                       </span>
-                      <div class="country-name font-accent">India</div>
-                    </div>
-                    <div class="review-description">
-                      <p>The process was smooth, after providing the required info, Pragyesh
-                        sent me an outstanding packet of wireframes. Thank you a lot!</p>
-                    </div><span class="publish py-3 d-inline-block w-100">Published 4 weeks
-                      ago</span>
-                    <div class="helpful-thumbs">
-                      <div class="helpful-thumb text-body-2"><span class="fit-icon thumbs-icon"><svg width="14"
-                            height="14" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                              d="M13.5804 7.81165C13.8519 7.45962 14 7 14 6.43858C14 5.40843 13.123 4.45422 12.0114 4.45422H10.0932C10.3316 3.97931 10.6591 3.39024 10.6591 2.54516C10.6591 0.948063 10.022 0 8.39207 0C7.57189 0 7.26753 1.03682 7.11159 1.83827C7.01843 2.31708 6.93041 2.76938 6.65973 3.04005C6.01524 3.68457 5.03125 5.25 4.44013 5.56787C4.38028 5.59308 4.3038 5.61293 4.22051 5.62866C4.06265 5.39995 3.79889 5.25 3.5 5.25H0.875C0.391754 5.25 0 5.64175 0 6.125V13.125C0 13.6082 0.391754 14 0.875 14H3.5C3.98325 14 4.375 13.6082 4.375 13.125V12.886C5.26354 12.886 7.12816 14.0002 9.22728 13.9996C9.37781 13.9997 10.2568 14.0004 10.3487 13.9996C11.9697 14 12.8713 13.0183 12.8188 11.5443C13.2325 11.0596 13.4351 10.3593 13.3172 9.70944C13.6578 9.17552 13.7308 8.42237 13.5804 7.81165ZM0.875 13.125V6.125H3.5V13.125H0.875ZM12.4692 7.5565C12.9062 7.875 12.9062 9.1875 12.3159 9.48875C12.6856 10.1111 12.3529 10.9439 11.9053 11.1839C12.1321 12.6206 11.3869 13.1146 10.3409 13.1246C10.2504 13.1255 9.32247 13.1246 9.22731 13.1246C7.23316 13.1246 5.54296 12.011 4.37503 12.011V6.44287C5.40611 6.44287 6.35212 4.58516 7.27847 3.65879C8.11368 2.82357 7.83527 1.43153 8.3921 0.874727C9.78414 0.874727 9.78414 1.84589 9.78414 2.54518C9.78414 3.69879 8.94893 4.21561 8.94893 5.32924H12.0114C12.6329 5.32924 13.1223 5.88607 13.125 6.44287C13.1277 6.99967 12.9062 7.4375 12.4692 7.5565ZM2.84375 11.8125C2.84375 12.1749 2.54994 12.4688 2.1875 12.4688C1.82506 12.4688 1.53125 12.1749 1.53125 11.8125C1.53125 11.4501 1.82506 11.1562 2.1875 11.1562C2.54994 11.1562 2.84375 11.4501 2.84375 11.8125Z">
-                            </path>
-                          </svg></span><span class="thumb-title ms-2">Helpful</span></div>
-                      <div class="helpful-thumb text-body-2 ml-3"><span class="fit-icon thumbs-icon"><svg width="14"
-                            height="14" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                              d="M0.419563 6.18835C0.148122 6.54038 6.11959e-07 7 5.62878e-07 7.56142C2.81294e-05 8.59157 0.876996 9.54578 1.98863 9.54578L3.90679 9.54578C3.66836 10.0207 3.34091 10.6098 3.34091 11.4548C3.34089 13.0519 3.97802 14 5.60793 14C6.42811 14 6.73247 12.9632 6.88841 12.1617C6.98157 11.6829 7.06959 11.2306 7.34027 10.9599C7.98476 10.3154 8.96875 8.75 9.55987 8.43213C9.61972 8.40692 9.6962 8.38707 9.77949 8.37134C9.93735 8.60005 10.2011 8.75 10.5 8.75L13.125 8.75C13.6082 8.75 14 8.35825 14 7.875L14 0.875C14 0.391754 13.6082 -3.42482e-08 13.125 -7.64949e-08L10.5 -3.0598e-07C10.0168 -3.48226e-07 9.625 0.391754 9.625 0.875L9.625 1.11398C8.73647 1.11398 6.87184 -0.000191358 4.77272 0.00038257C4.62219 0.000300541 3.74322 -0.000438633 3.65127 0.000382472C2.03027 -1.04643e-06 1.12867 0.981667 1.18117 2.45566C0.76754 2.94038 0.564868 3.64065 0.682829 4.29056C0.342234 4.82448 0.269227 5.57763 0.419563 6.18835ZM13.125 0.875L13.125 7.875L10.5 7.875L10.5 0.875L13.125 0.875ZM1.53079 6.4435C1.09375 6.125 1.09375 4.8125 1.6841 4.51125C1.31436 3.88891 1.64713 3.05613 2.09467 2.81605C1.86791 1.37941 2.61313 0.885417 3.65906 0.875355C3.74962 0.874535 4.67753 0.875355 4.77269 0.875355C6.76684 0.875355 8.45704 1.98898 9.62497 1.98898L9.62497 7.55713C8.5939 7.55713 7.64788 9.41484 6.72153 10.3412C5.88632 11.1764 6.16473 12.5685 5.6079 13.1253C4.21586 13.1253 4.21586 12.1541 4.21586 11.4548C4.21586 10.3012 5.05107 9.78439 5.05107 8.67076L1.9886 8.67076C1.36708 8.67076 0.877707 8.11393 0.874973 7.55713C0.872266 7.00033 1.09375 6.5625 1.53079 6.4435ZM11.1563 2.1875C11.1563 1.82506 11.4501 1.53125 11.8125 1.53125C12.1749 1.53125 12.4688 1.82506 12.4688 2.1875C12.4688 2.54994 12.1749 2.84375 11.8125 2.84375C11.4501 2.84375 11.1563 2.54994 11.1563 2.1875Z">
-                            </path>
-                          </svg></span><span class="thumb-title ms-2">Not Helpful</span>
-                      </div>
-                    </div>
-                    <div class="response-item mt-4 d-flex">
-                      <div class="left"><span><img src="https://bootdey.com/img/Content/avatar/avatar2.png"
-                            class="profile-pict-img img-fluid" alt=""></span></div>
-                      <div class="right">
-                        <h4>Gurdeep Osahan<span class="gig-rating text-body-2"><svg xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 1792 1792" width="15" height="15">
-                              <path fill="currentColor"
-                                d="M1728 647q0 22-26 48l-363 354 86 500q1 7 1 20 0 21-10.5 35.5t-30.5 14.5q-19 0-40-12l-449-236-449 236q-22 12-40 12-21 0-31.5-14.5t-10.5-35.5q0-6 2-20l86-500-364-354q-25-27-25-48 0-37 56-46l502-73 225-455q19-41 49-41t49 41l225 455 502 73q56 9 56 46z">
-                              </path>
-                            </svg>5.0</span></h4>
-                        <div class="country d-flex align-items-center"><span><img class="country-flag img-fluid"
-                              src="https://bootdey.com/img/Content/avatar/avatar3.png"></span>
-                          <div class="country-name font-accent">India</div>
-                        </div>
-                        <div class="review-description">
-                          <p>The process was smooth, after providing the required info,
-                            Pragyesh sent me an outstanding packet of wireframes. Thank
-                            you a lot!</p>
-                        </div><span class="publish py-3 d-inline-block w-100">Published 4
-                          weeks ago</span>
-                      </div>
                     </div>
                   </div>
+                  <div class="review-date">{{review?.createdAt | date:'MMM dd, yyyy'}}</div>
                 </div>
-              </li>
-            </ul>
-          </div>
-          <div class="review-list">
-            <ul>
-              <li>
-                <div class="d-flex">
-                  <div class="left"><span><img src="https://bootdey.com/img/Content/avatar/avatar1.png"
-                        class="profile-pict-img img-fluid" alt=""></span></div>
-                  <div class="right">
-                    <h4>Askbootstrap<span class="gig-rating text-body-2"><svg xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 1792 1792" width="15" height="15">
-                          <path fill="currentColor"
-                            d="M1728 647q0 22-26 48l-363 354 86 500q1 7 1 20 0 21-10.5 35.5t-30.5 14.5q-19 0-40-12l-449-236-449 236q-22 12-40 12-21 0-31.5-14.5t-10.5-35.5q0-6 2-20l86-500-364-354q-25-27-25-48 0-37 56-46l502-73 225-455q19-41 49-41t49 41l225 455 502 73q56 9 56 46z">
-                          </path>
-                        </svg>5.0</span></h4>
-                    <div class="country d-flex align-items-center"><span><img class="country-flag img-fluid"
-                          src="https://bootdey.com/img/Content/avatar/avatar6.png"></span>
-                      <div class="country-name font-accent">India</div>
-                    </div>
-                    <div class="review-description">
-                      <p>The process was smooth, after providing the required info, Pragyesh
-                        sent me an outstanding packet of wireframes. Thank you a lot!</p>
-                    </div><span class="publish py-3 d-inline-block w-100">Published 4 weeks
-                      ago</span>
-                    <div class="helpful-thumbs">
-                      <div class="helpful-thumb text-body-2"><span class="fit-icon thumbs-icon"><svg width="14"
-                            height="14" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                              d="M13.5804 7.81165C13.8519 7.45962 14 7 14 6.43858C14 5.40843 13.123 4.45422 12.0114 4.45422H10.0932C10.3316 3.97931 10.6591 3.39024 10.6591 2.54516C10.6591 0.948063 10.022 0 8.39207 0C7.57189 0 7.26753 1.03682 7.11159 1.83827C7.01843 2.31708 6.93041 2.76938 6.65973 3.04005C6.01524 3.68457 5.03125 5.25 4.44013 5.56787C4.38028 5.59308 4.3038 5.61293 4.22051 5.62866C4.06265 5.39995 3.79889 5.25 3.5 5.25H0.875C0.391754 5.25 0 5.64175 0 6.125V13.125C0 13.6082 0.391754 14 0.875 14H3.5C3.98325 14 4.375 13.6082 4.375 13.125V12.886C5.26354 12.886 7.12816 14.0002 9.22728 13.9996C9.37781 13.9997 10.2568 14.0004 10.3487 13.9996C11.9697 14 12.8713 13.0183 12.8188 11.5443C13.2325 11.0596 13.4351 10.3593 13.3172 9.70944C13.6578 9.17552 13.7308 8.42237 13.5804 7.81165ZM0.875 13.125V6.125H3.5V13.125H0.875ZM12.4692 7.5565C12.9062 7.875 12.9062 9.1875 12.3159 9.48875C12.6856 10.1111 12.3529 10.9439 11.9053 11.1839C12.1321 12.6206 11.3869 13.1146 10.3409 13.1246C10.2504 13.1255 9.32247 13.1246 9.22731 13.1246C7.23316 13.1246 5.54296 12.011 4.37503 12.011V6.44287C5.40611 6.44287 6.35212 4.58516 7.27847 3.65879C8.11368 2.82357 7.83527 1.43153 8.3921 0.874727C9.78414 0.874727 9.78414 1.84589 9.78414 2.54518C9.78414 3.69879 8.94893 4.21561 8.94893 5.32924H12.0114C12.6329 5.32924 13.1223 5.88607 13.125 6.44287C13.1277 6.99967 12.9062 7.4375 12.4692 7.5565ZM2.84375 11.8125C2.84375 12.1749 2.54994 12.4688 2.1875 12.4688C1.82506 12.4688 1.53125 12.1749 1.53125 11.8125C1.53125 11.4501 1.82506 11.1562 2.1875 11.1562C2.54994 11.1562 2.84375 11.4501 2.84375 11.8125Z">
-                            </path>
-                          </svg></span><span class="thumb-title ms-2">Helpful</span></div>
-                      <div class="helpful-thumb text-body-2 ml-3"><span class="fit-icon thumbs-icon"><svg width="14"
-                            height="14" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                              d="M0.419563 6.18835C0.148122 6.54038 6.11959e-07 7 5.62878e-07 7.56142C2.81294e-05 8.59157 0.876996 9.54578 1.98863 9.54578L3.90679 9.54578C3.66836 10.0207 3.34091 10.6098 3.34091 11.4548C3.34089 13.0519 3.97802 14 5.60793 14C6.42811 14 6.73247 12.9632 6.88841 12.1617C6.98157 11.6829 7.06959 11.2306 7.34027 10.9599C7.98476 10.3154 8.96875 8.75 9.55987 8.43213C9.61972 8.40692 9.6962 8.38707 9.77949 8.37134C9.93735 8.60005 10.2011 8.75 10.5 8.75L13.125 8.75C13.6082 8.75 14 8.35825 14 7.875L14 0.875C14 0.391754 13.6082 -3.42482e-08 13.125 -7.64949e-08L10.5 -3.0598e-07C10.0168 -3.48226e-07 9.625 0.391754 9.625 0.875L9.625 1.11398C8.73647 1.11398 6.87184 -0.000191358 4.77272 0.00038257C4.62219 0.000300541 3.74322 -0.000438633 3.65127 0.000382472C2.03027 -1.04643e-06 1.12867 0.981667 1.18117 2.45566C0.76754 2.94038 0.564868 3.64065 0.682829 4.29056C0.342234 4.82448 0.269227 5.57763 0.419563 6.18835ZM13.125 0.875L13.125 7.875L10.5 7.875L10.5 0.875L13.125 0.875ZM1.53079 6.4435C1.09375 6.125 1.09375 4.8125 1.6841 4.51125C1.31436 3.88891 1.64713 3.05613 2.09467 2.81605C1.86791 1.37941 2.61313 0.885417 3.65906 0.875355C3.74962 0.874535 4.67753 0.875355 4.77269 0.875355C6.76684 0.875355 8.45704 1.98898 9.62497 1.98898L9.62497 7.55713C8.5939 7.55713 7.64788 9.41484 6.72153 10.3412C5.88632 11.1764 6.16473 12.5685 5.6079 13.1253C4.21586 13.1253 4.21586 12.1541 4.21586 11.4548C4.21586 10.3012 5.05107 9.78439 5.05107 8.67076L1.9886 8.67076C1.36708 8.67076 0.877707 8.11393 0.874973 7.55713C0.872266 7.00033 1.09375 6.5625 1.53079 6.4435ZM11.1563 2.1875C11.1563 1.82506 11.4501 1.53125 11.8125 1.53125C12.1749 1.53125 12.4688 1.82506 12.4688 2.1875C12.4688 2.54994 12.1749 2.84375 11.8125 2.84375C11.4501 2.84375 11.1563 2.54994 11.1563 2.1875Z">
-                            </path>
-                          </svg></span><span class="thumb-title ms-2">Not Helpful</span>
-                      </div>
-                    </div>
-                    <div class="response-item mt-4 d-flex">
-                      <div class="left"><span><img src="https://bootdey.com/img/Content/avatar/avatar2.png"
-                            class="profile-pict-img img-fluid" alt=""></span></div>
-                      <div class="right">
-                        <h4>Gurdeep Osahan<span class="gig-rating text-body-2"><svg xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 1792 1792" width="15" height="15">
-                              <path fill="currentColor"
-                                d="M1728 647q0 22-26 48l-363 354 86 500q1 7 1 20 0 21-10.5 35.5t-30.5 14.5q-19 0-40-12l-449-236-449 236q-22 12-40 12-21 0-31.5-14.5t-10.5-35.5q0-6 2-20l86-500-364-354q-25-27-25-48 0-37 56-46l502-73 225-455q19-41 49-41t49 41l225 455 502 73q56 9 56 46z">
-                              </path>
-                            </svg>5.0</span></h4>
-                        <div class="country d-flex align-items-center"><span><img class="country-flag img-fluid"
-                              src="https://bootdey.com/img/Content/avatar/avatar3.png"></span>
-                          <div class="country-name font-accent">India</div>
-                        </div>
-                        <div class="review-description">
-                          <p>The process was smooth, after providing the required info,
-                            Pragyesh sent me an outstanding packet of wireframes. Thank
-                            you a lot!</p>
-                        </div><span class="publish py-3 d-inline-block w-100">Published 4
-                          weeks ago</span>
-                      </div>
-                    </div>
+                <div class="review-rating">
+                  <div class="rating-stars">
+                    <i *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" class="bi"
+                       [ngClass]="{'bi-star-fill': i < review?.rating, 'bi-star': i >= review?.rating}"></i>
                   </div>
+                  <h6 class="review-title">{{review?.title}}</h6>
                 </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="py-5">
-          <h2>Frequently Asked Questions</h2>
-          <div class="mt-4">
-            <p class="mb-1">Q: What type of vinyl is used for banners?</p>
-            <p class="mb-1">A: The most commonly used material is a heavy weight vinyl technically known
-              as PVC.</p>
-            <div class="helpful-thumbs float-end">
-              <div class="helpful-thumb text-body-2"><span class="fit-icon thumbs-icon"><svg width="14" height="14"
-                    viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M13.5804 7.81165C13.8519 7.45962 14 7 14 6.43858C14 5.40843 13.123 4.45422 12.0114 4.45422H10.0932C10.3316 3.97931 10.6591 3.39024 10.6591 2.54516C10.6591 0.948063 10.022 0 8.39207 0C7.57189 0 7.26753 1.03682 7.11159 1.83827C7.01843 2.31708 6.93041 2.76938 6.65973 3.04005C6.01524 3.68457 5.03125 5.25 4.44013 5.56787C4.38028 5.59308 4.3038 5.61293 4.22051 5.62866C4.06265 5.39995 3.79889 5.25 3.5 5.25H0.875C0.391754 5.25 0 5.64175 0 6.125V13.125C0 13.6082 0.391754 14 0.875 14H3.5C3.98325 14 4.375 13.6082 4.375 13.125V12.886C5.26354 12.886 7.12816 14.0002 9.22728 13.9996C9.37781 13.9997 10.2568 14.0004 10.3487 13.9996C11.9697 14 12.8713 13.0183 12.8188 11.5443C13.2325 11.0596 13.4351 10.3593 13.3172 9.70944C13.6578 9.17552 13.7308 8.42237 13.5804 7.81165ZM0.875 13.125V6.125H3.5V13.125H0.875ZM12.4692 7.5565C12.9062 7.875 12.9062 9.1875 12.3159 9.48875C12.6856 10.1111 12.3529 10.9439 11.9053 11.1839C12.1321 12.6206 11.3869 13.1146 10.3409 13.1246C10.2504 13.1255 9.32247 13.1246 9.22731 13.1246C7.23316 13.1246 5.54296 12.011 4.37503 12.011V6.44287C5.40611 6.44287 6.35212 4.58516 7.27847 3.65879C8.11368 2.82357 7.83527 1.43153 8.3921 0.874727C9.78414 0.874727 9.78414 1.84589 9.78414 2.54518C9.78414 3.69879 8.94893 4.21561 8.94893 5.32924H12.0114C12.6329 5.32924 13.1223 5.88607 13.125 6.44287C13.1277 6.99967 12.9062 7.4375 12.4692 7.5565ZM2.84375 11.8125C2.84375 12.1749 2.54994 12.4688 2.1875 12.4688C1.82506 12.4688 1.53125 12.1749 1.53125 11.8125C1.53125 11.4501 1.82506 11.1562 2.1875 11.1562C2.54994 11.1562 2.84375 11.4501 2.84375 11.8125Z">
-                    </path>
-                  </svg></span><span class="thumb-title ms-2">Helpful</span></div>
-              <div class="helpful-thumb text-body-2 ml-3"><span class="fit-icon thumbs-icon"><svg width="14" height="14"
-                    viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M0.419563 6.18835C0.148122 6.54038 6.11959e-07 7 5.62878e-07 7.56142C2.81294e-05 8.59157 0.876996 9.54578 1.98863 9.54578L3.90679 9.54578C3.66836 10.0207 3.34091 10.6098 3.34091 11.4548C3.34089 13.0519 3.97802 14 5.60793 14C6.42811 14 6.73247 12.9632 6.88841 12.1617C6.98157 11.6829 7.06959 11.2306 7.34027 10.9599C7.98476 10.3154 8.96875 8.75 9.55987 8.43213C9.61972 8.40692 9.6962 8.38707 9.77949 8.37134C9.93735 8.60005 10.2011 8.75 10.5 8.75L13.125 8.75C13.6082 8.75 14 8.35825 14 7.875L14 0.875C14 0.391754 13.6082 -3.42482e-08 13.125 -7.64949e-08L10.5 -3.0598e-07C10.0168 -3.48226e-07 9.625 0.391754 9.625 0.875L9.625 1.11398C8.73647 1.11398 6.87184 -0.000191358 4.77272 0.00038257C4.62219 0.000300541 3.74322 -0.000438633 3.65127 0.000382472C2.03027 -1.04643e-06 1.12867 0.981667 1.18117 2.45566C0.76754 2.94038 0.564868 3.64065 0.682829 4.29056C0.342234 4.82448 0.269227 5.57763 0.419563 6.18835ZM13.125 0.875L13.125 7.875L10.5 7.875L10.5 0.875L13.125 0.875ZM1.53079 6.4435C1.09375 6.125 1.09375 4.8125 1.6841 4.51125C1.31436 3.88891 1.64713 3.05613 2.09467 2.81605C1.86791 1.37941 2.61313 0.885417 3.65906 0.875355C3.74962 0.874535 4.67753 0.875355 4.77269 0.875355C6.76684 0.875355 8.45704 1.98898 9.62497 1.98898L9.62497 7.55713C8.5939 7.55713 7.64788 9.41484 6.72153 10.3412C5.88632 11.1764 6.16473 12.5685 5.6079 13.1253C4.21586 13.1253 4.21586 12.1541 4.21586 11.4548C4.21586 10.3012 5.05107 9.78439 5.05107 8.67076L1.9886 8.67076C1.36708 8.67076 0.877707 8.11393 0.874973 7.55713C0.872266 7.00033 1.09375 6.5625 1.53079 6.4435ZM11.1563 2.1875C11.1563 1.82506 11.4501 1.53125 11.8125 1.53125C12.1749 1.53125 12.4688 1.82506 12.4688 2.1875C12.4688 2.54994 12.1749 2.84375 11.8125 2.84375C11.4501 2.84375 11.1563 2.54994 11.1563 2.1875Z">
-                    </path>
-                  </svg></span><span class="thumb-title ms-2">Not Helpful</span></div>
-            </div>
-            <hr style="clear: right;">
-          </div>
-          <div class="mt-4">
-            <p class="mb-1">Q: What type of vinyl is used for banners?</p>
-            <p class="mb-1">A: The most commonly used material is a heavy weight vinyl technically known
-              as PVC.</p>
-            <div class="helpful-thumbs float-end">
-              <div class="helpful-thumb text-body-2"><span class="fit-icon thumbs-icon"><svg width="14" height="14"
-                    viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M13.5804 7.81165C13.8519 7.45962 14 7 14 6.43858C14 5.40843 13.123 4.45422 12.0114 4.45422H10.0932C10.3316 3.97931 10.6591 3.39024 10.6591 2.54516C10.6591 0.948063 10.022 0 8.39207 0C7.57189 0 7.26753 1.03682 7.11159 1.83827C7.01843 2.31708 6.93041 2.76938 6.65973 3.04005C6.01524 3.68457 5.03125 5.25 4.44013 5.56787C4.38028 5.59308 4.3038 5.61293 4.22051 5.62866C4.06265 5.39995 3.79889 5.25 3.5 5.25H0.875C0.391754 5.25 0 5.64175 0 6.125V13.125C0 13.6082 0.391754 14 0.875 14H3.5C3.98325 14 4.375 13.6082 4.375 13.125V12.886C5.26354 12.886 7.12816 14.0002 9.22728 13.9996C9.37781 13.9997 10.2568 14.0004 10.3487 13.9996C11.9697 14 12.8713 13.0183 12.8188 11.5443C13.2325 11.0596 13.4351 10.3593 13.3172 9.70944C13.6578 9.17552 13.7308 8.42237 13.5804 7.81165ZM0.875 13.125V6.125H3.5V13.125H0.875ZM12.4692 7.5565C12.9062 7.875 12.9062 9.1875 12.3159 9.48875C12.6856 10.1111 12.3529 10.9439 11.9053 11.1839C12.1321 12.6206 11.3869 13.1146 10.3409 13.1246C10.2504 13.1255 9.32247 13.1246 9.22731 13.1246C7.23316 13.1246 5.54296 12.011 4.37503 12.011V6.44287C5.40611 6.44287 6.35212 4.58516 7.27847 3.65879C8.11368 2.82357 7.83527 1.43153 8.3921 0.874727C9.78414 0.874727 9.78414 1.84589 9.78414 2.54518C9.78414 3.69879 8.94893 4.21561 8.94893 5.32924H12.0114C12.6329 5.32924 13.1223 5.88607 13.125 6.44287C13.1277 6.99967 12.9062 7.4375 12.4692 7.5565ZM2.84375 11.8125C2.84375 12.1749 2.54994 12.4688 2.1875 12.4688C1.82506 12.4688 1.53125 12.1749 1.53125 11.8125C1.53125 11.4501 1.82506 11.1562 2.1875 11.1562C2.54994 11.1562 2.84375 11.4501 2.84375 11.8125Z">
-                    </path>
-                  </svg></span><span class="thumb-title ms-2">Helpful</span></div>
-              <div class="helpful-thumb text-body-2 ml-3"><span class="fit-icon thumbs-icon"><svg width="14" height="14"
-                    viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M0.419563 6.18835C0.148122 6.54038 6.11959e-07 7 5.62878e-07 7.56142C2.81294e-05 8.59157 0.876996 9.54578 1.98863 9.54578L3.90679 9.54578C3.66836 10.0207 3.34091 10.6098 3.34091 11.4548C3.34089 13.0519 3.97802 14 5.60793 14C6.42811 14 6.73247 12.9632 6.88841 12.1617C6.98157 11.6829 7.06959 11.2306 7.34027 10.9599C7.98476 10.3154 8.96875 8.75 9.55987 8.43213C9.61972 8.40692 9.6962 8.38707 9.77949 8.37134C9.93735 8.60005 10.2011 8.75 10.5 8.75L13.125 8.75C13.6082 8.75 14 8.35825 14 7.875L14 0.875C14 0.391754 13.6082 -3.42482e-08 13.125 -7.64949e-08L10.5 -3.0598e-07C10.0168 -3.48226e-07 9.625 0.391754 9.625 0.875L9.625 1.11398C8.73647 1.11398 6.87184 -0.000191358 4.77272 0.00038257C4.62219 0.000300541 3.74322 -0.000438633 3.65127 0.000382472C2.03027 -1.04643e-06 1.12867 0.981667 1.18117 2.45566C0.76754 2.94038 0.564868 3.64065 0.682829 4.29056C0.342234 4.82448 0.269227 5.57763 0.419563 6.18835ZM13.125 0.875L13.125 7.875L10.5 7.875L10.5 0.875L13.125 0.875ZM1.53079 6.4435C1.09375 6.125 1.09375 4.8125 1.6841 4.51125C1.31436 3.88891 1.64713 3.05613 2.09467 2.81605C1.86791 1.37941 2.61313 0.885417 3.65906 0.875355C3.74962 0.874535 4.67753 0.875355 4.77269 0.875355C6.76684 0.875355 8.45704 1.98898 9.62497 1.98898L9.62497 7.55713C8.5939 7.55713 7.64788 9.41484 6.72153 10.3412C5.88632 11.1764 6.16473 12.5685 5.6079 13.1253C4.21586 13.1253 4.21586 12.1541 4.21586 11.4548C4.21586 10.3012 5.05107 9.78439 5.05107 8.67076L1.9886 8.67076C1.36708 8.67076 0.877707 8.11393 0.874973 7.55713C0.872266 7.00033 1.09375 6.5625 1.53079 6.4435ZM11.1563 2.1875C11.1563 1.82506 11.4501 1.53125 11.8125 1.53125C12.1749 1.53125 12.4688 1.82506 12.4688 2.1875C12.4688 2.54994 12.1749 2.84375 11.8125 2.84375C11.4501 2.84375 11.1563 2.54994 11.1563 2.1875Z">
-                    </path>
-                  </svg></span><span class="thumb-title ms-2">Not Helpful</span></div>
-            </div>
-            <hr style="clear: right;">
-          </div>
-          <div class="mt-4">
-            <p class="mb-1">Q: What type of vinyl is used for banners?</p>
-            <p class="mb-1">A: The most commonly used material is a heavy weight vinyl technically known
-              as PVC.</p>
-            <div class="helpful-thumbs float-end">
-              <div class="helpful-thumb text-body-2"><span class="fit-icon thumbs-icon"><svg width="14" height="14"
-                    viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M13.5804 7.81165C13.8519 7.45962 14 7 14 6.43858C14 5.40843 13.123 4.45422 12.0114 4.45422H10.0932C10.3316 3.97931 10.6591 3.39024 10.6591 2.54516C10.6591 0.948063 10.022 0 8.39207 0C7.57189 0 7.26753 1.03682 7.11159 1.83827C7.01843 2.31708 6.93041 2.76938 6.65973 3.04005C6.01524 3.68457 5.03125 5.25 4.44013 5.56787C4.38028 5.59308 4.3038 5.61293 4.22051 5.62866C4.06265 5.39995 3.79889 5.25 3.5 5.25H0.875C0.391754 5.25 0 5.64175 0 6.125V13.125C0 13.6082 0.391754 14 0.875 14H3.5C3.98325 14 4.375 13.6082 4.375 13.125V12.886C5.26354 12.886 7.12816 14.0002 9.22728 13.9996C9.37781 13.9997 10.2568 14.0004 10.3487 13.9996C11.9697 14 12.8713 13.0183 12.8188 11.5443C13.2325 11.0596 13.4351 10.3593 13.3172 9.70944C13.6578 9.17552 13.7308 8.42237 13.5804 7.81165ZM0.875 13.125V6.125H3.5V13.125H0.875ZM12.4692 7.5565C12.9062 7.875 12.9062 9.1875 12.3159 9.48875C12.6856 10.1111 12.3529 10.9439 11.9053 11.1839C12.1321 12.6206 11.3869 13.1146 10.3409 13.1246C10.2504 13.1255 9.32247 13.1246 9.22731 13.1246C7.23316 13.1246 5.54296 12.011 4.37503 12.011V6.44287C5.40611 6.44287 6.35212 4.58516 7.27847 3.65879C8.11368 2.82357 7.83527 1.43153 8.3921 0.874727C9.78414 0.874727 9.78414 1.84589 9.78414 2.54518C9.78414 3.69879 8.94893 4.21561 8.94893 5.32924H12.0114C12.6329 5.32924 13.1223 5.88607 13.125 6.44287C13.1277 6.99967 12.9062 7.4375 12.4692 7.5565ZM2.84375 11.8125C2.84375 12.1749 2.54994 12.4688 2.1875 12.4688C1.82506 12.4688 1.53125 12.1749 1.53125 11.8125C1.53125 11.4501 1.82506 11.1562 2.1875 11.1562C2.54994 11.1562 2.84375 11.4501 2.84375 11.8125Z">
-                    </path>
-                  </svg></span><span class="thumb-title ms-2">Helpful</span></div>
-              <div class="helpful-thumb text-body-2 ml-3"><span class="fit-icon thumbs-icon"><svg width="14" height="14"
-                    viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M0.419563 6.18835C0.148122 6.54038 6.11959e-07 7 5.62878e-07 7.56142C2.81294e-05 8.59157 0.876996 9.54578 1.98863 9.54578L3.90679 9.54578C3.66836 10.0207 3.34091 10.6098 3.34091 11.4548C3.34089 13.0519 3.97802 14 5.60793 14C6.42811 14 6.73247 12.9632 6.88841 12.1617C6.98157 11.6829 7.06959 11.2306 7.34027 10.9599C7.98476 10.3154 8.96875 8.75 9.55987 8.43213C9.61972 8.40692 9.6962 8.38707 9.77949 8.37134C9.93735 8.60005 10.2011 8.75 10.5 8.75L13.125 8.75C13.6082 8.75 14 8.35825 14 7.875L14 0.875C14 0.391754 13.6082 -3.42482e-08 13.125 -7.64949e-08L10.5 -3.0598e-07C10.0168 -3.48226e-07 9.625 0.391754 9.625 0.875L9.625 1.11398C8.73647 1.11398 6.87184 -0.000191358 4.77272 0.00038257C4.62219 0.000300541 3.74322 -0.000438633 3.65127 0.000382472C2.03027 -1.04643e-06 1.12867 0.981667 1.18117 2.45566C0.76754 2.94038 0.564868 3.64065 0.682829 4.29056C0.342234 4.82448 0.269227 5.57763 0.419563 6.18835ZM13.125 0.875L13.125 7.875L10.5 7.875L10.5 0.875L13.125 0.875ZM1.53079 6.4435C1.09375 6.125 1.09375 4.8125 1.6841 4.51125C1.31436 3.88891 1.64713 3.05613 2.09467 2.81605C1.86791 1.37941 2.61313 0.885417 3.65906 0.875355C3.74962 0.874535 4.67753 0.875355 4.77269 0.875355C6.76684 0.875355 8.45704 1.98898 9.62497 1.98898L9.62497 7.55713C8.5939 7.55713 7.64788 9.41484 6.72153 10.3412C5.88632 11.1764 6.16473 12.5685 5.6079 13.1253C4.21586 13.1253 4.21586 12.1541 4.21586 11.4548C4.21586 10.3012 5.05107 9.78439 5.05107 8.67076L1.9886 8.67076C1.36708 8.67076 0.877707 8.11393 0.874973 7.55713C0.872266 7.00033 1.09375 6.5625 1.53079 6.4435ZM11.1563 2.1875C11.1563 1.82506 11.4501 1.53125 11.8125 1.53125C12.1749 1.53125 12.4688 1.82506 12.4688 2.1875C12.4688 2.54994 12.1749 2.84375 11.8125 2.84375C11.4501 2.84375 11.1563 2.54994 11.1563 2.1875Z">
-                    </path>
-                  </svg></span><span class="thumb-title ms-2">Not Helpful</span></div>
-            </div>
-            <hr style="clear: right;">
-          </div>
-        </div>
-        <div class="p-5" style="background-color: rgb(240, 240, 240);">
-          <h4>Still have questions? Drop us a line</h4>
-          <div class="d-flex align-items-center flex-wrap">
-            <div class="mb-3 me-2" style="width: 250px;"><label class="form-label" for="formGroupEmail">Name<span
-                  class="text-danger">*</span></label><input placeholder="name" type="text" id="formGroupEmail"
-                class="form-control"></div>
-            <div class="mb-3 me-2" style="width: 250px;"><label class="form-label" for="formGroupPassword">Email<span
-                  class="text-danger">*</span></label><input placeholder="Email" type="text" id="formGroupPassword"
-                class="form-control"></div>
-            <div class="mb-3 me-2 input-qes"><label class="form-label" for="formGroupEmail">What do you
-                want to know?<span class="text-danger">*</span></label><input placeholder="name" type="text"
-                id="formGroupEmail" class="form-control"></div><button class="btn btn-primary mt-3">submit</button>
-          </div>
-        </div>
-        <div class="text-center py-5">
-          <h2>Recommended Products</h2>
-          <p>We curated a few products we think might interest you based on your shopping history.</p>
-          <div class="d-flex flex-wrap  justify-content-around">
-            <div class="swiper swiper-initialized swiper-horizontal mySwiper p-5">
-              <div class="swiper-wrapper">
-                <div class="swiper-slide swiper-slide-active" style="width: 207.8px; margin-right: 30px;">
-                  <div class=" rounded border  suggest-box mx-auto">
-                    <div class="card-body d-flex flex-wrap justify-content-center">
-                      <div class="img-container w-100 px-5 py-3"><img src="assets/images/pexels.jpg" alt="card-img"
-                          class="img-fluid"></div>
-                      <div class="d-flex flex-wrap align-items-center w-100 justify-content-center">
-                        <h5 class="card-title text-center mb-0 p-2">Special title treatment
-                        </h5>
-                        <div class="w-100 p-2">
-                          <div class="d-flex align-items-center justify-content-center w-50 mx-auto">
-                            <img src="assets/images/star.svg" alt="star">
-                            <img src="assets/images/star.svg" alt="star">
-                            <img src="assets/images/star.svg" alt="star">
-                            <img src="assets/images/star.svg" alt="star">
-                            <img src="assets/images/half-start.svg" alt="star">
-                            <span class="ms-1 font-weight-light">3980</span>
-                          </div>
-                          <p class="text-center p-2 card-text"><span class="test-dec">Starts at </span>$6.99</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="swiper-slide swiper-slide-next" style="width: 207.8px; margin-right: 30px;">
-                  <div class=" rounded border  suggest-box mx-auto">
-                    <div class="card-body d-flex flex-wrap justify-content-center">
-                      <div class="img-container w-100 px-5 py-3"><img src="assets/images/pexels.jpg" alt="card-img"
-                          class="img-fluid"></div>
-                      <div class="d-flex flex-wrap align-items-center w-100 justify-content-center">
-                        <h5 class="card-title text-center mb-0 p-2">Special title treatment
-                        </h5>
-                        <div class="w-100 p-2">
-                          <div class="d-flex align-items-center justify-content-center w-50 mx-auto">
-                            <img src="assets/images/star.svg" alt="star"><img src="assets/images/star.svg"
-                              alt="star"><img src="assets/images/star.svg" alt="star"><img src="assets/images/star.svg"
-                              alt="star"><img src="assets/images/half-start.svg" alt="star"><span
-                              class="ms-1 font-weight-light">3980</span>
-                          </div>
-                          <p class="text-center p-2 card-text"><span class="test-dec">Starts at </span>$6.99</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="swiper-slide" style="width: 207.8px; margin-right: 30px;">
-                  <div class=" rounded border  suggest-box mx-auto">
-                    <div class="card-body d-flex flex-wrap justify-content-center">
-                      <div class="img-container w-100 px-5 py-3"><img src="assets/images/pexels.jpg" alt="card-img"
-                          class="img-fluid"></div>
-                      <div class="d-flex flex-wrap align-items-center w-100 justify-content-center">
-                        <h5 class="card-title text-center mb-0 p-2">Special title treatment
-                        </h5>
-                        <div class="w-100 p-2">
-                          <div class="d-flex align-items-center justify-content-center w-50 mx-auto">
-                            <img src="assets/images/star.svg" alt="star"><img src="assets/images/star.svg"
-                              alt="star"><img src="assets/images/star.svg" alt="star"><img src="assets/images/star.svg"
-                              alt="star"><img src="assets/images/half-start.svg" alt="star"><span
-                              class="ms-1 font-weight-light">3980</span>
-                          </div>
-                          <p class="text-center p-2 card-text"><span class="test-dec">Starts at </span>$6.99</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="swiper-slide" style="width: 207.8px; margin-right: 30px;">
-                  <div class=" rounded border  suggest-box mx-auto">
-                    <div class="card-body d-flex flex-wrap justify-content-center">
-                      <div class="img-container w-100 px-5 py-3"><img
-                          src="assets/images/pexels.7e9e0142d56c7fbfde82.jpg" alt="card-img" class="img-fluid"></div>
-                      <div class="d-flex flex-wrap align-items-center w-100 justify-content-center">
-                        <h5 class="card-title text-center mb-0 p-2">Special title treatment
-                        </h5>
-                        <div class="w-100 p-2">
-                          <div class="d-flex align-items-center justify-content-center w-50 mx-auto">
-                            <img src="assets/images/star.svg" alt="star"><img src="assets/images/star.svg"
-                              alt="star"><img src="assets/images/star.svg" alt="star"><img src="assets/images/star.svg"
-                              alt="star"><img src="assets/images/half-start.svg" alt="star"><span
-                              class="ms-1 font-weight-light">3980</span>
-                          </div>
-                          <p class="text-center p-2 card-text"><span class="test-dec">Starts at </span>$6.99</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="swiper-slide" style="width: 207.8px; margin-right: 30px;">
-                  <div class=" rounded border  suggest-box mx-auto">
-                    <div class="card-body d-flex flex-wrap justify-content-center">
-                      <div class="img-container w-100 px-5 py-3"><img
-                          src="assets/images/pexels.7e9e0142d56c7fbfde82.jpg" alt="card-img" class="img-fluid"></div>
-                      <div class="d-flex flex-wrap align-items-center w-100 justify-content-center">
-                        <h5 class="card-title text-center mb-0 p-2">Special title treatment
-                        </h5>
-                        <div class="w-100 p-2">
-                          <div class="d-flex align-items-center justify-content-center w-50 mx-auto">
-                            <img src="assets/images/star.svg" alt="star"><img src="assets/images/star.svg"
-                              alt="star"><img src="assets/images/star.svg" alt="star"><img src="assets/images/star.svg"
-                              alt="star"><img src="assets/images/half-start.svg" alt="star"><span
-                              class="ms-1 font-weight-light">3980</span>
-                          </div>
-                          <p class="text-center p-2 card-text"><span class="test-dec">Starts at </span>$6.99</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                <div class="review-content">
+                  <p>{{review?.description}}</p>
                 </div>
               </div>
-              <div class="swiper-button-prev swiper-button-disabled swiper-button-lock"></div>
-              <div class="swiper-button-next swiper-button-disabled swiper-button-lock"></div>
             </div>
           </div>
         </div>
-      </div> -->
-
-      <div class="container mt-3">
-        <ul class="nav nav-pills" id="exTab1" role="tablist">
-          <li class="nav-item">
-            <a class="nav-link active" id="overview-tab" data-bs-toggle="tab" href="#1a">Description</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="nav-pills-tab" data-bs-toggle="tab" href="#2a">FAQs</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="clearfix-tab" data-bs-toggle="tab" href="#3a">Review & Rating</a>
-          </li>
-        </ul>
-
-        <div class="tab-content mt-3">
-          <div class="tab-pane fade show active" id="1a">
-            <p>{{formObj?.product_description}}</p>
-          </div>
-          <div class="tab-pane fade" id="2a">
-            <h3>FAQs</h3>
-          </div>
-          <div class="tab-pane fade" id="3a">
-            <div>
-              <div class="container review-container">
-                <div class="row align-items-center">
-                  <!-- Rating Summary -->
-                  <div class="col-md-3 text-center">
-                    <div class="rating-number">{{reviewSummaryData?.averageRating}}</div>
-                    <div class="stars">
-                      <i *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" class="bi"
-                      [ngClass]="{'bi-star-fill text-warning': i < reviewSummaryData?.averageRating, 'bi-star': i >= reviewSummaryData?.averageRating}"></i>
-                    </div>
-                    <div class="text-muted">Based on {{reviewSummaryData?.totalReviews || 0}} reviews</div>
-                  </div>
-
-                  <!-- Rating Distribution -->
-                  <div class="col-md-6">
-                    <div class="d-flex align-items-center" *ngFor="let rating of [5, 4, 3, 2, 1]">
-                      <span class="me-2 star-icon">{{ rating }} <i class="bi bi-star-fill"></i></span>
-                      <div class="progress flex-grow-1">
-                        <div class="progress-bar" [style.width.%]="ratingData[rating].progress"></div>
-                      </div>
-                      <span class="ms-2">{{ ratingData[rating].count }}</span>
-                    </div>
-                  </div>
-
-                  <!-- Write Review Button -->
-                  <div class="col-md-3 text-center">
-                    <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#reviewAddmodal">Write A
-                      Review</button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="container review-container">
-                <!-- Review 1 -->
-                <div class="row" *ngFor="let review of reviewList">
-                  <div class="col-md-1 text-center">
-                    <div class="user-avatar"><i class="bi bi-person"></i></div>
-                  </div>
-                  <div class="col-md-11">
-                    <div class="d-flex justify-content-between">
-                      <div>
-                        <strong>{{review?.userName}}</strong> <br>
-                        <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified Buyer</span>
-                      </div>
-                      <div class="text-muted">{{review?.createdAt | date:'dd/MM/yyyy' }}</div>
-                    </div>
-                    <div class="review-stars mt-2">
-                      <i *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" class="bi"
-                      [ngClass]="{'bi-star-fill text-warning': i < review?.rating, 'bi-star': i >= review?.rating}"></i>
-                      <span class="review-title"> {{review?.title}}</span>
-                    </div>
-                    <p>{{review?.description}}</p>
-                    <!-- <p class="store-owner">Store Owner</p>
-                    <p class="text-muted">
-                      Hello Cynthia, we apologize for the inconvenience caused. Upon reviewing your order details, we
-                      see that you selected the urgent shipping method, which offers an 89% chance of on-time delivery
-                      and an 11% chance of delivery taking an additional business day...
-                    </p>
-                    <div class="d-flex justify-content-between review-footer">
-                      <span>Was this review helpful?</span>
-                      <div class="like-buttons">
-                        <i class="bi bi-hand-thumbs-up"></i> 0
-                        <i class="bi bi-hand-thumbs-down"></i> 0
-                      </div>
-                    </div> -->
-                  </div>
-                  <div class="divider"></div>
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-<!-- main end -->
-
-<!-- newsletter start -->
-<div class="w-100 text-center " style="background-color: rgb(67, 131, 184); color: white;">
-  <div class="w-100 text-center d-flex align-items-center justify-content-evenly p-3 Subscribe-box w-cm">
-    <p class="w-33">Subscribe to our newsletter and get 20% OFF on Your First Order + Free Shipping.</p><input
-      placeholder="Normal text" type="text" class="w-45 height-fitcontant form-control"><button type="button"
-      class="height-fitcontant px-2 my-2 btn btn-light">SUBSCRIBE</button>
-  </div>
-</div>
-<!-- newsletter end -->
-
-
-<!-- Modal -->
-<div class="modal fade" id="selectDesignModal" tabindex="-1" aria-labelledby="selectDesignModal" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="selectDesignModal"><img *ngIf="modelViewType != 0" (click)="closeViewTypeModal('1')"
-            src="https://cdn-icons-png.flaticon.com/512/3114/3114883.png" class="me-2 pointer" height="24" width="24">
-          {{modelViewName}}</h5>
-        <button (click)="closeViewTypeModal('2')" type="button" class="btn-close" data-bs-dismiss="modal"
-          aria-label="Close"></button>
-      </div>
-      <div class="modal-body" style="height: 445px; overflow: auto;">
-        <ul class="list-group border-0" *ngIf="modelViewType == 0">
-          <li
-            class="list-group-item d-flex align-items-center justify-content-between cursor-pointer border-top-0 border-start-0 border-end-0 border-bottom m-0">
-            <img src="assets/images/design_online.svg" alt="design_online" class="design_online" />
-            <div class="model-desc w-75">
-              <h4 class="card-title li-heading">Design Online</h4>
-              <h6 class="card-subtitle mb-2 text-muted li-sub-text">
-                Need a design? Craft your unique design effortlessly with
-                our online tool.
-              </h6>
-              <span class="card-text border-end li-labels pl-0">10,000+ Templates</span>
-              <span class="card-text li-labels">Easy Customization</span>
-            </div>
-            <img src="assets/images/right-arrow.svg" (click)="changeviewtype('1')" alt="design_online"
-              class="design_online" />
-          </li>
-          <li
-            class="list-group-item d-flex align-items-center justify-content-between cursor-pointer border-top-0 border-start-0 border-end-0 border-bottom m-0">
-            <img src="assets/images/upload_artwork.svg" alt="design_online" class="design_online" />
-            <div class="model-desc w-75">
-              <h4 class="card-title li-heading">Upload Your Art Work</h4>
-              <h6 class="card-subtitle mb-2 text-muted li-sub-text">
-                Have your own artwork? Upload it for a show-stopping
-                print.
-              </h6>
-              <span class="card-text border-end li-labels pl-0">Free Design Proofing</span>
-              <span class="card-text li-labels">Perfect Print</span>
-            </div>
-            <img src="assets/images/right-arrow.svg" (click)="changeviewtype('2')" alt="design_online"
-              class="design_online" />
-          </li>
-          <li
-            class="list-group-item d-flex align-items-center justify-content-between cursor-pointer border-top-0 border-start-0 border-end-0 border-bottom m-0">
-            <img src="assets/images/hire_designer.svg" alt="design_online" class="design_online" />
-            <div class="model-desc w-75">
-              <h4 class="card-title li-heading">Hire a Designer?</h4>
-              <h6 class="card-subtitle mb-2 text-muted li-sub-text">
-                Want a design that turns heads? Let our design pros bring
-                your vision to life.
-              </h6>
-              <span class="card-text border-end li-labels pl-0">1 on 1 Consultations</span>
-              <span class="card-text li-labels">Unlimited Revisions</span>
-            </div>
-            <img src="assets/images/right-arrow.svg" (click)="changeviewtype('3')" alt="design_online"
-              class="design_online" />
-          </li>
-        </ul>
-
-        <!-- <ng-container *ngIf="modelViewType == 2">
-          <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item w-50" role="presentation">
-              <button class="nav-link active w-100 text-left fw-bold p-3" style="font-size: 14px" id="home-tab"
-                data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home"
-                aria-selected="true">
-                Upload Artwork
-                <p style="font-size: 11px">
-                  Upload your designs and get the design proofing
-                </p>
-              </button>
-            </li>
-            <li class="nav-item w-50" role="presentation">
-              <button class="nav-link w-100 fw-bold p-3 text-left" id="profile-tab" data-bs-toggle="tab"
-                data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
-                Design Online
-                <p style="font-size: 11px">
-                  Upload your designs and get the design proofing
-                </p>
-              </button>
-            </li>
-          </ul>
-
-          <div class="tab-content" id="myTabContent">
-            <div class="tab-pane show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-              <div class="d-flex align-items-center">
-                <form id="file-upload-form" class="uploader pointer" (click)="uploadNow('#uploadnow')">
-                  <input id="file-upload" type="file" name="fileUpload" (change)="uploadArt($event)" />
-
-                  <label for="file-upload" id="uploadnow" [ngClass]="{'activelogo': uploadnow}">
-                    <img id="file-image" src="#" alt="Preview" class="hidden" />
-                    <div id="start">
-                      <i class="fa fa-download" aria-hidden="true"></i>
-                      <div>Upload Artwork Now</div>
-                      <div id="notimage" class="hidden">
-                        Please select an image
-                      </div>
-                      <span id="file-upload-btn" class="btn btn-primary">Select a file</span>
-                    </div>
-                  </label>
-                </form>
-                or
-                <form id="file-upload-form" class="uploader pointer" (click)="uploadNow('#uploadlater')">
-                  <label id="uploadlater" [ngClass]="{'activelogo': uploadlater}">
-                    <div id="start">
-                      <div>Upload Artwork Later</div>
-                      <span class="upload-sub-text">You can continue by placing the order, we will send you an e-mail
-                        with link to upload your artwork file(s)</span>
-                    </div>
-                    <div id="response" class="hidden">
-                      <div id="messages"></div>
-                      <progress class="progress" id="file-progress" value="0">
-                        <span>0</span>%
-                      </progress>
-                    </div>
-                  </label>
-                </form>
-              </div>
-
-              <img *ngIf="cartObj.upload_art_image" [src]="gs.imageUrl + cartObj.upload_art_image"
-                (click)="imageViewModal(cartObj.upload_art_image)" class="clearfix pointer" height="150">
-
-            </div>
-            <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-              <h5 class="mx-auto text-center pt-4" style="font-size: 16px; font-weight: 600">
-                Choose Design Template for Your Product
-              </h5>
-            </div>
-          </div>
-        </ng-container> -->
-
-
-
-        <div class="text-center" *ngIf="modelViewType == 3">
-          <div style="width: 60%" class="d-flex flex-wrap mx-auto py-4">
-            <p class="w-50 fs-5 mb-0 p-2 border-end">Call with Expert</p>
-            <p class="w-50 fs-5 mb-0 p-2 border-bottom">
-              Print after your approval
-            </p>
-            <p class="w-50 fs-5 mb-0 p-2 border-top">Unlimited revisions</p>
-            <p class="w-50 fs-5 mb-0 p-2 border-start">
-              Provision to buy assets
-            </p>
-          </div>
-          <h4 class="mt-3 mb-1">Lets Our Expert Assist You</h4>
-          <span class="text-secondary pb-3">Getting Professional Design with Experts are ease of mind
-            now.</span>
-          <div class="my-5 d-flex justify-content-between">
-            <div class="p-3 border d-flex flex-wrap justify-content-center rounded position-relative steps-box">
-              <div class="w-100"><span class="number-step">1</span></div>
-              <img src="assets/images/shopping-cart (1).png" alt="cart" class="img"
-                style="width: 40px; margin-bottom: 15px; margin-top: 20px" />
-              <span class="fs-5 w-100"> Place your order </span>
-            </div>
-            <div class="p-3 border d-flex flex-wrap justify-content-center rounded position-relative steps-box">
-              <div class="w-100"><span class="number-step">2</span></div>
-              <img src="assets/images/customer-service.png" alt="cart" class="img"
-                style="width: 40px; margin-bottom: 15px; margin-top: 20px" />
-              <span class="fs-5 w-100"> Place your order </span>
-            </div>
-            <div class="p-3 border d-flex flex-wrap justify-content-center rounded position-relative steps-box">
-              <div class="w-100"><span class="number-step">3</span></div>
-              <img src="assets/images/design_online.svg" alt="cart" class="img"
-                style="width: 40px; margin-bottom: 15px; margin-top: 20px" />
-              <span class="fs-5 w-100"> Place your order </span>
-            </div>
-            <div class="p-3 border d-flex flex-wrap justify-content-center rounded position-relative steps-box">
-              <div class="w-100"><span class="number-step">4</span></div>
-              <img src="assets/images/kitting.png" alt="cart" class="img"
-                style="width: 40px; margin-bottom: 15px; margin-top: 20px" />
-              <span class="fs-5 w-100"> Place your order </span>
-            </div>
-          </div>
-          <div>
-            <h3 class="fs-4 text-left">
-              Let us know how you want your design
-            </h3>
-            <div class="form-floating">
-              <span class="d-block text-left fs-5 mt-3 mb-2">Describe the design*</span>
-              <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
-                style="height: 100px"></textarea>
-            </div>
-            <span class="d-block text-left fs-5 mt-3 mb-2">Add files
-              <span class="text-secondary">(optional)</span></span>
-            <form id="file-upload-form" class="uploader" style="width: 40%; margin: 0 0 auto">
-              <input id="file-upload" type="file" name="fileUpload" accept="image/*" />
-
-              <label for="file-upload" id="file-drag" class="w-100 m-0 h-auto">
-                <img id="file-image" src="#" alt="Preview" class="hidden" />
-                <div id="start">
-                  <div>Upload Artwork Now</div>
-                  <div id="notimage" class="hidden">
-                    Please select an image
-                  </div>
-                  <span id="file-upload-btn" class="btn btn-primary">Select a file</span>
-                </div>
-                <div id="response" class="hidden">
-                  <div id="messages"></div>
-                  <progress class="progress" id="file-progress" value="0">
-                    <span>0</span>%
-                  </progress>
-                </div>
-              </label>
-            </form>
-            <div class="mb-4 pt-4" style="text-align: left">
-              <strong>More file tips:</strong>
-              <ul class="f-size-14 text-left fs-6">
-                <li>
-                  The simplest way to provide the correct artwork is to use
-                  the downloadable templates provided on the product page.
-                  Keep in mind that the template changes based on the size
-                  selected
-                </li>
-                <li>
-                  Set the canvas size in proportion to the size of the
-                  product you are ordering
-                </li>
-                <li>Convert all text to outlines (curves)</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-      </div>
-      <div *ngIf="modelViewType != 0" class="modal-footer" style="justify-content: space-between !important;">
-        <div>
-          <div class="d-flex align-items-center flex-wrap">
-            <p style="font-weight: 600; color: black !important;" *ngIf="!discount" class="m-0 me-4">$ {{product_price}}
-            </p>
-            <p style="font-weight: 600; color: black !important;" *ngIf="discount" class="m-0 me-4">$ {{discount_price}}
-            </p>
-            <div class="me-4">
-              <p *ngIf="discount" class="text-decoration-line-through m-0">$ {{product_price}}</p>
-              <span *ngIf="discount" class="badge bg-success">{{discount}} % off</span>
-            </div>
-            <div class="quantity">
-              <button (click)="minus()" class="minus" aria-label="Decrease">−</button>
-              <input [(ngModel)]="prod_qty" name="prod_qty" type="number" class="input-box-1">
-              <button (click)="plus()" class="plus" aria-label="Increase">+</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- <button *ngIf="!isInCart"
-          [disabled]="!(cartObj.upload_art== 'Later' || (cartObj.upload_art== 'Now' && cartObj.upload_art_image))"
-          (click)="addToCart()" type="button" class="btn btn-primary">Add to
-          cart</button>
-
-
-        <button *ngIf="isInCart"
-          [disabled]="!(cartObj.upload_art == 'Later' || (cartObj.upload_art == 'Now' && cartObj.upload_art_image))"
-          (click)="updateCart()" type="button" class="btn btn-primary">
-          update cart
-        </button> -->
-
       </div>
     </div>
   </div>
-</div>
+</section>
 
+<!-- Newsletter Section -->
+<section class="newsletter-section">
+  <div class="container">
+    <div class="newsletter-container">
+      <div class="newsletter-content">
+        <div class="newsletter-text">
+          <h5 class="newsletter-title">Subscribe to our newsletter and get 20% OFF on Your First Order + Free Shipping.</h5>
+        </div>
+        <div class="newsletter-form">
+          <div class="input-group">
+            <input type="email" placeholder="Enter your email" class="form-control newsletter-input" />
+            <button class="btn btn-light newsletter-btn">
+              <span>SUBSCRIBE</span>
+              <i class="bi bi-arrow-right ms-1"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-
-<!-- image view modal -->
+<!-- Modals -->
+<!-- Image View Modal -->
 <div class="modal fade" id="imageModal" tabindex="-1">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Image</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title">Product Image</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body p-0">
-        <img [src]="gs.imageUrl + imageName" width="100%">
+        <img [src]="gs.imageUrl + imageName" class="img-fluid w-100" />
       </div>
     </div>
   </div>
 </div>
 
-<!-- review add modal  -->
-<div class="modal fade" id="reviewAddmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="reviewAddmodalLabel" aria-hidden="true">
+<!-- Review Add Modal -->
+<div class="modal fade" id="reviewAddmodal" data-bs-backdrop="static" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="reviewAddmodalLabel">Add Review</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title">
+          <i class="bi bi-star me-2"></i>
+          Write a Review
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
         <form [formGroup]="reviewForm">
-          <!-- Review Title -->
           <div class="mb-3">
-            <label for="reviewTitle" class="form-label">Title</label>
-            <input type="text" class="form-control" id="reviewTitle" formControlName="title"
-              placeholder="Enter review title">
-            <small class="text-danger"
-              *ngIf="reviewForm.controls['title'].invalid && reviewForm.controls['title'].touched">Title is
-              required</small>
+            <label for="reviewTitle" class="form-label">Review Title</label>
+            <input type="text" 
+                   class="form-control" 
+                   id="reviewTitle" 
+                   formControlName="title"
+                   placeholder="Summarize your experience">
+            <div class="invalid-feedback" 
+                 *ngIf="reviewForm.controls['title'].invalid && reviewForm.controls['title'].touched">
+              Please provide a review title
+            </div>
           </div>
 
-          <!-- Review Description -->
           <div class="mb-3">
-            <label for="reviewDescription" class="form-label">Description</label>
-            <textarea class="form-control" id="reviewDescription" formControlName="description" rows="3"
-              placeholder="Write your review here..."></textarea>
-            <small class="text-danger"
-              *ngIf="reviewForm.controls['description'].invalid && reviewForm.controls['description'].touched">Description
-              is required</small>
+            <label for="reviewDescription" class="form-label">Your Review</label>
+            <textarea class="form-control" 
+                      id="reviewDescription" 
+                      formControlName="description" 
+                      rows="4"
+                      placeholder="Tell others about your experience with this product"></textarea>
+            <div class="invalid-feedback" 
+                 *ngIf="reviewForm.controls['description'].invalid && reviewForm.controls['description'].touched">
+              Please write your review
+            </div>
           </div>
 
-          <!-- Rating -->
           <div class="mb-3">
             <label class="form-label">Rating</label>
-            <div class="review-rating">
-              <i *ngFor="let star of stars; let i = index" class="bi"
-                [ngClass]="{'bi-star-fill text-warning': i < selectedRating, 'bi-star': i >= selectedRating}"
-                (click)="selectRating(i + 1)"></i>
+            <div class="rating-input">
+              <i *ngFor="let star of stars; let i = index" 
+                 class="bi rating-star"
+                 [ngClass]="{'bi-star-fill': i < selectedRating, 'bi-star': i >= selectedRating}"
+                 (click)="selectRating(i + 1)"></i>
             </div>
             <input type="hidden" formControlName="rating">
-            <small class="text-danger"
-              *ngIf="reviewForm.controls['rating'].invalid && reviewForm.controls['rating'].touched">Rating is
-              required</small>
+            <div class="invalid-feedback" 
+                 *ngIf="reviewForm.controls['rating'].invalid && reviewForm.controls['rating'].touched">
+              Please select a rating
+            </div>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="cancelReview()">Cancel</button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" [disabled]="reviewForm.invalid"
-          (click)="submitReview()">Submit</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="cancelReview()">
+          Cancel
+        </button>
+        <button type="button" 
+                class="btn btn-primary" 
+                data-bs-dismiss="modal" 
+                [disabled]="reviewForm.invalid"
+                (click)="submitReview()">
+          <i class="bi bi-check-lg me-1"></i>
+          Submit Review
+        </button>
       </div>
     </div>
   </div>

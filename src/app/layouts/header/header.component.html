@@ -1,148 +1,341 @@
-<div class="topbar d-flex justify-content-between px-4" >
-  <div class="toppbar_left d-flex flex-nowrap align-items-center header-first-sec">
-    <a class="text-light font-size-13">
-      <img src="assets/images/order-tracking.svg" alt="order-tracking" class="tracking-png" />
-      Order Tracking
-    </a>
-  </div>
-  <div class="topbar_right d-flex font-size-13 right-sideheader w-46 " *ngIf="gs.isLogin">
-    <div class="text-light font-size-13 d-sm-none">
-      <img src="assets/images/account.svg" alt="account" class="profile-png" /> Hi,
-      {{profileData?.firstname}}
-    </div>
-    <a class="dropdown-toggle text-light font-size-13 d-none d-md-inline d-sm-inline d-lg-inline d-xl-inline"
-      role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <img src="assets/images/account.svg" alt="account" class="profile-png" /> Hi, {{profileData?.firstname + ' ' +
-      profileData?.lastname}}
-    </a>
-    <div class="dropdown-menu font-size-13 py-0 profile-dropdown" aria-labelledby="dropdownMenuLink">
-      <a class="dropdown-item px-3 pointer" routerLink="/account">My Account</a>
-      <a class="dropdown-item px-3 pointer" (click)="logout()">Logout</a>
-    </div>
-    <a class="hover_orange text-light" [routerLink]="['/cart']" routerLinkActive="router-link-active">
-      <img src="assets/images/items.svg" alt="items" class="items-png" /> {{cartItems}} Item(s)
-      <span>${{finalPrice}}</span>
-    </a>
-    <div class="dropdown show pr-1">
-      <a class="dropdown-toggle text-light" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
-        aria-haspopup="true" aria-expanded="false">
-        <img src="assets/images/usa.svg" alt="usa-map" class="small-png" />
-      </a>
-      <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
-        <a class="dropdown-item">
-          <img src="assets/images/uk.svg" alt="uk-map" class="small-png" width="25" /> UK
-        </a>
-        <a class="dropdown-item">
-          <img src="assets/images/au.svg" alt="au-map" class="small-png" width="25" /> AU
-        </a>
-        <a class="dropdown-item">
-          <img src="assets/images/nz.svg" alt="nz-map" class="small-png" width="25" /> NZ
-        </a>
-        <a class="dropdown-item">
-          <img src="assets/images/ca.svg" alt="ca-map" class="small-png" width="25" /> CA
-        </a>
-        <a class="dropdown-item">
-          <img src="assets/images/ind.svg" alt="ind-map" class="small-png" width="25" /> IND
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <div class="topbar_right d-flex font-size-13 right-sideheader w-46 " *ngIf="!gs.isLogin">
-    <div class="text-light font-size-13">
-      <img src="assets/images/account.svg" alt="account" class="profile-png" />
-      <span [routerLink]="['/login']">Login/Register</span>
-    </div>
-  </div>
-</div>
-
-<div class="main_wrapper">
-  <div class="header-logo d-flex align-items-center">
-    <img src="assets/images/sidebaarIcon.svg" class="d-none side-baar-icon cursor-pointer" alt="logo"
-      [routerLink]="['/home']" routerLinkActive="router-link-active" />
-    <!-- (click)="setSideBar(true)" -->
-    <img src="assets/images/logo.svg" class="mw-90 cursor-pointer" alt="logo" [routerLink]="['/home']"
-      routerLinkActive="router-link-active" />
-  </div>
-  <div class="search-select-box d-flex align-items-center dropdown">
-    <input type="text" [formControl]="searchControl" placeholder="Search for" class="w-100 form-control dropdown-toggle"
-      data-bs-toggle="dropdown" aria-expanded="false" />
-    <div class="quick-access-container dropdown-menu">
-      <h1>Quick Access</h1>
-      <div class="grid-container ">
-        <div class="grid-item" *ngFor="let item of searchProductList" [routerLink]="'product-details/' + item._id">
-          <img [src]="item?.product_images[0]" [alt]="item?.productname">
-          <p>{{item?.productname}}</p>
+<!-- Top Promotional Bar with Unique Design -->
+<div class="promo-bar bg-gradient-primary text-white py-2 position-relative overflow-hidden">
+  <div class="promo-bg-pattern"></div>
+  <div class="container-fluid position-relative">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <div class="d-flex align-items-center">
+          <div class="shipping-icon-wrapper me-3">
+            <i class="bi bi-truck fs-5"></i>
+          </div>
+          <div class="shipping-text">
+            <span class="fw-bold">FREE SUPER SAVER SHIPPING</span>
+            <span class="shipping-condition ms-2">over $99</span>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-  <div class="d-flex w-20 justify-content-around chat-now-box">
-    <div class="d-flex align-items-center w-50 callUsBox">
-      <img src="assets/images/chat-now.svg" alt="callUs" class="call-us connect" />
-      <span class="small-sub-text ml-3">Chat now</span>
-    </div>
-    <div class="d-flex align-items-center w-50 callUsBox">
-      <img src="assets/images/call-us.svg" alt="callUs" class="call-us connect" />
-      <span class="small-sub-text ml-3">
-        Call us
-        <p class="mb-0">800-580-4489</p>
-      </span>
-    </div>
-    <div class="Icons-header">
-      <a class="dropdown-toggle text-dark" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
-        aria-haspopup="true" aria-expanded="false">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16"
-          className="profile-icons">
-          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-          <path fill-rule="evenodd"
-            d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
-        </svg>
-      </a>
-      <div class="dropdown-menu font-size-13 py-0 profile-dropdown" aria-labelledby="dropdownMenuLink">
-        <a class="dropdown-item px-3" routerLink="/account">My Account</a>
-        <!-- <a class="dropdown-item px-3">My design</a> -->
-        <a class="dropdown-item px-3 bg-secondary text-light">Logout</a>
-      </div>
-      <div> <!--  (click)="setCart(true)" -->
-        <svg xmlns="http://www.w3.org/2000/svg" fill="#000000" class="bi bi-bag-check" viewBox="0 0 16 16"
-          className="cart-icon">
-          <path fill-rule="#000000" stroke="30"
-            d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0z" />
-          <path
-            d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
-        </svg>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="main-navbar navbar-color">
-  <div class="d-none d-md-flex justify-content-around">
-    <ng-container *ngFor="let item of header; index as k">
-      <!-- Parent Wrapper for Positioning -->
-      <div class="nav-item-wrapper position-relative">
-        <!-- Toggle -->
-        <a class="text-light d-flex align-items-center w-fit-content mx-2"
-          [class.dropdown-toggle]="item.subCatArray.length > 0" [class.remove_icon]="item.subCatArray.length <= 0"
-          role="button">
-          <div class="prl-2 nav-item cursor-pointer" [routerLink]="['/product-list', item.slug]" [queryParams]="{ cat_url: item._id }">{{ item.name }}</div>
-        </a>
-
-        <!-- Dropdown -->
-        <div class="dropdown-menu font-size-13 p-2" *ngIf="item.subCatArray.length > 0">
-          <div class="d-flex flex-wrap">
-            <div class="py-2">
-              <ng-container *ngFor="let data of item.subCatArray">
-                <a [routerLink]="['/product-list', data.slug]" [queryParams]="{ sub_cat : data._id }"
-                  class="px-3 py-1 mb-0 text-center d-flex justify-content-between cursor-pointer f-size-16 text-primary">
-                  {{ data.name }}
-                </a>
-              </ng-container>
+      <div class="col-md-4 text-end">
+        <div class="d-flex align-items-center justify-content-end gap-3">
+          <div class="offer-text">
+            <span class="text-warning fw-bold">Up to 30% Off Sitewide.</span>
+            <span class="ms-1">Use Code: <span class="code-highlight">IDPREP</span></span>
+          </div>
+          <div class="countdown-timer d-flex gap-1">
+            <div class="time-unit">
+              <span class="time-value">01</span>
+              <span class="time-label">D</span>
+            </div>
+            <span class="time-separator">:</span>
+            <div class="time-unit">
+              <span class="time-value">07</span>
+              <span class="time-label">H</span>
+            </div>
+            <span class="time-separator">:</span>
+            <div class="time-unit">
+              <span class="time-value">17</span>
+              <span class="time-label">M</span>
+            </div>
+            <span class="time-separator">:</span>
+            <div class="time-unit">
+              <span class="time-value">27</span>
+              <span class="time-label">S</span>
             </div>
           </div>
         </div>
       </div>
-    </ng-container>
+    </div>
+  </div>
+</div>
+
+<!-- Top Bar with Improved Dropdowns -->
+<div class="topbar bg-light border-bottom py-2">
+  <div class="container-fluid">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <div class="d-flex align-items-center gap-4">
+          <div class="dropdown custom-dropdown">
+            <button class="btn btn-link p-0 text-decoration-none dropdown-toggle custom-dropdown-toggle" 
+                    data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-list me-1"></i>
+              <span class="fw-semibold">Quick Links</span>
+            </button>
+            <ul class="dropdown-menu custom-dropdown-menu shadow-lg">
+              <li>
+                <a class="dropdown-item custom-dropdown-item" href="/track-order">
+                  <i class="bi bi-box-seam me-2"></i>
+                  <span>Track Order</span>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item custom-dropdown-item" href="/design-templates">
+                  <i class="bi bi-palette me-2"></i>
+                  <span>Design Templates</span>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item custom-dropdown-item" href="/bulk-orders">
+                  <i class="bi bi-stack me-2"></i>
+                  <span>Bulk Orders</span>
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item custom-dropdown-item" href="/help">
+                  <i class="bi bi-question-circle me-2"></i>
+                  <span>Help Center</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="d-flex align-items-center justify-content-end gap-3">
+          <!-- User Account Section -->
+          <div class="dropdown custom-dropdown" *ngIf="gs.isLogin">
+            <a class="dropdown-toggle custom-dropdown-toggle text-decoration-none d-flex align-items-center" 
+               href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle me-1"></i>
+              <span>Hi, {{profileData?.firstname}}</span>
+            </a>
+            <ul class="dropdown-menu custom-dropdown-menu shadow-lg">
+              <li>
+                <a class="dropdown-item custom-dropdown-item" routerLink="/account">
+                  <i class="bi bi-person me-2"></i>
+                  <span>My Account</span>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item custom-dropdown-item" routerLink="/orders">
+                  <i class="bi bi-bag me-2"></i>
+                  <span>My Orders</span>
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item custom-dropdown-item" (click)="logout()">
+                  <i class="bi bi-box-arrow-right me-2"></i>
+                  <span>Logout</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          
+          <div *ngIf="!gs.isLogin">
+            <a routerLink="/login" class="text-dark text-decoration-none d-flex align-items-center">
+              <i class="bi bi-person-circle me-1"></i>
+              <span>Login/Register</span>
+            </a>
+          </div>
+
+          <!-- Cart -->
+          <a routerLink="/cart" class="text-dark text-decoration-none d-flex align-items-center">
+            <i class="bi bi-bag me-1"></i>
+            <span>Item(s) <span class="fw-bold">${{finalPrice}}</span></span>
+          </a>
+
+          <!-- Country Selector -->
+          <div class="dropdown custom-dropdown">
+            <a class="dropdown-toggle custom-dropdown-toggle text-decoration-none d-flex align-items-center" 
+               href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="assets/images/usa.svg" alt="usa" width="20" height="15" class="me-1" />
+              <span class="small">US</span>
+            </a>
+            <ul class="dropdown-menu custom-dropdown-menu shadow-lg">
+              <li>
+                <a class="dropdown-item custom-dropdown-item" href="#">
+                  <img src="assets/images/uk.svg" alt="uk" width="20" class="me-2" />
+                  <span>United Kingdom</span>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item custom-dropdown-item" href="#">
+                  <img src="assets/images/au.svg" alt="au" width="20" class="me-2" />
+                  <span>Australia</span>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item custom-dropdown-item" href="#">
+                  <img src="assets/images/ca.svg" alt="ca" width="20" class="me-2" />
+                  <span>Canada</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Header with Fixed Search -->
+<header class="main-header bg-white py-3 shadow-sm">
+  <div class="container-fluid">
+    <div class="row align-items-center">
+      <!-- Logo -->
+      <div class="col-lg-2 col-md-3 col-6">
+        <a routerLink="/home" class="navbar-brand">
+          <img src="assets/images/logo.svg" alt="BannerBuzz" class="logo" height="45" />
+        </a>
+      </div>
+
+      <!-- Search Bar - Fixed Dropdown Issue -->
+      <div class="col-lg-6 col-md-5 col-12 order-lg-2 order-3 mt-2 mt-lg-0">
+        <div class="search-container position-relative">
+          <div class="search-wrapper">
+            <input type="text" 
+                   [formControl]="searchControl" 
+                   placeholder="Search for Banners, Signs, Displays..." 
+                   class="form-control search-input"
+                   (focus)="showSearchDropdown = true"
+                   (blur)="hideSearchDropdown()" />
+            <button class="btn btn-primary search-btn" type="button">
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+          <!-- Fixed Search Dropdown -->
+          <div class="search-results-dropdown" 
+               *ngIf="showSearchDropdown && searchProductList.length > 0"
+               [class.show]="showSearchDropdown">
+            <div class="search-results-header">
+              <h6 class="mb-0 fw-bold">Quick Access</h6>
+            </div>
+            <div class="search-results-body">
+              <div class="row g-2">
+                <div class="col-4" *ngFor="let item of searchProductList.slice(0, 6)">
+                  <a [routerLink]="'/product-details/' + item._id" 
+                     class="search-result-item"
+                     (mousedown)="selectSearchItem(item)">
+                    <div class="search-result-image">
+                      <img [src]="item?.product_images[0]" [alt]="item?.productname" />
+                    </div>
+                    <p class="search-result-title">{{item?.productname}}</p>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact & Actions - Fixed Layout -->
+      <div class="col-lg-4 col-md-4 col-6 order-lg-3 order-2">
+        <div class="header-actions d-flex align-items-center justify-content-end">
+          <div class="contact-buttons d-none d-md-flex">
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="bi bi-chat-dots"></i>
+              </div>
+              <div class="contact-info">
+                <div class="contact-label">Chat Now</div>
+                <div class="contact-value">Live Support</div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="bi bi-telephone"></i>
+              </div>
+              <div class="contact-info">
+                <div class="contact-label">Call Us</div>
+                <div class="contact-value">800-580-4489</div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="bi bi-truck"></i>
+              </div>
+              <div class="contact-info">
+                <div class="contact-label">Order</div>
+                <div class="contact-value">Tracking</div>
+              </div>
+            </div>
+          </div>
+          <div class="user-actions d-flex align-items-center gap-2 ms-3">
+            <a routerLink="/account" class="action-btn">
+              <i class="bi bi-person-circle"></i>
+            </a>
+            <a routerLink="/cart" class="action-btn position-relative">
+              <i class="bi bi-bag"></i>
+              <span class="cart-badge" *ngIf="cartItems > 0">{{cartItems}}</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Navigation Menu -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
+  <div class="container-fluid">
+    <!-- Mobile Menu Toggle -->
+    <button class="navbar-toggler d-lg-none border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
+      <i class="bi bi-list fs-4"></i>
+    </button>
+
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item dropdown custom-nav-dropdown" *ngFor="let item of header">
+          <a class="nav-link custom-nav-link" 
+             [routerLink]="['/product-list', item.slug]" 
+             [queryParams]="{ cat_url: item._id }"
+             [class.dropdown-toggle]="item.subCatArray.length > 0"
+             role="button" 
+             [attr.data-bs-toggle]="item.subCatArray.length > 0 ? 'dropdown' : null">
+            {{ item.name }}
+          </a>
+          <ul class="dropdown-menu custom-nav-dropdown-menu shadow-lg" *ngIf="item.subCatArray.length > 0">
+            <li *ngFor="let subItem of item.subCatArray">
+              <a class="dropdown-item custom-nav-dropdown-item" 
+                 [routerLink]="['/product-list', subItem.slug]" 
+                 [queryParams]="{ sub_cat: subItem._id }">
+                {{ subItem.name }}
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Enhanced Mobile Offcanvas Menu -->
+<div class="offcanvas offcanvas-start custom-offcanvas" tabindex="-1" id="mobileMenu">
+  <div class="offcanvas-header border-bottom">
+    <h5 class="offcanvas-title fw-bold">
+      <i class="bi bi-list me-2"></i>
+      Menu
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body p-0">
+    <div class="mobile-menu-list">
+      <div class="mobile-menu-item" *ngFor="let item of header; let i = index">
+        <div class="mobile-menu-header" 
+             [class.has-submenu]="item.subCatArray.length > 0"
+             (click)="toggleMobileSubmenu(i)">
+          <a [routerLink]="['/product-list', item.slug]" 
+             [queryParams]="{ cat_url: item._id }"
+             class="mobile-menu-link">
+            {{ item.name }}
+          </a>
+          <button class="mobile-submenu-toggle" 
+                  *ngIf="item.subCatArray.length > 0"
+                  [class.active]="mobileSubmenuOpen[i]">
+            <i class="bi bi-chevron-down"></i>
+          </button>
+        </div>
+        <div class="mobile-submenu" 
+             *ngIf="item.subCatArray.length > 0"
+             [class.show]="mobileSubmenuOpen[i]">
+          <a *ngFor="let subItem of item.subCatArray"
+             [routerLink]="['/product-list', subItem.slug]" 
+             [queryParams]="{ sub_cat: subItem._id }"
+             class="mobile-submenu-link">
+            {{ subItem.name }}
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
