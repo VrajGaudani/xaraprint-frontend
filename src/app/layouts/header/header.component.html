@@ -14,33 +14,33 @@
           </div>
         </div>
       </div>
-      <div class="col-md-4 text-end">
+      <div class="col-md-4 text-end" *ngIf="mostValued">
         <div class="d-flex align-items-center justify-content-end gap-3">
           <div class="offer-text">
-            <span class="text-warning fw-bold">Up to 30% Off Sitewide.</span>
-            <span class="ms-1">Use Code: <span class="code-highlight">IDPREP</span></span>
+            <span class="text-warning fw-bold">Up to {{mostValued?.discount_amount}}% Off Sitewide.</span>
+            <span class="ms-1">Use Code: <span class="code-highlight">{{mostValued.coupon_code}}</span></span>
           </div>
-          <div class="countdown-timer d-flex gap-1">
+          <!-- <div class="countdown-timer d-flex gap-1" *ngIf="countdown">
             <div class="time-unit">
-              <span class="time-value">01</span>
+              <span class="time-value">{{countdown.days}}</span>
               <span class="time-label">D</span>
             </div>
             <span class="time-separator">:</span>
             <div class="time-unit">
-              <span class="time-value">07</span>
+              <span class="time-value">{{countdown.hours}}</span>
               <span class="time-label">H</span>
             </div>
             <span class="time-separator">:</span>
             <div class="time-unit">
-              <span class="time-value">17</span>
+              <span class="time-value">{{countdown.minutes}}</span>
               <span class="time-label">M</span>
             </div>
             <span class="time-separator">:</span>
             <div class="time-unit">
-              <span class="time-value">27</span>
+              <span class="time-value">{{countdown.seconds}}</span>
               <span class="time-label">S</span>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -135,7 +135,7 @@
           </a>
 
           <!-- Country Selector -->
-          <div class="dropdown custom-dropdown">
+          <!-- <div class="dropdown custom-dropdown">
             <a class="dropdown-toggle custom-dropdown-toggle text-decoration-none d-flex align-items-center" 
                href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <img src="assets/images/usa.svg" alt="usa" width="20" height="15" class="me-1" />
@@ -161,7 +161,7 @@
                 </a>
               </li>
             </ul>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -249,15 +249,6 @@
                 <div class="contact-value">Tracking</div>
               </div>
             </div>
-          </div>
-          <div class="user-actions d-flex align-items-center gap-2 ms-3">
-            <a routerLink="/account" class="action-btn">
-              <i class="bi bi-person-circle"></i>
-            </a>
-            <a routerLink="/cart" class="action-btn position-relative">
-              <i class="bi bi-bag"></i>
-              <span class="cart-badge" *ngIf="cartItems > 0">{{cartItems}}</span>
-            </a>
           </div>
         </div>
       </div>

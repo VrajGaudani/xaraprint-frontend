@@ -84,14 +84,14 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params: any) => {
+    this.route.paramMap.subscribe(paramMap => {
+      this.proid = paramMap.get('id');
+      if (this.proid) {
+        this.getProduct(this.proid);
+        this.getAllproductReview();
+        this.getReviewSummary();
+      }
     });
-    this.proid = this.route.snapshot.paramMap.get('id');
-    console.log(">>", this.proid)
-
-    this.getProduct(this.proid);
-    this.getAllproductReview()
-    this.getReviewSummary()
   }
 
   next() {

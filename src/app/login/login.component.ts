@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
     this.isLoading = true
     const loginData = this.loginForm.value
 
-    this.httpService.post(APIURLs.loginAPI, loginData).subscribe(
+    this.httpService.postBasic(APIURLs.loginAPI, loginData).subscribe(
       (res: any) => {
         this.isLoading = false
           this.gs.setItem("token", res?.data?.token);

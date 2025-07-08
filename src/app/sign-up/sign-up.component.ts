@@ -113,7 +113,7 @@ export class SignUpComponent implements OnInit {
     this.isLoading = true
     const signupData = this.signupForm.value
 
-    this.httpService.post(APIURLs.registerAPI, signupData).subscribe(
+    this.httpService.postBasic(APIURLs.registerAPI, signupData).subscribe(
       (res: any) => {
         this.isLoading = false
         if (res.success) {

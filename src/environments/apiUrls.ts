@@ -41,6 +41,7 @@ export const APIURLs = {
 
   // coupon
   getCouponDiscountAPI : environment.baseUrl + 'user/coupon/getDiscount',
+  getAllCouponAPI : environment.baseUrl + 'user/coupon/getAll',
 
   // category
   getAllCatAPI : environment.baseUrl + 'category/getAll',

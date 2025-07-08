@@ -56,12 +56,12 @@ export class GlobleService {
   }
 
   errorToaster(message?: any) {
-    this.toast.error(message, 'Oops!', {
-      timeOut: 1500,
-      positionClass: 'toast-top-right',
-      progressBar: true,
-      progressAnimation: 'increasing'
-    });
+    // this.toast.error(message, 'Oops!', {
+    //   timeOut: 1500,
+    //   positionClass: 'toast-top-right',
+    //   progressBar: true,
+    //   progressAnimation: 'increasing'
+    // });
   }
 
   socialLogin() {

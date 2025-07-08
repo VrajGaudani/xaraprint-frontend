@@ -28,6 +28,8 @@ export class HeaderComponent implements OnInit {
   searchControl = new FormControl()
   mobileSubmenuOpen: boolean[] = []
   showSearchDropdown = false
+  coupenCode = [];
+  mostValued: any = {}
 
   constructor(
     private router: Router,
@@ -53,7 +55,8 @@ export class HeaderComponent implements OnInit {
     this.searchControl.valueChanges.pipe(debounceTime(2000), distinctUntilChanged()).subscribe((query) => {
       this.searchProduct(query)
     })
-    this.getAllSearchProduct()
+    this.getAllSearchProduct();
+    this.getCouponDiscount();
 
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -86,6 +89,26 @@ export class HeaderComponent implements OnInit {
         console.log("err -->", err)
         this.searchProductList = []
       },
+    )
+  }
+
+  getCouponDiscount() {
+    return this.httpService.get(APIURLs.getAllCouponAPI).subscribe(
+      (res: any) => {
+        this.coupenCode = res.data;
+        if (Array.isArray(res.data) && res.data.length > 0) {
+          this.mostValued = res.data.reduce((max: { discount_amount: any }, curr: { discount_amount: any }) =>
+            Number(curr.discount_amount) > Number(max.discount_amount) ? curr : max,
+            res.data[0]
+          );
+        } else {
+          this.mostValued = res.data[0] || {};
+        }
+        console.log("Coupon discount:", res.data)
+      },
+      (err) => {
+        this.gs.errorToaster(err?.error?.msg || "Failed to apply coupon!")
+      }
     )
   }
 

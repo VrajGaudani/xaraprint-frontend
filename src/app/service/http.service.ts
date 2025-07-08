@@ -1,93 +1,111 @@
+// src/app/services/http.service.ts
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GlobleService } from './globle.service';
 import { catchError, map, throwError } from 'rxjs';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
+import { Buffer } from 'buffer';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class HttpService {
+  private basicToken: string;
 
   constructor(
     private http: HttpClient,
     private gs: GlobleService,
-    private router : Router
-  ) { }
-
-  setHeaders() {
-    let token: any = localStorage.getItem('token')
-
-    let headers = new HttpHeaders({
-      "Authorization": "Bearer " + JSON.parse(token),
-      'Content-type': 'application/json'
-    });
-
-    headers.set('Access-Control-Allow-Origin', '*');
-    headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
-    let options = { headers: headers, withCredintials: true };
-    return options
+    private router: Router
+  ) {
+    this.basicToken = btoa(`${environment.basicUser}:${environment.basicPassword}`);
   }
 
-  get(url:string){
-    return this.http.get(url , this.setHeaders()).pipe(map((res) => {
-      return res
-    }),
-    catchError((err) => {
-      if(err?.status == 401){
-        localStorage.removeItem('token');
-        this.router.navigate(['/login']);
-      }
-      return throwError(err)
-    }))
+  private setHeaders(useBasic: boolean = false) {
+    const headersConfig: { [name: string]: string } = {
+      'Content-Type': 'application/json',
+    };
+
+    if (useBasic) {
+      headersConfig['Authorization'] = `Basic ${this.basicToken}`;
+    } else {
+      const stored = localStorage.getItem('token');
+      const bearer = stored ? JSON.parse(stored) : '';
+      headersConfig['Authorization'] = `Bearer ${bearer}`;
+    }
+
+    const headers = new HttpHeaders(headersConfig);
+    // withCredentials spelled correctly
+    return { headers, withCredentials: true };
   }
 
-  post(url:string, payload: any){
-    return this.http.post(url,payload, this.setHeaders()).pipe(map((res) => {
-      return res
-    }),
-    catchError((err) => {
-      if(err?.status == 401){
-        localStorage.removeItem('token');
-        this.router.navigate(['/login']);
-      }
-      return throwError(err)
-    }))
+  // === Basic protected endpoints ===
+
+  postBasic<T>(url: string, payload: any) {
+    return this.http
+      .post<T>(url, payload, this.setHeaders(true))
+      .pipe(
+        map((res) => res),
+        catchError((err) => throwError(() => err))
+      );
   }
 
-  delete(url:string, payload: any){
-    return this.http.delete(url, this.setHeaders()).pipe(map((res) => {
-      return res
-    }),
-    catchError((err) => {
-      if(err?.status == 401){
-        localStorage.removeItem('token');
-        this.router.navigate(['/login']);
-      }
-      return throwError(err)
-    }))
+  getBasic<T>(url: string) {
+    return this.http
+      .get<T>(url, this.setHeaders(true))
+      .pipe(
+        map((res) => res),
+        catchError((err) => throwError(() => err))
+      );
   }
 
-  put(url:string, payload: any){
-    return this.http.put(url,payload,this.setHeaders()).pipe(map((res) => {
-      return res
-    }),
-    catchError((err) => {
-      if(err?.status == 401){
-        localStorage.removeItem('token');
-        this.router.navigate(['/login']);
-      }
-      return throwError(err)
-    }))
+  // Example usage:
+  // this.http.postBasic(environment.baseUrl + 'user/auth/register', body);
+  // this.http.postBasic(environment.baseUrl + 'user/auth/login', body);
+
+  // === Bearer protected endpoints ===
+
+  get<T>(url: string) {
+    return this.http.get<T>(url, this.setHeaders()).pipe(
+      map((res) => res),
+      catchError((err) => this.handleAuthError(err))
+    );
   }
 
-  postWithoutSec(url:string, payload: any){
-    return this.http.post(url,payload).pipe(map((res) => {
-      return res
-    }),
-    catchError((err) => {
-      return throwError(err)
-    }))
+  post<T>(url: string, payload: any) {
+    return this.http.post<T>(url, payload, this.setHeaders()).pipe(
+      map((res) => res),
+      catchError((err) => this.handleAuthError(err))
+    );
+  }
+
+  put<T>(url: string, payload: any) {
+    return this.http.put<T>(url, payload, this.setHeaders()).pipe(
+      map((res) => res),
+      catchError((err) => this.handleAuthError(err))
+    );
+  }
+
+  delete<T>(url: string) {
+    return this.http.delete<T>(url, this.setHeaders()).pipe(
+      map((res) => res),
+      catchError((err) => this.handleAuthError(err))
+    );
+  }
+
+  // === No auth endpoints ===
+
+  postWithoutSec<T>(url: string, payload: any) {
+    return this.http.post<T>(url, payload).pipe(
+      map((res) => res),
+      catchError((err) => throwError(() => err))
+    );
+  }
+
+  // === shared 401 handler ===
+  private handleAuthError(err: any) {
+    if (err?.status === 401) {
+      localStorage.removeItem('token');
+      this.router.navigate(['/login']);
+    }
+    return throwError(() => err);
   }
 }

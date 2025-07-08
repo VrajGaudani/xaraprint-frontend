@@ -15,7 +15,9 @@ export const environment = {
     messagingSenderId: "311720436742",
     appId: "1:311720436742:web:c433b2f1a58c893229cf87",
     measurementId: "G-CQP0QPNN61"
-  }
+  },
+  basicUser: 'xaraprint',
+  basicPassword: 'xaraprint123',
 };
 
 

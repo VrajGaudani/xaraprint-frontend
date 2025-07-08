@@ -1,8 +1,8 @@
 export const environment = {
   production: true,
-  // baseUrl: "http://localhost:3000/api/v1/",
-  baseUrl: "https://api.xaraprint.com/v1/",
-  imgUrl: "https://api.xaraprint.com/uploads/",
+  baseUrl: "http://localhost:3000/v1/",
+  // baseUrl: "https://api.xaraprint.com/v1/",
+  imgUrl: "http://localhost:3000/uploads/",
   firebaseConfig: {
     apiKey: "AIzaSyDu4WF-7oely4T3JPHjxAzKxKA1rC-9YDM",
     authDomain: "banner-web-b98bc.firebaseapp.com",
