@@ -14,6 +14,11 @@ import { CheckoutComponent } from './pages/checkout/checkout.component';
 import { OrderSuccessComponent } from './pages/order-success/order-success.component';
 import { MyAccountComponent } from './my-account/my-account.component';
 import { CountryComponent } from './pages/country/country.component';
+import { AboutUsComponent } from './pages/about-us/about-us.component';
+import { ContactUsComponent } from './pages/contact-us/contact-us.component';
+import { TermsConditionsComponent } from './pages/terms-conditions/terms-conditions.component';
+import { CancellationRefundComponent } from './pages/cancellation-refund/cancellation-refund.component';
+import { ErrorComponent } from './pages/error/error.component';
 
 const routes: Routes = [
   {
@@ -32,12 +37,16 @@ const routes: Routes = [
       { path: 'order-success', component: OrderSuccessComponent },
       { path: 'country', component: CountryComponent },
       { path: 'account', component: MyAccountComponent },
+      { path: "about-us", component: AboutUsComponent },
+      { path: "contact-us", component: ContactUsComponent },
+      { path: "terms-conditions", component: TermsConditionsComponent },
+      { path: "cancellation-refund", component: CancellationRefundComponent }
     ]
   },
   { path: 'login', component: LoginComponent },
   { path: 'sign-up', component: SignUpComponent },
-  // { path: '404', component: ErrorComponent },
-  // { path: '**', redirectTo: '/404' }
+  { path: '404', component: ErrorComponent },
+  { path: '**', redirectTo: '/404' }
 ];
 
 @NgModule({

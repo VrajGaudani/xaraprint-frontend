@@ -26,6 +26,12 @@ import { OrderStatusComponent } from './pages/order-status/order-status.componen
 import { MyAccountComponent } from './my-account/my-account.component';
 import { CountryComponent } from './pages/country/country.component';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
+import { AboutUsComponent } from './pages/about-us/about-us.component';
+import { ContactUsComponent } from './pages/contact-us/contact-us.component';
+import { TermsConditionsComponent } from './pages/terms-conditions/terms-conditions.component';
+import { CancellationRefundComponent } from './pages/cancellation-refund/cancellation-refund.component';
+import { ErrorComponent } from './pages/error/error.component';
+
 
 @NgModule({
   declarations: [
@@ -46,7 +52,12 @@ import { SlickCarouselModule } from 'ngx-slick-carousel';
     OrderSuccessComponent,
     OrderStatusComponent,
     MyAccountComponent,
-    CountryComponent
+    CountryComponent,
+    AboutUsComponent,
+    ContactUsComponent,
+    TermsConditionsComponent,
+    CancellationRefundComponent,
+    ErrorComponent
   ],
   imports: [
     SlickCarouselModule,
