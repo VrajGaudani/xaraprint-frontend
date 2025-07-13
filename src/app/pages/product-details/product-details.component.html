@@ -171,7 +171,7 @@
                          [class.active]="item.ngClass === 'active'"
                          (click)="sizePrice(item, i)">
                       <span class="size-label">{{item.size}}</span>
-                      <span class="size-price">${{item.total_price}}</span>
+                      <span class="size-price">₹{{item.total_price}}</span>
                     </div>
                   </div>
                 </div>
@@ -222,7 +222,7 @@
                 </div>
                 <div class="option-content">
                   <span class="option-name">{{data.name}}</span>
-                  <span class="option-price">${{data.price}}</span>
+                  <span class="option-price">₹{{data.price}}</span>
                 </div>
               </div>
             </div>
@@ -239,10 +239,10 @@
     <div class="purchase-bar-content">
       <div class="price-section">
         <div class="price-display">
-          <span class="current-price" *ngIf="!discount">${{product_price}}</span>
-          <span class="current-price" *ngIf="discount">${{discount_price}}</span>
+          <span class="current-price" *ngIf="!discount">₹{{product_price}}</span>
+          <span class="current-price" *ngIf="discount">₹{{discount_price}}</span>
           <div class="price-details" *ngIf="discount">
-            <span class="original-price">${{product_price}}</span>
+            <span class="original-price">₹{{product_price}}</span>
             <span class="discount-badge">{{discount}}% OFF</span>
           </div>
         </div>

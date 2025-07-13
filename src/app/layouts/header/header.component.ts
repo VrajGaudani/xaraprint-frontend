@@ -135,7 +135,7 @@ export class HeaderComponent implements OnInit {
   }
 
   getCart() {
-    this.httpService.post(APIURLs.getCartAPI, "").subscribe(
+    this.httpService.get(APIURLs.getCartAPI).subscribe(
       (res: any) => {
         this.allData = res.data
         setTimeout(() => {

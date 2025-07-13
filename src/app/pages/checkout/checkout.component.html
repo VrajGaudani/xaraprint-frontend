@@ -189,7 +189,7 @@
                             <h6 class="item-name">{{item.product_id.productname}}</h6>
                             <div class="item-info">
                               <span class="item-qty">Qty: {{item.qty}}</span>
-                              <span class="item-price">${{item.after_discount_price}}</span>
+                              <span class="item-price">₹{{item.after_discount_price}}</span>
                             </div>
                           </div>
                         </div>
@@ -203,15 +203,15 @@
               <div class="price-breakdown">
                 <div class="price-row">
                   <span class="price-label">Subtotal:</span>
-                  <span class="price-value">${{cartData.subtotal}}</span>
+                  <span class="price-value">₹{{cartData.subtotal}}</span>
                 </div>
                 <div class="price-row discount-row">
                   <span class="price-label">Total Discount:</span>
-                  <span class="price-value discount-value">-${{cartData.totalDiscount}}</span>
+                  <span class="price-value discount-value">-₹{{cartData.totalDiscount}}</span>
                 </div>
                 <div class="price-row total-row">
                   <span class="price-label">Total:</span>
-                  <span class="price-value total-value">${{cartData.finalPrice}}</span>
+                  <span class="price-value total-value">₹{{cartData.finalPrice}}</span>
                 </div>
               </div>
 

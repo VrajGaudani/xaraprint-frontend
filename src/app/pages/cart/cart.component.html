@@ -73,7 +73,7 @@
                     <h5 class="product-name mb-2">{{item.product_id.productname}}</h5>
                     <div class="product-specs">
                       <p class="spec-item mb-1">
-                        <span class="text-muted">Size (W X H):</span> 8 Ft x 8 Ft (FT) | ${{item.single_price}}
+                        <span class="text-muted">Size (W X H):</span> 8 Ft x 8 Ft (FT) | ₹{{item.single_price}}
                       </p>
                       <p class="spec-item mb-1">
                         <span class="text-muted">Side:</span> Single Sided
@@ -128,7 +128,7 @@
                   <!-- Price & Actions -->
                   <div class="col-md-2">
                     <div class="text-end">
-                      <h5 class="item-price mb-2">${{item.after_discount_price}}</h5>
+                      <h5 class="item-price mb-2">₹{{item.after_discount_price}}</h5>
                       <p class="delivery-info text-muted small mb-3">
                         Estimated delivery<br>Wed, Nov 8th 2023
                       </p>
@@ -222,7 +222,7 @@
                                 <strong>Priority</strong>
                                 <small class="d-block text-muted">Mon, Nov 6th 2023</small>
                               </div>
-                              <span class="fw-bold">$60.82</span>
+                              <span class="fw-bold">₹60.82</span>
                             </label>
                           </div>
                           <div class="form-check mb-2">
@@ -232,7 +232,7 @@
                                 <strong>Express</strong>
                                 <small class="d-block text-muted">Wed, Nov 8th 2023</small>
                               </div>
-                              <span class="fw-bold">$40.57</span>
+                              <span class="fw-bold">₹40.57</span>
                             </label>
                           </div>
                           <div class="form-check">
@@ -256,7 +256,7 @@
               <div class="price-breakdown">
                 <div class="d-flex justify-content-between mb-2">
                   <span>Shipping</span>
-                  <span class="text-decoration-line-through text-muted">$505.70</span>
+                  <span class="text-decoration-line-through text-muted">₹505.70</span>
                 </div>
                 <small class="text-muted d-block mb-3">
                   Estimated delivery Tue, Nov 14th 2023 - Super Saver
@@ -264,28 +264,28 @@
 
                 <div class="d-flex justify-content-between mb-2">
                   <span>Exceptional Courier Charges</span>
-                  <span>$505.70</span>
+                  <span>₹505.70</span>
                 </div>
 
                 <div *ngIf="couponObj.res" class="text-success mb-3">
-                  <small>You will get discount ${{couponObj.discount_amount}}</small>
+                  <small>You will get discount ₹{{couponObj.discount_amount}}</small>
                 </div>
 
                 <hr>
 
                 <div class="d-flex justify-content-between mb-2">
                   <span>Subtotal</span>
-                  <span>${{subtotal}}</span>
+                  <span>₹{{subtotal}}</span>
                 </div>
 
                 <div class="d-flex justify-content-between mb-3">
                   <span>Total Discount</span>
-                  <span class="text-danger">-${{totalDiscount}}</span>
+                  <span class="text-danger">-₹{{totalDiscount}}</span>
                 </div>
 
                 <div class="d-flex justify-content-between mb-4">
                   <h5>Grand Total:</h5>
-                  <h5 class="text-primary">${{finalPrice}}</h5>
+                  <h5 class="text-primary">₹{{finalPrice}}</h5>
                 </div>
 
                 <!-- Checkout Buttons -->

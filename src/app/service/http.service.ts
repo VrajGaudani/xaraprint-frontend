@@ -65,7 +65,13 @@ export class HttpService {
 
   get<T>(url: string) {
     return this.http.get<T>(url, this.setHeaders()).pipe(
-      map((res) => res),
+      map((res) => {
+        const response = res as { data?: { data?: any } } & T;
+        if (response && response.data && response.data.data) {
+          response.data = response.data.data;
+        }
+        return response;
+      }),
       catchError((err) => this.handleAuthError(err))
     );
   }

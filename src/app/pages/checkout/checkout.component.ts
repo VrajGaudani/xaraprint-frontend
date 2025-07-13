@@ -133,7 +133,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   getCartData() {
-    this.httpService.post(APIURLs.getCartAPI, '').subscribe((res: any) => {
+    this.httpService.get(APIURLs.getCartAPI).subscribe((res: any) => {
       if (res.data) {
         this.cartData.items = res.data;
         this.calculateCartTotals();

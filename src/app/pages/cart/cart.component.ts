@@ -38,7 +38,7 @@ export class CartComponent implements OnInit {
 
   getCart() {
 
-    this.httpService.post(APIURLs.getCartAPI,'').subscribe((res: any) => {
+    this.httpService.get(APIURLs.getCartAPI).subscribe((res: any) => {
       this.allData = res.data;
       console.log("this.allData", this.allData)
       setTimeout(() => {

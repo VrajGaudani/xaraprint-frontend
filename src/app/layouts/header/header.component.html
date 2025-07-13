@@ -10,7 +10,7 @@
           </div>
           <div class="shipping-text">
             <span class="fw-bold">FREE SUPER SAVER SHIPPING</span>
-            <span class="shipping-condition ms-2">over $99</span>
+            <span class="shipping-condition ms-2">over ₹99</span>
           </div>
         </div>
       </div>
@@ -61,26 +61,14 @@
             </button>
             <ul class="dropdown-menu custom-dropdown-menu shadow-lg">
               <li>
-                <a class="dropdown-item custom-dropdown-item" href="/track-order">
+                <a class="dropdown-item custom-dropdown-item" href="/account">
                   <i class="bi bi-box-seam me-2"></i>
                   <span>Track Order</span>
                 </a>
               </li>
-              <li>
-                <a class="dropdown-item custom-dropdown-item" href="/design-templates">
-                  <i class="bi bi-palette me-2"></i>
-                  <span>Design Templates</span>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item custom-dropdown-item" href="/bulk-orders">
-                  <i class="bi bi-stack me-2"></i>
-                  <span>Bulk Orders</span>
-                </a>
-              </li>
               <li><hr class="dropdown-divider"></li>
               <li>
-                <a class="dropdown-item custom-dropdown-item" href="/help">
+                <a class="dropdown-item custom-dropdown-item" href="/contact-us">
                   <i class="bi bi-question-circle me-2"></i>
                   <span>Help Center</span>
                 </a>
@@ -105,12 +93,6 @@
                   <span>My Account</span>
                 </a>
               </li>
-              <li>
-                <a class="dropdown-item custom-dropdown-item" routerLink="/orders">
-                  <i class="bi bi-bag me-2"></i>
-                  <span>My Orders</span>
-                </a>
-              </li>
               <li><hr class="dropdown-divider"></li>
               <li>
                 <a class="dropdown-item custom-dropdown-item" (click)="logout()">
@@ -131,7 +113,7 @@
           <!-- Cart -->
           <a routerLink="/cart" class="text-dark text-decoration-none d-flex align-items-center">
             <i class="bi bi-bag me-1"></i>
-            <span>Item(s) <span class="fw-bold">${{finalPrice}}</span></span>
+            <span>Item(s) <span class="fw-bold">₹{{finalPrice}}</span></span>
           </a>
 
           <!-- Country Selector -->

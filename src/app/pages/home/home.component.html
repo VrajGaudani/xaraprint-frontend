@@ -127,7 +127,7 @@
               </div>
               <div class="brand-price">
                 <span class="price-label">Starting at</span>
-                <span class="price-value">${{item?.price || '29.99'}}</span>
+                <span class="price-value">₹{{item?.price || '29.99'}}</span>
               </div>
             </div>
           </div>
@@ -186,7 +186,7 @@
                 </div>
                 <div class="product-price-fixed">
                   <span class="price-label">Starts at</span>
-                  <span class="price-value">${{item?.price}}</span>
+                  <span class="price-value">₹{{item?.price}}</span>
                 </div>
                 <a [routerLink]="['/product-details', item._id]" class="btn btn-primary product-btn-fixed">
                   <span>Customize</span>
@@ -230,7 +230,7 @@
           </div>
           <div class="process-content">
             <h6 class="process-title">Hire a Designer</h6>
-            <span class="process-subtitle">Starts <strong>$9.99</strong></span>
+            <span class="process-subtitle">Starts <strong>₹9.99</strong></span>
           </div>
         </div>
       </div>
@@ -314,8 +314,8 @@
               <span class="rating-count">(4.5)</span>
             </div>
             <div class="pick-pricing">
-              <span class="current-price">${{item?.price}}</span>
-              <span class="original-price">$7.59</span>
+              <span class="current-price">₹{{item?.price}}</span>
+              <span class="original-price">₹7.59</span>
               <span class="discount-badge">Save 20%</span>
             </div>
             <a [routerLink]="['/product-details', item._id]" class="btn btn-primary pick-btn">
@@ -348,7 +348,7 @@
                 <h6 class="loved-product-title-fixed">{{item?.productname}}</h6>
                 <div class="loved-product-price-fixed">
                   <span class="price-label">Starts at</span>
-                  <span class="price-value">${{item?.price}}</span>
+                  <span class="price-value">₹{{item?.price}}</span>
                 </div>
                 <div class="loved-product-rating-fixed">
                   <div class="rating-stars">

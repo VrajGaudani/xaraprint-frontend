@@ -153,7 +153,7 @@
                         {{order?.order_status}}
                       </span>
                     </div>
-                    <div class="order-total">${{order?.price}}</div>
+                    <div class="order-total">₹{{order?.price}}</div>
                   </div>
                   <div class="empty-state" *ngIf="!orderArray.length">
                     <i class="bi bi-bag-x"></i>
@@ -431,7 +431,7 @@
                   </div>
                 </div>
                 <div class="order-total">
-                  <h5>${{order?.price}}</h5>
+                  <h5>₹{{order?.price}}</h5>
                 </div>
               </div>
               <div class="order-actions">
@@ -473,7 +473,7 @@
               </div>
               <div class="item-details">
                 <h6>Custom Banner Sign</h6>
-                <p class="item-price">$29.99</p>
+                <p class="item-price">₹29.99</p>
                 <button class="btn btn-primary btn-sm">Add to Cart</button>
               </div>
             </div>
@@ -679,7 +679,7 @@
                     {{orderObj?.order_status}}
                   </span>
                 </p>
-                <p><strong>Total:</strong> ${{orderObj?.price}}</p>
+                <p><strong>Total:</strong> ₹{{orderObj?.price}}</p>
               </div>
             </div>
             <div class="col-md-4">
@@ -716,9 +716,9 @@
                 </div>
                 <div class="item-price">
                   <p class="original-price" *ngIf="item?.orignal_price !== item?.after_discount_price">
-                    ${{item?.orignal_price}}
+                    ₹{{item?.orignal_price}}
                   </p>
-                  <p class="final-price">${{item?.after_discount_price}}</p>
+                  <p class="final-price">₹{{item?.after_discount_price}}</p>
                 </div>
               </div>
             </div>
