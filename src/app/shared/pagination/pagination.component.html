@@ -1,0 +1,125 @@
+<div class="pagination-wrapper" *ngIf="paginationData.total > 0">
+  <!-- Pagination Info -->
+  <div class="pagination-info" *ngIf="showInfo">
+    <div class="results-summary">
+      <span class="pagination-text">{{paginationInfo.showingText}}</span>
+    </div>
+    
+    <!-- Items per page selector -->
+    <div class="items-per-page" *ngIf="showLimitSelector">
+      <label for="limitSelect" class="form-label">Items per page:</label>
+      <select 
+        id="limitSelect"
+        class="form-select form-select-sm" 
+        [value]="paginationData.limit"
+        (change)="onLimitChange($event)">
+        <option *ngFor="let option of limitOptions" [value]="option">
+          {{option}}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Pagination Controls -->
+  <nav aria-label="Pagination Navigation" class="pagination-nav">
+    <ul class="pagination justify-content-center">
+      <!-- First Page -->
+      <li class="page-item" [class.disabled]="paginationData.page === 1">
+        <button 
+          class="page-link" 
+          type="button"
+          [disabled]="paginationData.page === 1"
+          (click)="goToFirstPage()"
+          title="First Page">
+          <i class="bi bi-chevron-double-left"></i>
+        </button>
+      </li>
+
+      <!-- Previous Page -->
+      <li class="page-item" [class.disabled]="paginationData.page === 1">
+        <button 
+          class="page-link" 
+          type="button"
+          [disabled]="paginationData.page === 1"
+          (click)="goToPreviousPage()"
+          title="Previous Page">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+      </li>
+
+      <!-- Page Numbers -->
+      <li 
+        class="page-item" 
+        *ngFor="let page of paginationInfo.pages" 
+        [class.active]="paginationData.page === page"
+        [class.disabled]="page === -1">
+        
+        <!-- Regular page number -->
+        <button 
+          *ngIf="page !== -1" 
+          class="page-link" 
+          type="button"
+          (click)="onPageClick(page)">
+          {{page}}
+        </button>
+        
+        <!-- Ellipsis -->
+        <span *ngIf="page === -1" class="page-link">...</span>
+      </li>
+
+      <!-- Next Page -->
+      <li class="page-item" [class.disabled]="!paginationData.hasNextPage">
+        <button 
+          class="page-link" 
+          type="button"
+          [disabled]="!paginationData.hasNextPage"
+          (click)="goToNextPage()"
+          title="Next Page">
+          <i class="bi bi-chevron-right"></i>
+        </button>
+      </li>
+
+      <!-- Last Page -->
+      <li class="page-item" [class.disabled]="!paginationData.hasNextPage">
+        <button 
+          class="page-link" 
+          type="button"
+          [disabled]="!paginationData.hasNextPage"
+          (click)="goToLastPage()"
+          title="Last Page">
+          <i class="bi bi-chevron-double-right"></i>
+        </button>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Mobile Pagination (Simplified) -->
+  <div class="mobile-pagination d-md-none">
+    <div class="mobile-pagination-info">
+      <span>Page {{paginationData.page}} of {{paginationData.totalPage}}</span>
+    </div>
+    <div class="mobile-pagination-controls">
+      <button 
+        class="btn btn-outline-primary btn-sm" 
+        [disabled]="paginationData.page === 1"
+        (click)="goToPreviousPage()">
+        <i class="bi bi-chevron-left"></i> Previous
+      </button>
+      <button 
+        class="btn btn-outline-primary btn-sm" 
+        [disabled]="!paginationData.hasNextPage"
+        (click)="goToNextPage()">
+        Next <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- No Results Message -->
+<div class="no-results" *ngIf="paginationData.total === 0">
+  <div class="text-center py-4">
+    <i class="bi bi-inbox display-4 text-muted"></i>
+    <h5 class="mt-3 text-muted">No results found</h5>
+    <p class="text-muted">Try adjusting your search criteria or filters</p>
+  </div>
+</div>

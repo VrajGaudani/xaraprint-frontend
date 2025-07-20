@@ -5,6 +5,7 @@ import { debounceTime, distinctUntilChanged } from "rxjs"
 import { Api1Service } from "src/app/service/api1.service"
 import { GlobleService } from "src/app/service/globle.service"
 import { HttpService } from "src/app/service/http.service"
+import { PaginationService } from "src/app/service/pagination.service"
 import { APIURLs } from "src/environments/apiUrls"
 
 @Component({
@@ -28,7 +29,7 @@ export class HeaderComponent implements OnInit {
   searchControl = new FormControl()
   mobileSubmenuOpen: boolean[] = []
   showSearchDropdown = false
-  coupenCode = [];
+  coupenCode = []
   mostValued: any = {}
 
   constructor(
@@ -36,10 +37,12 @@ export class HeaderComponent implements OnInit {
     private api1: Api1Service,
     public gs: GlobleService,
     private httpService: HttpService,
+    private paginationService: PaginationService,
   ) {
+    // Load categories for navigation
     this.httpService.get(APIURLs.getAllCatAPI).subscribe(
       (res: any) => {
-        this.header = res.data
+        this.header = res.data?.data || res.data || []
       },
       (err) => {
         this.gs.errorToaster(err?.error?.msg || "something went wrong !!")
@@ -55,8 +58,8 @@ export class HeaderComponent implements OnInit {
     this.searchControl.valueChanges.pipe(debounceTime(2000), distinctUntilChanged()).subscribe((query) => {
       this.searchProduct(query)
     })
-    this.getAllSearchProduct();
-    this.getCouponDiscount();
+    this.getAllSearchProduct()
+    this.getCouponDiscount()
 
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -81,13 +84,22 @@ export class HeaderComponent implements OnInit {
   }
 
   getAllSearchProduct(query?: any) {
-    this.httpService.get(query ? APIURLs.getAllBannersAPI + `?str=${query}` : APIURLs.getAllBannersAPI).subscribe(
+    // Search in products, not banners
+    const searchParams: any = {}
+    if (query) {
+      searchParams.search = query
+      searchParams.limit = 10
+    }
+
+    this.httpService.get(APIURLs.getAllProductAPI, searchParams).subscribe(
       (res: any) => {
-        this.searchProductList = res.data
+        this.searchProductList = res.data?.data || res.data || []
+        this.showSearchDropdown = query && this.searchProductList.length > 0
       },
       (err) => {
         console.log("err -->", err)
         this.searchProductList = []
+        this.showSearchDropdown = false
       },
     )
   }
@@ -95,20 +107,22 @@ export class HeaderComponent implements OnInit {
   getCouponDiscount() {
     return this.httpService.get(APIURLs.getAllCouponAPI).subscribe(
       (res: any) => {
-        this.coupenCode = res.data;
-        if (Array.isArray(res.data) && res.data.length > 0) {
-          this.mostValued = res.data.reduce((max: { discount_amount: any }, curr: { discount_amount: any }) =>
-            Number(curr.discount_amount) > Number(max.discount_amount) ? curr : max,
-            res.data[0]
-          );
+        const coupons = res.data?.data || res.data || []
+        this.coupenCode = coupons
+        if (Array.isArray(coupons) && coupons.length > 0) {
+          this.mostValued = coupons.reduce(
+            (max: { discount_amount: any }, curr: { discount_amount: any }) =>
+              Number(curr.discount_amount) > Number(max.discount_amount) ? curr : max,
+            coupons[0],
+          )
         } else {
-          this.mostValued = res.data[0] || {};
+          this.mostValued = coupons[0] || {}
         }
-        console.log("Coupon discount:", res.data)
+        console.log("Coupon discount:", coupons)
       },
       (err) => {
         this.gs.errorToaster(err?.error?.msg || "Failed to apply coupon!")
-      }
+      },
     )
   }
 
@@ -137,7 +151,7 @@ export class HeaderComponent implements OnInit {
   getCart() {
     this.httpService.get(APIURLs.getCartAPI).subscribe(
       (res: any) => {
-        this.allData = res.data
+        this.allData = res.data?.data || res.data || []
         setTimeout(() => {
           this.finalPriceCount()
         }, 300)
@@ -152,8 +166,8 @@ export class HeaderComponent implements OnInit {
     let finalPrice = 0
     let items = 0
     for (let i = 0; i < this.allData.length; i++) {
-      finalPrice += this.allData[i].after_discount_price
-      items += this.allData[i].qty
+      finalPrice += this.allData[i].after_discount_price || 0
+      items += this.allData[i].qty || 0
     }
     this.finalPrice = finalPrice
     this.cartItems = items
@@ -177,6 +191,7 @@ export class HeaderComponent implements OnInit {
 
   logout(): void {
     localStorage.removeItem("token")
+    this.gs.isLogin = false
     this.router.navigate(["/login"])
   }
 

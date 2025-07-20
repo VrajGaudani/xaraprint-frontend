@@ -19,6 +19,7 @@ import { ContactUsComponent } from './pages/contact-us/contact-us.component';
 import { TermsConditionsComponent } from './pages/terms-conditions/terms-conditions.component';
 import { CancellationRefundComponent } from './pages/cancellation-refund/cancellation-refund.component';
 import { ErrorComponent } from './pages/error/error.component';
+import { PricingDetailsComponent } from './pages/pricing-details/pricing-details.component';
 
 const routes: Routes = [
   {
@@ -40,7 +41,8 @@ const routes: Routes = [
       { path: "about-us", component: AboutUsComponent },
       { path: "contact-us", component: ContactUsComponent },
       { path: "terms-conditions", component: TermsConditionsComponent },
-      { path: "cancellation-refund", component: CancellationRefundComponent }
+      { path: "cancellation-refund", component: CancellationRefundComponent },
+      { path: "pricing-details", component: PricingDetailsComponent }
     ]
   },
   { path: 'login', component: LoginComponent },

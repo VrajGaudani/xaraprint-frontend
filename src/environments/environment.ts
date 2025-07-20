@@ -4,7 +4,6 @@
 
 export const environment = {
   production: false,
-  // baseUrl: "http://localhost:3000/api/v1/",
   baseUrl: "http://localhost:3000/v1/",
   imgUrl: "http://localhost:3000/uploads/",
   firebaseConfig: {
@@ -14,12 +13,12 @@ export const environment = {
     storageBucket: "banner-web-b98bc.appspot.com",
     messagingSenderId: "311720436742",
     appId: "1:311720436742:web:c433b2f1a58c893229cf87",
-    measurementId: "G-CQP0QPNN61"
+    measurementId: "G-CQP0QPNN61",
   },
-  basicUser: 'xaraprint',
-  basicPassword: 'xaraprint123',
-};
-
+  basicUser: "admin", // This should match your backend BASIC_USER
+  basicPassword: "password123", // This should match your backend BASIC_PASSWORD
+  RAZORPAY_KEY_ID: "rzp_test_HJG5Rtuy8Xh2NB"
+}
 
 /*
  * For easier debugging in development mode, you can import the following file

@@ -1,173 +1,311 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Api1Service } from 'src/app/service/api1.service';
-import { GlobleService } from 'src/app/service/globle.service';
-import { HttpService } from 'src/app/service/http.service';
-import { APIURLs } from 'src/environments/apiUrls';
+import { Component, OnInit } from "@angular/core"
+import { HttpService } from "../../service/http.service"
+import { GlobleService } from "../../service/globle.service"
+import { APIURLs } from "../../../environments/apiUrls"
+import { Router } from "@angular/router"
 
 @Component({
-  selector: 'app-cart',
-  templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.scss']
+  selector: "app-cart",
+  templateUrl: "./cart.component.html",
+  styleUrls: ["./cart.component.scss"],
 })
 export class CartComponent implements OnInit {
+  allData: any[] = []
+  couponCode = ""
+  appliedCoupon: any = null
+  isLoading = false
+  isUpdatingQuantity = false
+  isApplyingCoupon = false
+  isCouponApplied = false
 
-  allData: any = [];
-  finalPrice: any = 0;
-  cartItems: any = 0;
-  coupon_code: any = ""
-  couponObj: any = {
-    res: false,
-    coupon_code: "",
-    discount_amount: 0
+  calculations = {
+    subtotal: 0,
+    total_discount: 0,
+    taxable_amount: 0,
+    coupon_discount: 0,
+    final_taxable_amount: 0,
+    total_tax: 0,
+    shipping_charge: 0,
+    shipping_tax: 0,
+    grand_total: 0,
+    coupon_details: null,
+    item_calculations: [],
   }
-  subtotal: number = 0;
-  totalDiscount: number = 0;
 
   constructor(
-    private api1: Api1Service,
-    public gs: GlobleService,
     private httpService: HttpService,
+    public gs: GlobleService,
     private router: Router,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    this.getCart();
+    this.getCart()
   }
 
+  trackByCartId(index: number, item: any): string {
+    return item._id || index.toString()
+  }
 
   getCart() {
+    this.isLoading = true
+    this.httpService.get(APIURLs.getCartAPI).subscribe(
+      (res: any) => {
+        console.log("Cart API response:", res)
+        if (res.data && res.data.data) {
+          this.allData = res.data.data || []
+          this.calculations = res.data.calculations || this.calculations
+          console.log("Cart calculations:", this.calculations)
 
-    this.httpService.get(APIURLs.getCartAPI).subscribe((res: any) => {
-      this.allData = res.data;
-      console.log("this.allData", this.allData)
-      setTimeout(() => {
-        this.finalPriceCount();
-      }, 300);
-    },(err) => {
-      this.gs.errorToaster(err?.error?.msg || "something went wrong !!")
-    })
+          // Check if coupon is applied
+          const itemWithCoupon = this.allData.find((item) => item.applied_coupon_code)
+          if (itemWithCoupon && itemWithCoupon.applied_coupon_code) {
+            this.isCouponApplied = true
+            this.couponCode = itemWithCoupon.applied_coupon_code
+            this.appliedCoupon = itemWithCoupon.coupon_details || this.calculations.coupon_details
+          } else {
+            this.isCouponApplied = false
+            this.couponCode = ""
+            this.appliedCoupon = null
+          }
+        } else {
+          // Handle empty cart
+          this.allData = []
+          this.calculations = {
+            subtotal: 0,
+            total_discount: 0,
+            taxable_amount: 0,
+            coupon_discount: 0,
+            final_taxable_amount: 0,
+            total_tax: 0,
+            shipping_charge: 0,
+            shipping_tax: 0,
+            grand_total: 0,
+            coupon_details: null,
+            item_calculations: [],
+          }
+          this.isCouponApplied = false
+          this.couponCode = ""
+          this.appliedCoupon = null
+        }
+        this.isLoading = false
+      },
+      (err) => {
+        this.gs.errorToaster(err?.error?.msg || "Failed to load cart!")
+        this.isLoading = false
+      },
+    )
   }
 
-
-  changeQty(data: any, index: any, type: any) {
-    this.allData[index].qty = Number(this.allData[index].qty);
-    if (type == 'plus') {
-      this.allData[index].qty += 1;
-    } else if (type == 'minus') {
-      if (this.allData[index].qty > 1) {
-        this.allData[index].qty -= 1;
-      } else {
-        this.gs.errorToaster('Quantity cannot be less than 1');
-      }
-    }
-
-    let price = this.allData[index].single_price;
-    let multiQtyPrice = price * this.allData[index].qty;
-    let discountPercentage = 0;
-    let discountAmount = 0;
-    let finalPrice = 0;
-
-    discountPercentage = this.calculateDiscount(this.allData[index].qty, data.product_id.bulk_qty);
-    discountAmount = (multiQtyPrice * discountPercentage) / 100;
-    this.allData[index].discount_amount = discountAmount
-    finalPrice = multiQtyPrice - discountAmount
-
-    this.allData[index].discount_percentage = discountPercentage;
-    this.allData[index].orignal_price = multiQtyPrice;
-    this.allData[index].after_discount_price = finalPrice
-
-    // add spinner here
-
-    this.httpService.post(APIURLs.cartQntUpdateAPI,this.allData[index]).subscribe((res: any) => {
-      setTimeout(() => {
-        this.finalPriceCount();
-      }, 300)
-    },(err) => {
-      this.gs.errorToaster(err?.error?.msg || "something went wrong !!")
-    })
+  changeQuantity(item: any, newQty: number) {
+    if (newQty < 1) return
+    this.updateQuantity(item, newQty)
   }
 
-  calculateDiscount(quantity: any, discounts: any) {
+  onQuantityInputChange(item: any, event: Event) {
+    const target = event.target as HTMLInputElement
+    const newQty = Number.parseInt(target.value) || 1
 
-    for (let i = discounts.length - 1; i >= 0; i--) {
-      if (quantity >= discounts[i].qty) {
-        return discounts[i].discount;
-      }
+    if (newQty !== item.qty) {
+      this.updateQuantity(item, newQty)
     }
-    return 0;
   }
 
-  finalPriceCount() {
-    let finalPrice = 0;
-    let items = 0;
-    let subtotal = 0;
-    let totalDiscount = 0;
-
-    for (let i = 0; i < this.allData.length; i++) {
-      // Calculate subtotal (price before discount)
-      subtotal += this.allData[i].orignal_price;
-
-      // Calculate total discount (including bulk discounts)
-      totalDiscount += this.allData[i].discount_amount;
-
-      finalPrice += this.allData[i].after_discount_price;
-      items += this.allData[i].qty;
+  updateQuantity(item: any, newQty: number) {
+    if (newQty < 1) {
+      newQty = 1
     }
 
-    // Add coupon discount if applied
-    if (this.couponObj.res) {
-      totalDiscount += parseFloat(this.couponObj.discount_amount);
+    this.isUpdatingQuantity = true
+    const updateData = {
+      id: item._id,
+      qty: newQty,
     }
 
-    this.subtotal = subtotal;
-    this.totalDiscount = totalDiscount;
-    this.finalPrice = finalPrice;
-    this.cartItems = items;
+    this.httpService.put(APIURLs.updateCartQntAPI, updateData).subscribe(
+      (res: any) => {
+        if (res.data && res.data.calculations) {
+          // Update calculations from backend
+          this.calculations = res.data.calculations
+
+          // Update the item in the local array
+          const index = this.allData.findIndex((cartItem) => cartItem._id === item._id)
+          if (index !== -1 && res.data.item) {
+            this.allData[index] = { ...this.allData[index], ...res.data.item }
+          }
+
+          // Update coupon status
+          const itemWithCoupon = this.allData.find((item) => item.applied_coupon_code)
+          if (itemWithCoupon && itemWithCoupon.applied_coupon_code) {
+            this.isCouponApplied = true
+            this.couponCode = itemWithCoupon.applied_coupon_code
+            this.appliedCoupon = itemWithCoupon.coupon_details || this.calculations.coupon_details
+          } else {
+            this.isCouponApplied = false
+            this.couponCode = ""
+            this.appliedCoupon = null
+          }
+        }
+
+        this.gs.successToaster("Quantity updated successfully!")
+        this.isUpdatingQuantity = false
+      },
+      (err) => {
+        this.gs.errorToaster(err?.error?.msg || "Failed to update quantity!")
+        this.isUpdatingQuantity = false
+        this.getCart() // Refresh cart on error
+      },
+    )
   }
 
+  removeFromCart(item: any) {
+    if (confirm("Are you sure you want to remove this item from cart?")) {
+      this.httpService.delete(`${APIURLs.deleteCartItemAPI}/${item._id}`).subscribe(
+        (res: any) => {
+          // Remove item from local array
+          this.allData = this.allData.filter((cartItem) => cartItem._id !== item._id)
 
-  proceedToCheckout() {
+          if (res.data && res.data.calculations) {
+            this.calculations = res.data.calculations
 
+            // Update coupon status
+            const itemWithCoupon = this.allData.find((item) => item.applied_coupon_code)
+            if (itemWithCoupon && itemWithCoupon.applied_coupon_code) {
+              this.isCouponApplied = true
+              this.couponCode = itemWithCoupon.applied_coupon_code
+              this.appliedCoupon = itemWithCoupon.coupon_details || this.calculations.coupon_details
+            } else {
+              this.isCouponApplied = false
+              this.couponCode = ""
+              this.appliedCoupon = null
+            }
+          }
 
-    let cartIds = []
-
-    for (let i in this.allData) {
-      cartIds.push(this.allData[i]._id)
+          this.gs.successToaster("Item removed from cart!")
+        },
+        (err) => {
+          this.gs.errorToaster(err?.error?.msg || "Failed to remove item!")
+        },
+      )
     }
-
-    let cartData = {
-      cartLength: this.allData.length,
-      totalPrice: this.finalPrice,
-      cartIds: cartIds,
-      coupon_code: this.coupon_code,
-      coupon_discount: this.couponObj.discount_amount,
-      coupon_applyed :  this.coupon_code.res
-    }
-
-    let queryParams = { cartData: JSON.stringify(cartData) };
-    // this.router.navigate(['/checkout'], { queryParams });
-    this.router.navigate(['/checkout']);
   }
 
-  deleteCart(data: any, index: any) {
-    this.httpService.post(APIURLs.deleteCartItemAPI,{ _id: data._id }).subscribe((res: any) => {
-      this.allData.splice(index, 1);
-      this.finalPriceCount();
-    },(err) => {
-      this.gs.errorToaster(err?.error?.msg || "something went wrong !!")
-    })
+  clearCart() {
+    if (this.allData.length === 0) {
+      this.gs.errorToaster("Cart is already empty!")
+      return
+    }
 
+    if (confirm("Are you sure you want to clear your cart?")) {
+      const deletePromises = this.allData.map((item) =>
+        this.httpService.delete(`${APIURLs.deleteCartItemAPI}/${item._id}`).toPromise(),
+      )
+
+      Promise.all(deletePromises)
+        .then(() => {
+          this.allData = []
+          this.isCouponApplied = false
+          this.couponCode = ""
+          this.appliedCoupon = null
+          this.calculations = {
+            subtotal: 0,
+            total_discount: 0,
+            taxable_amount: 0,
+            coupon_discount: 0,
+            final_taxable_amount: 0,
+            total_tax: 0,
+            shipping_charge: 0,
+            shipping_tax: 0,
+            grand_total: 0,
+            coupon_details: null,
+            item_calculations: [],
+          }
+          this.gs.successToaster("Cart cleared successfully!")
+        })
+        .catch((err) => {
+          this.gs.errorToaster("Failed to clear cart!")
+          this.getCart() // Refresh cart
+        })
+    }
   }
 
   applyCoupon() {
-    this.httpService.post(APIURLs.getCouponDiscountAPI, { coupon_code: this.coupon_code }).subscribe((res: any) => {
-      this.couponObj = res.data;
-      this.couponObj.res = true;
-      this.finalPriceCount(); // Recalculate all totals including the coupon discount
-    }, (err) => {
-      this.couponObj.res = false;
-      this.gs.errorToaster(err?.error?.msg || "something went wrong !!");
-    });
+    if (!this.couponCode.trim()) {
+      this.gs.errorToaster("Please enter a coupon code!")
+      return
+    }
+
+    this.isApplyingCoupon = true
+    const couponData = {
+      coupon_code: this.couponCode.trim().toUpperCase(),
+    }
+
+    this.httpService.post(`${APIURLs.applyCouponAPI}`, couponData).subscribe(
+      (res: any) => {
+        if (res.data) {
+          this.appliedCoupon = res.data.coupon
+          this.calculations = res.data.calculations
+          this.isCouponApplied = true
+          this.gs.successToaster("Coupon applied successfully!")
+        }
+        this.isApplyingCoupon = false
+      },
+      (err) => {
+        this.gs.errorToaster(err?.error?.msg || "Invalid coupon code!")
+        this.isApplyingCoupon = false
+      },
+    )
+  }
+
+  removeCoupon() {
+    this.httpService.post(`${APIURLs.removeCouponAPI}`, {}).subscribe(
+      (res: any) => {
+        if (res.data && res.data.calculations) {
+          this.calculations = res.data.calculations
+        }
+        this.appliedCoupon = null
+        this.couponCode = ""
+        this.isCouponApplied = false
+        this.gs.successToaster("Coupon removed!")
+      },
+      (err) => {
+        this.gs.errorToaster(err?.error?.msg || "Failed to remove coupon!")
+      },
+    )
+  }
+
+  proceedToCheckout() {
+    if (this.allData.length === 0) {
+      this.gs.errorToaster("Your cart is empty!")
+      return
+    }
+
+    // Store cart summary for checkout
+    const cartSummary = {
+      items: this.allData,
+      calculations: this.calculations,
+      appliedCoupon: this.appliedCoupon,
+    }
+
+    localStorage.setItem("cartSummary", JSON.stringify(cartSummary))
+    this.router.navigate(["/checkout"])
+  }
+
+  continueShopping() {
+    this.router.navigate(["/"])
+  }
+
+  getItemTotal(item: any): number {
+    // after_discount_price is already for the whole line (for the given quantity)
+    return Number.parseFloat((item.after_discount_price || 0).toFixed(2))
+  }
+
+  getItemOriginalTotal(item: any): number {
+    // orignal_price is already for the whole line
+    return Number.parseFloat((item.orignal_price || 0).toFixed(2))
+  }
+
+  getItemDiscount(item: any): number {
+    // discount_amount is already for the whole line
+    return Number.parseFloat((item.discount_amount || 0).toFixed(2))
   }
 }

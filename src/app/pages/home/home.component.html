@@ -28,13 +28,13 @@
                   <span>Final Hour 4th of July Preps</span>
                 </div>
                 <h1 class="hero-title">
-                  Up to <span class="text-primary">30% OFF</span> sitewide
+                  Up to <span class="text-primary">{{mostValued?.discount_amount}}% OFF</span> sitewide
                 </h1>
                 <p class="hero-subtitle">Great promotions ensure unlimited savings on custom banners and displays</p>
                 <div class="hero-actions">
                   <div class="promo-code-display">
                     <span class="code-label">Code:</span>
-                    <span class="code-value">IDPREP</span>
+                    <span class="code-value">{{mostValued.coupon_code}}</span>
                   </div>
                   <button class="btn btn-primary btn-lg hero-cta">
                     <span>SHOP NOW</span>

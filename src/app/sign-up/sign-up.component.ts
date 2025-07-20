@@ -113,7 +113,7 @@ export class SignUpComponent implements OnInit {
     this.isLoading = true
     const signupData = this.signupForm.value
 
-    this.httpService.postBasic(APIURLs.registerAPI, signupData).subscribe(
+    this.httpService.postBasic(APIURLs.userRegisterAPI, signupData).subscribe(
       (res: any) => {
         this.isLoading = false
         if (res.success) {
@@ -131,9 +131,14 @@ export class SignUpComponent implements OnInit {
     )
   }
 
-  socialSignup(provider: string) {
-    // Implement social signup logic
-    this.gs.successToaster(`${provider} signup feature coming soon!`)
+  socialSignup(provider: 'google' | 'facebook') {
+    if (provider === 'google') {
+      // Google signup implementation
+      this.gs.errorToaster("Google signup feature coming soon!")
+    } else if (provider === 'facebook') {
+      // Facebook signup implementation
+      this.gs.errorToaster("Facebook signup feature coming soon!")
+    }
   }
 
   togglePasswordVisibility() {

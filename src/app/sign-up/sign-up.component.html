@@ -281,21 +281,13 @@
               </div>
 
               <div class="social-buttons">
-                <button type="button" class="btn btn-social btn-facebook">
-                  <i class="bi bi-facebook"></i>
-                  <span>Facebook</span>
-                </button>
-                <button type="button" class="btn btn-social btn-google">
+                <button type="button" class="btn btn-social btn-google" (click)="socialSignup('google')">
                   <i class="bi bi-google"></i>
                   <span>Google</span>
                 </button>
-                <button type="button" class="btn btn-social btn-twitter">
-                  <i class="bi bi-twitter"></i>
-                  <span>Twitter</span>
-                </button>
-                <button type="button" class="btn btn-social btn-apple">
-                  <i class="bi bi-apple"></i>
-                  <span>Apple</span>
+                <button type="button" class="btn btn-social btn-facebook" (click)="socialSignup('facebook')">
+                  <i class="bi bi-facebook"></i>
+                  <span>Facebook</span>
                 </button>
               </div>
             </div>

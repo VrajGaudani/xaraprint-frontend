@@ -1,39 +1,93 @@
 <!-- Order Success Section -->
 <section class="order-success-section">
   <div class="container">
-    <div class="success-container">
-      <div class="success-card">
-        <div class="success-content">
-          <!-- Success Icon -->
-          <div class="success-icon">
-            <i class="bi bi-check-circle-fill"></i>
-          </div>
-          
-          <!-- Success Message -->
-          <div class="success-message">
-            <h2 class="success-title">Awesome Purchase!</h2>
-            <p class="success-subtitle">Order Placed! Cool Choice By The Way.</p>
-            <p class="success-description">Thanks A Lot For Your Order!</p>
-          </div>
-          
-          <!-- Order Info -->
-          <div class="order-info">
-            <div class="info-notice">
-              <i class="bi bi-info-circle me-2"></i>
-              <span><strong>NOTE:</strong> We'll keep you informed about your order on email.</span>
+    <div class="order-success-page">
+      <div class="container my-5">
+        <div class="row justify-content-center">
+          <div class="col-md-8 col-lg-6">
+            <div class="card text-center">
+              <div class="card-body py-5">
+                <!-- Success Icon -->
+                <div class="success-icon mb-4">
+                  <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+                </div>
+
+                <!-- Success Message -->
+                <h2 class="text-success mb-3">Order Placed Successfully!</h2>
+                <p class="text-muted mb-4">Thank you for your purchase. Your order has been confirmed and is being processed.</p>
+
+                <!-- Order Info -->
+                <div *ngIf="!isLoading && orderDetails" class="order-info mb-4">
+                  <div class="row">
+                    <div class="col-6">
+                      <strong>Order ID:</strong>
+                      <p class="mb-2">#{{orderDetails.order_id}}</p>
+                    </div>
+                    <div class="col-6">
+                      <strong>Total Amount:</strong>
+                      <p class="mb-2 text-success">₹{{orderDetails.price}}</p>
+                    </div>
+                    <div class="col-6">
+                      <strong>Payment Method:</strong>
+                      <p class="mb-2">{{orderDetails.payment_mode | titlecase}}</p>
+                    </div>
+                    <div class="col-6">
+                      <strong>Order Status:</strong>
+                      <p class="mb-2">
+                        <span class="badge bg-info">{{orderDetails.order_status | titlecase}}</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Loading State -->
+                <div *ngIf="isLoading" class="mb-4">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                  <p class="mt-2">Loading order details...</p>
+                </div>
+
+                <!-- Action Button -->
+                <div class="success-actions">
+                  <a routerLink="/account" class="btn btn-primary review-order-btn">
+                    <i class="bi bi-receipt me-2"></i>
+                    Review Your Order
+                  </a>
+                  <a routerLink="/home" class="btn btn-outline-primary continue-shopping-btn">
+                    <i class="bi bi-arrow-left me-2"></i>
+                    Continue Shopping
+                  </a>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex flex-column flex-md-row gap-3 justify-content-center mt-3">
+                  <button class="btn btn-primary" (click)="viewOrderDetails()">
+                    <i class="bi bi-list-ul me-2"></i>View Order Details
+                  </button>
+                  <button class="btn btn-outline-success" 
+                          *ngIf="orderDetails?.invoice"
+                          (click)="downloadInvoice()">
+                    <i class="bi bi-download me-2"></i>Download Invoice
+                  </button>
+                  <button class="btn btn-outline-primary" (click)="continueShopping()">
+                    <i class="bi bi-arrow-left me-2"></i>Continue Shopping
+                  </button>
+                </div>
+
+                <!-- Additional Info -->
+                <div class="mt-4 pt-4 border-top">
+                  <p class="text-muted mb-2">
+                    <i class="bi bi-envelope me-2"></i>
+                    Order confirmation has been sent to your email
+                  </p>
+                  <p class="text-muted mb-0">
+                    <i class="bi bi-truck me-2"></i>
+                    You will receive tracking information once your order is shipped
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
-          
-          <!-- Action Button -->
-          <div class="success-actions">
-            <a routerLink="/account" class="btn btn-primary review-order-btn">
-              <i class="bi bi-receipt me-2"></i>
-              Review Your Order
-            </a>
-            <a routerLink="/home" class="btn btn-outline-primary continue-shopping-btn">
-              <i class="bi bi-arrow-left me-2"></i>
-              Continue Shopping
-            </a>
           </div>
         </div>
       </div>

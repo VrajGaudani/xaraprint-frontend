@@ -43,6 +43,25 @@
           <!-- Filters Content -->
           <div class="collapse d-lg-block" id="filtersCollapse">
             <div class="filters-content">
+              <!-- Search Filter -->
+              <div class="filter-group">
+                <div class="filter-header">
+                  <h6 class="filter-title">
+                    <i class="bi bi-search me-2"></i>
+                    Search Products
+                  </h6>
+                </div>
+                <div class="filter-body">
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    placeholder="Search products..."
+                    [(ngModel)]="paginationParams.search"
+                    (keyup.enter)="onSearchChange(paginationParams.search || '')"
+                    (blur)="onSearchChange(paginationParams.search || '')">
+                </div>
+              </div>
+
               <!-- Categories Filter -->
               <div class="filter-group">
                 <div class="filter-header">
@@ -54,31 +73,65 @@
                 <div class="filter-body">
                   <div class="filter-options">
                     <div class="filter-option">
-                      <input type="radio" id="cat-all" name="category" class="filter-radio">
+                      <input 
+                        type="radio" 
+                        id="cat-all" 
+                        name="category" 
+                        class="filter-radio"
+                        [checked]="selectedCategory === ''" 
+                        (change)="onCategoryChange('')">
                       <label for="cat-all" class="filter-label">All Products</label>
                     </div>
-                    <div class="filter-option">
-                      <input type="radio" id="cat-banners" name="category" class="filter-radio">
-                      <label for="cat-banners" class="filter-label">Banners</label>
+                    <div class="filter-option" *ngFor="let category of categories">
+                      <input 
+                        type="radio" 
+                        [id]="'cat-' + category._id" 
+                        name="category" 
+                        class="filter-radio"
+                        [checked]="selectedCategory === category._id" 
+                        (change)="onCategoryChange(category._id)">
+                      <label [for]="'cat-' + category._id" class="filter-label">{{category.name}}</label>
                     </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sub Categories Filter -->
+              <div class="filter-group" *ngIf="subCategories.length > 0">
+                <div class="filter-header">
+                  <h6 class="filter-title">
+                    <i class="bi bi-tags me-2"></i>
+                    Sub Categories
+                  </h6>
+                </div>
+                <div class="filter-body">
+                  <div class="filter-options">
                     <div class="filter-option">
-                      <input type="radio" id="cat-signs" name="category" class="filter-radio">
-                      <label for="cat-signs" class="filter-label">Signs</label>
+                      <input 
+                        type="radio" 
+                        id="subcat-all" 
+                        name="subCategory" 
+                        class="filter-radio"
+                        [checked]="selectedSubCategory === ''" 
+                        (change)="onSubCategoryChange('')">
+                      <label for="subcat-all" class="filter-label">All Sub Categories</label>
                     </div>
-                    <div class="filter-option">
-                      <input type="radio" id="cat-displays" name="category" class="filter-radio">
-                      <label for="cat-displays" class="filter-label">Displays</label>
-                    </div>
-                    <div class="filter-option">
-                      <input type="radio" id="cat-flags" name="category" class="filter-radio">
-                      <label for="cat-flags" class="filter-label">Flags</label>
+                    <div class="filter-option" *ngFor="let subCategory of subCategories">
+                      <input 
+                        type="radio" 
+                        [id]="'subcat-' + subCategory._id" 
+                        name="subCategory" 
+                        class="filter-radio"
+                        [checked]="selectedSubCategory === subCategory._id" 
+                        (change)="onSubCategoryChange(subCategory._id)">
+                      <label [for]="'subcat-' + subCategory._id" class="filter-label">{{subCategory.name}}</label>
                     </div>
                   </div>
                 </div>
               </div>
 
               <!-- Usage Filter -->
-              <div class="filter-group">
+              <!-- <div class="filter-group">
                 <div class="filter-header">
                   <h6 class="filter-title">
                     <i class="bi bi-tag me-2"></i>
@@ -87,32 +140,21 @@
                 </div>
                 <div class="filter-body">
                   <div class="filter-options">
-                    <div class="filter-option">
-                      <input type="checkbox" id="use-indoor" class="filter-checkbox">
-                      <label for="use-indoor" class="filter-label">Indoor</label>
-                    </div>
-                    <div class="filter-option">
-                      <input type="checkbox" id="use-outdoor" class="filter-checkbox">
-                      <label for="use-outdoor" class="filter-label">Outdoor</label>
-                    </div>
-                    <div class="filter-option">
-                      <input type="checkbox" id="use-events" class="filter-checkbox">
-                      <label for="use-events" class="filter-label">Events</label>
-                    </div>
-                    <div class="filter-option">
-                      <input type="checkbox" id="use-retail" class="filter-checkbox">
-                      <label for="use-retail" class="filter-label">Retail</label>
-                    </div>
-                    <div class="filter-option">
-                      <input type="checkbox" id="use-trade" class="filter-checkbox">
-                      <label for="use-trade" class="filter-label">Trade Shows</label>
+                    <div class="filter-option" *ngFor="let usage of usageOptions">
+                      <input 
+                        type="checkbox" 
+                        [id]="'use-' + usage" 
+                        class="filter-checkbox"
+                        [checked]="isUsageSelected(usage)" 
+                        (change)="onUsageChange(usage, getChecked($event))">
+                      <label [for]="'use-' + usage" class="filter-label">{{usage | titlecase}}</label>
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
 
               <!-- Print Type Filter -->
-              <div class="filter-group">
+              <!-- <div class="filter-group">
                 <div class="filter-header">
                   <h6 class="filter-title">
                     <i class="bi bi-printer me-2"></i>
@@ -121,28 +163,21 @@
                 </div>
                 <div class="filter-body">
                   <div class="filter-options">
-                    <div class="filter-option">
-                      <input type="checkbox" id="print-digital" class="filter-checkbox">
-                      <label for="print-digital" class="filter-label">Digital Print</label>
-                    </div>
-                    <div class="filter-option">
-                      <input type="checkbox" id="print-vinyl" class="filter-checkbox">
-                      <label for="print-vinyl" class="filter-label">Vinyl Print</label>
-                    </div>
-                    <div class="filter-option">
-                      <input type="checkbox" id="print-fabric" class="filter-checkbox">
-                      <label for="print-fabric" class="filter-label">Fabric Print</label>
-                    </div>
-                    <div class="filter-option">
-                      <input type="checkbox" id="print-mesh" class="filter-checkbox">
-                      <label for="print-mesh" class="filter-label">Mesh Print</label>
+                    <div class="filter-option" *ngFor="let printType of printTypeOptions">
+                      <input 
+                        type="checkbox" 
+                        [id]="'print-' + printType" 
+                        class="filter-checkbox"
+                        [checked]="isPrintTypeSelected(printType)" 
+                        (change)="onPrintTypeChange(printType, getChecked($event))">
+                      <label [for]="'print-' + printType" class="filter-label">{{printType | titlecase}} Print</label>
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
 
               <!-- Price Range Filter -->
-              <div class="filter-group">
+              <!-- <div class="filter-group">
                 <div class="filter-header">
                   <h6 class="filter-title">
                     <i class="bi bi-currency-dollar me-2"></i>
@@ -151,29 +186,22 @@
                 </div>
                 <div class="filter-body">
                   <div class="filter-options">
-                    <div class="filter-option">
-                      <input type="checkbox" id="price-1" class="filter-checkbox">
-                      <label for="price-1" class="filter-label">Under ₹25</label>
-                    </div>
-                    <div class="filter-option">
-                      <input type="checkbox" id="price-2" class="filter-checkbox">
-                      <label for="price-2" class="filter-label">₹25 - ₹50</label>
-                    </div>
-                    <div class="filter-option">
-                      <input type="checkbox" id="price-3" class="filter-checkbox">
-                      <label for="price-3" class="filter-label">₹50 - ₹100</label>
-                    </div>
-                    <div class="filter-option">
-                      <input type="checkbox" id="price-4" class="filter-checkbox">
-                      <label for="price-4" class="filter-label">₹100+</label>
+                    <div class="filter-option" *ngFor="let priceRange of priceRangeOptions">
+                      <input 
+                        type="checkbox" 
+                        [id]="'price-' + priceRange.value" 
+                        class="filter-checkbox"
+                        [checked]="isPriceRangeSelected(priceRange.value)" 
+                        (change)="onPriceRangeChange(priceRange.value, getChecked($event))">
+                      <label [for]="'price-' + priceRange.value" class="filter-label">{{priceRange.label}}</label>
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
 
               <!-- Clear Filters -->
               <div class="filter-actions">
-                <button class="btn btn-outline-secondary btn-sm w-100">
+                <button class="btn btn-outline-secondary btn-sm w-100" (click)="clearAllFilters()">
                   <i class="bi bi-arrow-clockwise me-1"></i>
                   Clear All Filters
                 </button>
@@ -190,73 +218,115 @@
           <div class="results-header">
             <div class="results-info">
               <h5 class="results-count">
-                Showing <span class="fw-bold">{{productsArray.length}}</span> Products
+                {{getPaginationInfo().showingText}}
               </h5>
               <p class="results-description">Premium quality custom banners and displays</p>
             </div>
             <div class="results-controls">
               <div class="sort-dropdown">
-                <select class="form-select sort-select">
-                  <option selected>Sort by: Best Sellers</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
-                  <option value="newest">Newest First</option>
-                  <option value="rating">Highest Rated</option>
+                <select 
+                  class="form-select sort-select" 
+                  [value]="paginationParams.sortBy + '_' + paginationParams.sortOrder"
+                  (change)="onSortChange($event)">
+                  <option *ngFor="let option of sortOptions" 
+                          [value]="option.value + '_' + (option.order || 'desc')">
+                    {{option.label}}
+                  </option>
+                </select>
+              </div>
+              <div class="items-per-page">
+                <select 
+                  class="form-select" 
+                  [value]="paginationParams.limit"
+                  (change)="onLimitChange(+getValue($event))">
+                  <option value="10">10 per page</option>
+                  <option value="20">20 per page</option>
+                  <option value="50">50 per page</option>
+                  <option value="100">100 per page</option>
                 </select>
               </div>
               <div class="view-toggle">
-                <button class="btn btn-outline-secondary btn-sm active" title="Grid View">
+                <button class="btn btn-outline-secondary btn-sm active" title="Grid View" (click)="toggleGridView()">
                   <i class="bi bi-grid-3x3-gap"></i>
                 </button>
-                <button class="btn btn-outline-secondary btn-sm" title="List View">
+                <button class="btn btn-outline-secondary btn-sm" title="List View" (click)="toggleListView()">
                   <i class="bi bi-list"></i>
                 </button>
               </div>
             </div>
           </div>
 
+          <!-- Loading State -->
+          <div *ngIf="loading" class="text-center py-5">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading products...</p>
+          </div>
+
           <!-- Products Grid -->
-          <div class="products-grid">
+          <div class="products-grid" *ngIf="!loading">
             <div class="product-item" *ngFor="let data of productsArray">
               <div class="product-card" (click)="navigate(data)">
                 <div class="product-image-container">
                   <img [src]="data?.product_images?.[0]" [alt]="data?.productname" class="product-image" />
                   <div class="product-overlay">
                     <div class="overlay-actions">
-                      <button class="btn btn-light btn-sm overlay-btn" title="Quick View">
+                      <button class="btn btn-light btn-sm overlay-btn" title="Quick View" (click)="quickView(data); $event.stopPropagation()">
                         <i class="bi bi-eye"></i>
                       </button>
-                      <button class="btn btn-light btn-sm overlay-btn" title="Add to Wishlist">
+                      <button class="btn btn-light btn-sm overlay-btn" title="Add to Wishlist" (click)="addToWishlist(data); $event.stopPropagation()">
                         <i class="bi bi-heart"></i>
                       </button>
                     </div>
                   </div>
-                  <div class="product-badge">
-                    <span class="badge bg-primary">Popular</span>
+                  <div class="product-badge" *ngIf="data.isBestSelling">
+                    <span class="badge bg-primary">Best Seller</span>
+                  </div>
+                  <div class="product-badge" *ngIf="data.isMostLoved">
+                    <span class="badge bg-danger">Most Loved</span>
+                  </div>
+                  <div class="product-badge" *ngIf="data.isMostPopular">
+                    <span class="badge bg-success">Popular</span>
                   </div>
                 </div>
                 <div class="product-content">
                   <h6 class="product-title">{{data?.productname}}</h6>
-                  <div class="product-rating">
+                  <div class="product-rating" *ngIf="data.rating > 0">
                     <div class="rating-stars">
-                      <i class="bi bi-star-fill"></i>
-                      <i class="bi bi-star-fill"></i>
-                      <i class="bi bi-star-fill"></i>
-                      <i class="bi bi-star-fill"></i>
-                      <i class="bi bi-star-half"></i>
+                      <i class="bi bi-star-fill" *ngFor="let star of [].constructor(Math.floor(data.rating))"></i>
+                      <i class="bi bi-star-half" *ngIf="data.rating % 1 !== 0"></i>
+                      <i class="bi bi-star" *ngFor="let star of [].constructor(5 - Math.ceil(data.rating))"></i>
                     </div>
-                    <span class="rating-text">(4.5/5)</span>
+                    <span class="rating-text">({{data.rating}}/5)</span>
+                    <span class="review-count" *ngIf="data.review_count > 0">({{data.review_count}} reviews)</span>
                   </div>
                   <div class="product-details">
-                    <div class="product-size">
+                    <div class="product-size" *ngIf="data?.min_size_obj?.size">
                       <span class="detail-label">Size:</span>
-                      <span class="detail-value">{{data?.min_size_obj?.size || 'Custom'}}</span>
+                      <span class="detail-value">{{data.min_size_obj.size}}</span>
+                    </div>
+                    <div class="product-sku" *ngIf="data.SKU">
+                      <span class="detail-label">SKU:</span>
+                      <span class="detail-value">{{data.SKU}}</span>
                     </div>
                   </div>
                   <div class="product-pricing">
                     <div class="price-info">
                       <span class="price-label">Starts at</span>
-                      <span class="price-value">₹{{data?.price}}</span>
+                      <div class="price-container">
+                        <span class="price-value">₹{{data?.price}}</span>
+                        <span class="original-price" *ngIf="data.discount && data.sell_price">₹{{data.sell_price}}</span>
+                        <span class="discount-badge" *ngIf="data.discount">{{data.discount}}% OFF</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="product-features" *ngIf="data.design_support || data.free_design_proof || data.premium_quality || data.free_shipping">
+                    <div class="feature-badges">
+                      <span class="badge badge-feature" *ngIf="data.design_support">Design Support</span>
+                      <span class="badge badge-feature" *ngIf="data.free_design_proof">Free Proof</span>
+                      <span class="badge badge-feature" *ngIf="data.premium_quality">Premium Quality</span>
+                      <span class="badge badge-feature" *ngIf="data.free_shipping">Free Shipping</span>
                     </div>
                   </div>
                   <div class="product-actions">
@@ -270,43 +340,25 @@
             </div>
           </div>
 
-          <!-- Load More / Pagination -->
-          <div class="pagination-section" *ngIf="productsArray.length > 0">
-            <div class="pagination-info">
-              <p class="pagination-text">Showing 1-{{productsArray.length}} of {{productsArray.length}} products</p>
-            </div>
-            <nav aria-label="Product pagination">
-              <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                  <a class="page-link" href="#" tabindex="-1">
-                    <i class="bi bi-chevron-left"></i>
-                  </a>
-                </li>
-                <li class="page-item active">
-                  <a class="page-link" href="#">1</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">2</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">3</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">
-                    <i class="bi bi-chevron-right"></i>
-                  </a>
-                </li>
-              </ul>
-            </nav>
+          <!-- Pagination using reusable component -->
+          <div *ngIf="!loading">
+            <app-pagination
+              [paginationData]="paginationData"
+              [showInfo]="true"
+              [showLimitSelector]="true"
+              [limitOptions]="[10, 20, 50, 100]"
+              (pageChange)="onPageChange($event)"
+              (limitChange)="onLimitChange($event)">
+            </app-pagination>
           </div>
 
           <!-- No Products Found -->
-          <div class="no-products" *ngIf="productsArray.length === 0">
+          <div class="no-products" *ngIf="!loading && productsArray.length === 0">
             <div class="no-products-content">
               <i class="bi bi-search no-products-icon"></i>
               <h5 class="no-products-title">No Products Found</h5>
               <p class="no-products-text">Try adjusting your filters or search criteria</p>
-              <button class="btn btn-primary">
+              <button class="btn btn-primary" (click)="clearAllFilters()">
                 <i class="bi bi-arrow-clockwise me-1"></i>
                 Clear Filters
               </button>

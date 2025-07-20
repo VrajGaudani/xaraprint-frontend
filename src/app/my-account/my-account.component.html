@@ -9,24 +9,24 @@
               <i class="bi bi-person-circle"></i>
             </div>
             <div class="user-info">
-              <h2>Welcome back, {{formObj?.firstname}} {{formObj?.lastname}}</h2>
-              <p class="user-email">{{formObj?.email}}</p>
+              <h2>Welcome back, {{profileData?.firstname}} {{profileData?.lastname}}</h2>
+              <p class="user-email">{{profileData?.email}}</p>
               <span class="user-badge">Premium Member</span>
             </div>
           </div>
         </div>
-        <div class="col-md-4 text-end">
-          <div class="account-stats">
-            <div class="stat-item">
-              <span class="stat-number">{{orderArray.length || 0}}</span>
-              <span class="stat-label">Orders</span>
+                    <div class="col-md-4 text-end">
+              <div class="account-stats">
+                <div class="stat-item">
+                  <span class="stat-number">{{totalItems || 0}}</span>
+                  <span class="stat-label">Orders</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-number">{{addresses.length || 0}}</span>
+                  <span class="stat-label">Addresses</span>
+                </div>
+              </div>
             </div>
-            <div class="stat-item">
-              <span class="stat-number">{{addressArray.length || 0}}</span>
-              <span class="stat-label">Addresses</span>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -37,39 +37,35 @@
       <div class="col-lg-3 col-md-4">
         <div class="account-sidebar">
           <div class="sidebar-menu">
-            <div class="menu-item" (click)="changeTab(1)" [ngClass]="{'active': tabType == '1'}">
+            <div class="menu-item" (click)="setActiveTab('dashboard')" [ngClass]="{'active': activeTab === 'dashboard'}">
               <i class="bi bi-speedometer2"></i>
               <span>Dashboard</span>
             </div>
-            <div class="menu-item" (click)="changeTab(2)" [ngClass]="{'active': tabType == '2'}">
+            <div class="menu-item" (click)="setActiveTab('profile')" [ngClass]="{'active': activeTab === 'profile'}">
               <i class="bi bi-person"></i>
               <span>Profile Settings</span>
             </div>
-            <div class="menu-item" (click)="changeTab(3)" [ngClass]="{'active': tabType == '3'}">
+            <div class="menu-item" (click)="setActiveTab('addresses')" [ngClass]="{'active': activeTab === 'addresses'}">
               <i class="bi bi-geo-alt"></i>
               <span>Address Book</span>
             </div>
-            <div class="menu-item" (click)="changeTab(4)" [ngClass]="{'active': tabType == '4'}">
+            <div class="menu-item" (click)="setActiveTab('orders')" [ngClass]="{'active': activeTab === 'orders'}">
               <i class="bi bi-bag"></i>
               <span>Order History</span>
             </div>
-            <div class="menu-item" (click)="changeTab(5)" [ngClass]="{'active': tabType == '5'}">
+            <div class="menu-item" (click)="setActiveTab('wishlist')" [ngClass]="{'active': activeTab === 'wishlist'}">
               <i class="bi bi-heart"></i>
               <span>Wishlist</span>
             </div>
-            <div class="menu-item" (click)="changeTab(6)" [ngClass]="{'active': tabType == '6'}">
-              <i class="bi bi-credit-card"></i>
-              <span>Payment Methods</span>
-            </div>
-            <div class="menu-item" (click)="changeTab(7)" [ngClass]="{'active': tabType == '7'}">
+            <div class="menu-item" (click)="setActiveTab('notifications')" [ngClass]="{'active': activeTab === 'notifications'}">
               <i class="bi bi-bell"></i>
               <span>Notifications</span>
             </div>
-            <div class="menu-item" (click)="changeTab(8)" [ngClass]="{'active': tabType == '8'}">
+            <div class="menu-item" (click)="setActiveTab('support')" [ngClass]="{'active': activeTab === 'support'}">
               <i class="bi bi-headset"></i>
               <span>Support</span>
             </div>
-            <div class="menu-item logout-item">
+            <div class="menu-item logout-item" (click)="logout()">
               <i class="bi bi-box-arrow-right"></i>
               <span>Logout</span>
             </div>
@@ -80,7 +76,7 @@
       <!-- Main Content -->
       <div class="col-lg-9 col-md-8">
         <!-- Dashboard Tab -->
-        <div class="account-content" *ngIf="tabType == 1">
+        <div class="account-content" *ngIf="activeTab === 'dashboard'">
           <div class="content-header">
             <h3>Dashboard Overview</h3>
             <p>Manage your account and track your activities</p>
@@ -94,7 +90,7 @@
                   <i class="bi bi-bag-check"></i>
                 </div>
                 <div class="stat-content">
-                  <h4>{{orderArray.length || 0}}</h4>
+                  <h4>{{totalItems || 0}}</h4>
                   <p>Total Orders</p>
                 </div>
               </div>
@@ -105,7 +101,7 @@
                   <i class="bi bi-clock-history"></i>
                 </div>
                 <div class="stat-content">
-                  <h4>2</h4>
+                  <h4>{{getPendingOrdersCount()}}</h4>
                   <p>Pending Orders</p>
                 </div>
               </div>
@@ -116,19 +112,19 @@
                   <i class="bi bi-heart"></i>
                 </div>
                 <div class="stat-content">
-                  <h4>15</h4>
+                  <h4>{{wishlistItems.length || 0}}</h4>
                   <p>Wishlist Items</p>
                 </div>
               </div>
             </div>
             <div class="col-md-3 col-sm-6 mb-3">
               <div class="stat-card">
-                <div class="stat-icon rewards">
-                  <i class="bi bi-gift"></i>
+                <div class="stat-icon support">
+                  <i class="bi bi-headset"></i>
                 </div>
                 <div class="stat-content">
-                  <h4>250</h4>
-                  <p>Reward Points</p>
+                  <h4>{{supportQueries.length || 0}}</h4>
+                  <p>Support Queries</p>
                 </div>
               </div>
             </div>
@@ -140,13 +136,13 @@
               <div class="activity-card">
                 <div class="card-header">
                   <h5>Recent Orders</h5>
-                  <a href="#" class="view-all">View All</a>
+                  <a href="#" class="view-all" (click)="setActiveTab('orders')">View All</a>
                 </div>
                 <div class="card-body">
-                  <div class="order-item" *ngFor="let order of orderArray.slice(0, 3)">
+                  <div class="order-item" *ngFor="let order of orders.slice(0, 3)">
                     <div class="order-info">
                       <div class="order-id">#{{order?.order_id}}</div>
-                      <div class="order-date">{{order?.created_at | date}}</div>
+                      <div class="order-date">{{formatDate(order?.createdAt)}}</div>
                     </div>
                     <div class="order-status">
                       <span class="status-badge" [ngClass]="order?.order_status?.toLowerCase()">
@@ -155,7 +151,7 @@
                     </div>
                     <div class="order-total">₹{{order?.price}}</div>
                   </div>
-                  <div class="empty-state" *ngIf="!orderArray.length">
+                  <div class="empty-state" *ngIf="!orders.length">
                     <i class="bi bi-bag-x"></i>
                     <p>No orders yet</p>
                     <a href="#" class="btn btn-primary btn-sm">Start Shopping</a>
@@ -167,19 +163,19 @@
               <div class="quick-actions">
                 <h5>Quick Actions</h5>
                 <div class="action-buttons">
-                  <button class="action-btn" (click)="changeTab(4)">
+                  <button class="action-btn" (click)="setActiveTab('orders')">
                     <i class="bi bi-bag"></i>
                     <span>Track Order</span>
                   </button>
-                  <button class="action-btn" (click)="changeTab(3)">
+                  <button class="action-btn" (click)="setActiveTab('addresses')">
                     <i class="bi bi-geo-alt"></i>
                     <span>Add Address</span>
                   </button>
-                  <button class="action-btn" (click)="changeTab(2)">
+                  <button class="action-btn" (click)="setActiveTab('profile')">
                     <i class="bi bi-person"></i>
                     <span>Edit Profile</span>
                   </button>
-                  <button class="action-btn" (click)="changeTab(8)">
+                  <button class="action-btn" (click)="setActiveTab('support')">
                     <i class="bi bi-headset"></i>
                     <span>Get Support</span>
                   </button>
@@ -190,7 +186,7 @@
         </div>
 
         <!-- Profile Settings Tab -->
-        <div class="account-content" *ngIf="tabType == 2">
+        <div class="account-content" *ngIf="activeTab === 'profile'">
           <div class="content-header">
             <h3>Profile Settings</h3>
             <p>Manage your personal information and preferences</p>
@@ -199,17 +195,20 @@
           <div class="profile-tabs">
             <ul class="nav nav-tabs" id="profileTab" role="tablist">
               <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="personal-tab" data-bs-toggle="tab" data-bs-target="#personal" type="button">
+                <button class="nav-link" [ngClass]="{'active': profileSubTab === 'personal'}" 
+                        (click)="profileSubTab = 'personal'" type="button">
                   <i class="bi bi-person"></i> Personal Info
                 </button>
               </li>
               <li class="nav-item" role="presentation">
-                <button class="nav-link" id="security-tab" data-bs-toggle="tab" data-bs-target="#security" type="button">
+                <button class="nav-link" [ngClass]="{'active': profileSubTab === 'security'}" 
+                        (click)="profileSubTab = 'security'" type="button">
                   <i class="bi bi-shield-lock"></i> Security
                 </button>
               </li>
               <li class="nav-item" role="presentation">
-                <button class="nav-link" id="preferences-tab" data-bs-toggle="tab" data-bs-target="#preferences" type="button">
+                <button class="nav-link" [ngClass]="{'active': profileSubTab === 'preferences'}" 
+                        (click)="profileSubTab = 'preferences'" type="button">
                   <i class="bi bi-gear"></i> Preferences
                 </button>
               </li>
@@ -217,53 +216,54 @@
 
             <div class="tab-content" id="profileTabContent">
               <!-- Personal Info -->
-              <div class="tab-pane fade show active" id="personal" role="tabpanel">
-                <div class="profile-form">
+              <div class="tab-pane fade show active" *ngIf="profileSubTab === 'personal'">
+                <div class="profile-form" *ngIf="profileData">
                   <div class="row">
                     <div class="col-md-6 mb-3">
                       <label class="form-label">First Name</label>
-                      <input type="text" class="form-control" [(ngModel)]="formObj.firstname" name="firstname">
+                      <input type="text" class="form-control" [(ngModel)]="profileData.firstname" name="firstname">
                     </div>
                     <div class="col-md-6 mb-3">
                       <label class="form-label">Last Name</label>
-                      <input type="text" class="form-control" [(ngModel)]="formObj.lastname" name="lastname">
+                      <input type="text" class="form-control" [(ngModel)]="profileData.lastname" name="lastname">
                     </div>
                     <div class="col-md-6 mb-3">
                       <label class="form-label">Email Address</label>
-                      <input type="email" class="form-control" [(ngModel)]="formObj.email" name="email">
+                      <input type="email" class="form-control" [(ngModel)]="profileData.email" name="email">
                     </div>
                     <div class="col-md-6 mb-3">
                       <label class="form-label">Phone Number</label>
-                      <input type="tel" class="form-control" [(ngModel)]="formObj.phone_no" name="phone_no">
+                      <input type="tel" class="form-control" [(ngModel)]="profileData.phone_no" name="phone_no">
                     </div>
                     <div class="col-12 mb-3">
                       <label class="form-label">Company Name</label>
-                      <input type="text" class="form-control" [(ngModel)]="formObj.company_name" name="company_name">
+                      <input type="text" class="form-control" [(ngModel)]="profileData.company_name" name="company_name">
                     </div>
                   </div>
                   <div class="form-actions">
-                    <button type="button" class="btn btn-primary" (click)="updateUser('user')">
-                      <i class="bi bi-check-circle"></i> Save Changes
+                    <button type="button" class="btn btn-primary" (click)="updateProfile()" [disabled]="isLoadingProfile">
+                      <i class="bi bi-check-circle"></i> 
+                      {{isLoadingProfile ? 'Saving...' : 'Save Changes'}}
                     </button>
                   </div>
                 </div>
               </div>
 
               <!-- Security -->
-              <div class="tab-pane fade" id="security" role="tabpanel">
+              <div class="tab-pane fade" *ngIf="profileSubTab === 'security'">
                 <div class="security-form">
                   <div class="row">
                     <div class="col-md-6 mb-3">
                       <label class="form-label">Current Password</label>
-                      <input type="password" class="form-control" [(ngModel)]="newPaasObj.old_pass" name="old_pass">
+                      <input type="password" class="form-control" [(ngModel)]="passwordForm.old_pass" name="old_pass">
                     </div>
                     <div class="col-md-6 mb-3">
                       <label class="form-label">New Password</label>
-                      <input type="password" class="form-control" [(ngModel)]="newPaasObj.new_pass" name="new_pass">
+                      <input type="password" class="form-control" [(ngModel)]="passwordForm.new_pass" name="new_pass">
                     </div>
                     <div class="col-md-6 mb-3">
                       <label class="form-label">Confirm New Password</label>
-                      <input type="password" class="form-control" [(ngModel)]="newPaasObj.confirm_pass" name="confirm_pass">
+                      <input type="password" class="form-control" [(ngModel)]="passwordForm.confirm_pass" name="confirm_pass">
                     </div>
                   </div>
                   <div class="password-requirements">
@@ -276,44 +276,50 @@
                     </ul>
                   </div>
                   <div class="form-actions">
-                    <button type="button" class="btn btn-primary" (click)="updatePassword()">
-                      <i class="bi bi-shield-check"></i> Update Password
+                    <button type="button" class="btn btn-primary" (click)="updatePassword()" [disabled]="isUpdatingPassword">
+                      <i class="bi bi-shield-check"></i> 
+                      {{isUpdatingPassword ? 'Updating...' : 'Update Password'}}
                     </button>
                   </div>
                 </div>
               </div>
 
               <!-- Preferences -->
-              <div class="tab-pane fade" id="preferences" role="tabpanel">
+              <div class="tab-pane fade" *ngIf="profileSubTab === 'preferences'">
                 <div class="preferences-form">
                   <div class="preference-group">
                     <h6>Email Notifications</h6>
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" id="orderUpdates" checked>
+                      <input class="form-check-input" type="checkbox" id="orderUpdates" 
+                             [(ngModel)]="preferences.emailNotifications.orderUpdates">
                       <label class="form-check-label" for="orderUpdates">Order updates</label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" id="promotions" checked>
+                      <input class="form-check-input" type="checkbox" id="promotions" 
+                             [(ngModel)]="preferences.emailNotifications.promotions">
                       <label class="form-check-label" for="promotions">Promotions and offers</label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" id="newsletter">
+                      <input class="form-check-input" type="checkbox" id="newsletter" 
+                             [(ngModel)]="preferences.emailNotifications.newsletter">
                       <label class="form-check-label" for="newsletter">Newsletter</label>
                     </div>
                   </div>
                   <div class="preference-group">
                     <h6>SMS Notifications</h6>
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" id="smsOrders">
+                      <input class="form-check-input" type="checkbox" id="smsOrders" 
+                             [(ngModel)]="preferences.smsNotifications.orderUpdates">
                       <label class="form-check-label" for="smsOrders">Order status updates</label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" id="smsDelivery" checked>
+                      <input class="form-check-input" type="checkbox" id="smsDelivery" 
+                             [(ngModel)]="preferences.smsNotifications.deliveryNotifications">
                       <label class="form-check-label" for="smsDelivery">Delivery notifications</label>
                     </div>
                   </div>
                   <div class="form-actions">
-                    <button type="button" class="btn btn-primary">
+                    <button type="button" class="btn btn-primary" (click)="savePreferences()">
                       <i class="bi bi-check-circle"></i> Save Preferences
                     </button>
                   </div>
@@ -324,29 +330,88 @@
         </div>
 
         <!-- Address Book Tab -->
-        <div class="account-content" *ngIf="tabType == 3">
+        <div class="account-content" *ngIf="activeTab === 'addresses'">
           <div class="content-header">
             <h3>Address Book</h3>
             <p>Manage your shipping and billing addresses</p>
-            <button class="btn btn-primary" (click)="showModal('add')">
+            <button class="btn btn-primary" (click)="showAddAddressForm()">
               <i class="bi bi-plus-circle"></i> Add New Address
             </button>
           </div>
 
-          <div class="addresses-grid" *ngIf="addressArray.length > 0">
-            <div class="address-card add-new" (click)="showModal('add')">
+          <div class="addresses-grid" *ngIf="addresses.length > 0 || showAddressForm">
+            <div class="address-card add-new" (click)="showAddAddressForm()" *ngIf="!showAddressForm">
               <div class="add-icon">
                 <i class="bi bi-plus-circle"></i>
               </div>
               <p>Add New Address</p>
             </div>
 
-            <div class="address-card" *ngFor="let addr of addressArray">
+            <!-- Address Form Card -->
+            <div class="address-card" *ngIf="showAddressForm">
+              <div class="address-form">
+                <h6>{{editingAddress ? 'Edit' : 'Add New'}} Address</h6>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">First Name</label>
+                    <input type="text" class="form-control" [(ngModel)]="addressForm.firstname" name="firstname">
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" class="form-control" [(ngModel)]="addressForm.lastname" name="lastname">
+                  </div>
+                  <div class="col-12 mb-3">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" class="form-control" [(ngModel)]="addressForm.phone_no" name="phone_no">
+                  </div>
+                  <div class="col-12 mb-3">
+                    <label class="form-label">Address</label>
+                    <input type="text" class="form-control" [(ngModel)]="addressForm.address" name="address">
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">City</label>
+                    <input type="text" class="form-control" [(ngModel)]="addressForm.city" name="city">
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">State</label>
+                    <input type="text" class="form-control" [(ngModel)]="addressForm.state" name="state">
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Country</label>
+                    <input type="text" class="form-control" [(ngModel)]="addressForm.country" name="country">
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Postal Code</label>
+                    <input type="text" class="form-control" [(ngModel)]="addressForm.pincode" name="pincode">
+                  </div>
+                  <div class="col-12 mb-3">
+                    <div class="form-check mb-2">
+                      <input class="form-check-input" type="checkbox" [(ngModel)]="addressForm.isBilling" 
+                             name="billing" id="billing">
+                      <label class="form-check-label" for="billing">Use as billing address</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" [(ngModel)]="addressForm.isShipping" 
+                             name="shipping" id="shipping">
+                      <label class="form-check-label" for="shipping">Use as shipping address</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button type="button" class="btn btn-secondary me-2" (click)="cancelAddressForm()">Cancel</button>
+                  <button type="button" class="btn btn-primary" (click)="saveAddress()" [disabled]="isLoadingAddresses">
+                    {{isLoadingAddresses ? 'Saving...' : (editingAddress ? 'Update' : 'Save')}} Address
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="address-card" *ngFor="let addr of addresses">
               <div class="address-actions">
-                <button class="btn btn-sm btn-outline-primary" (click)="showModal('Edit',addr)">
+                <button class="btn btn-sm btn-outline-primary" (click)="editAddress(addr)">
                   <i class="bi bi-pencil"></i>
                 </button>
-                <button class="btn btn-sm btn-outline-danger" (click)="delete(addr?._id)">
+                <button class="btn btn-sm btn-outline-danger" (click)="deleteAddress(addr)">
                   <i class="bi bi-trash"></i>
                 </button>
               </div>
@@ -366,18 +431,18 @@
             </div>
           </div>
 
-          <div class="empty-state" *ngIf="!addressArray.length">
+          <div class="empty-state" *ngIf="!addresses.length && !showAddressForm">
             <i class="bi bi-geo-alt"></i>
             <h5>No addresses added yet</h5>
             <p>Add your first address to make checkout faster</p>
-            <button class="btn btn-primary" (click)="showModal('add')">
+            <button class="btn btn-primary" (click)="showAddAddressForm()">
               <i class="bi bi-plus-circle"></i> Add Address
             </button>
           </div>
         </div>
 
         <!-- Order History Tab -->
-        <div class="account-content" *ngIf="tabType == 4">
+        <div class="account-content" *ngIf="activeTab === 'orders'">
           <div class="content-header">
             <h3>Order History</h3>
             <p>Track and manage your orders</p>
@@ -387,30 +452,33 @@
             <div class="row align-items-center">
               <div class="col-md-6">
                 <div class="filter-buttons">
-                  <button class="btn btn-outline-primary active">All Orders</button>
-                  <button class="btn btn-outline-primary">Pending</button>
-                  <button class="btn btn-outline-primary">Delivered</button>
-                  <button class="btn btn-outline-primary">Cancelled</button>
+                  <button class="btn btn-outline-primary" 
+                          [ngClass]="{'active': orderStatus === status.value}"
+                          *ngFor="let status of orderStatuses"
+                          (click)="onOrderStatusChange(status.value)">
+                    {{status.label}}
+                  </button>
                 </div>
               </div>
               <div class="col-md-6 text-end">
                 <div class="search-box">
-                  <input type="text" class="form-control" placeholder="Search orders...">
+                  <input type="text" class="form-control" placeholder="Search orders..." 
+                         [(ngModel)]="orderSearchTerm" (input)="searchOrders()">
                   <i class="bi bi-search"></i>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="orders-list" *ngIf="orderArray.length > 0">
-            <div class="order-card" *ngFor="let order of orderArray">
+          <div class="orders-list" *ngIf="filteredOrders.length > 0">
+            <div class="order-card" *ngFor="let order of filteredOrders">
               <div class="order-header">
                 <div class="order-info">
                   <h6>Order #{{order?.order_id}}</h6>
-                  <p class="order-date">{{order?.created_at | date}}</p>
+                  <p class="order-date">{{formatDate(order?.createdAt)}}</p>
                 </div>
                 <div class="order-status">
-                  <span class="status-badge" [ngClass]="order?.order_status?.toLowerCase()">
+                  <span class="status-badge" [ngClass]="getStatusBadgeClass(order?.order_status)">
                     {{order?.order_status}}
                   </span>
                 </div>
@@ -419,11 +487,12 @@
                 <div class="order-items">
                   <div class="item-summary" *ngFor="let item of order?.cart_id?.slice(0, 2)">
                     <div class="item-image">
-                      <img [src]="item?.product_id?.image || 'assets/images/product-placeholder.jpg'" alt="Product">
+                      <img [src]="getProductImage(item)" alt="Product">
                     </div>
                     <div class="item-details">
                       <h6>{{item?.product_id?.productname}}</h6>
                       <p>Qty: {{item?.qty}} | Size: {{item?.size}}</p>
+                      <p>Shape: {{item?.shape}}</p>
                     </div>
                   </div>
                   <div class="more-items" *ngIf="order?.cart_id?.length > 2">
@@ -435,111 +504,125 @@
                 </div>
               </div>
               <div class="order-actions">
-                <button class="btn btn-outline-primary btn-sm" (click)="showOrderModal('edit', order)">
+                <button class="btn btn-outline-primary btn-sm" (click)="viewOrderDetails(order)">
                   <i class="bi bi-eye"></i> View Details
                 </button>
-                <button class="btn btn-outline-secondary btn-sm" (click)="queryOrder(order, 0, 'query')">
+                <button class="btn btn-outline-secondary btn-sm" (click)="contactSupport(order)" 
+                        *ngIf="canContactSupport(order)">
                   <i class="bi bi-chat-dots"></i> Contact Support
                 </button>
-                <button class="btn btn-primary btn-sm" *ngIf="order?.order_status === 'Delivered'">
+                <button class="btn btn-outline-info btn-sm" (click)="trackOrder(order)" 
+                        *ngIf="canTrackOrder(order)">
+                  <i class="bi bi-geo-alt"></i> Track Order
+                </button>
+                <button class="btn btn-outline-success btn-sm" (click)="downloadInvoice(order)" 
+                        *ngIf="canDownloadInvoice(order)">
+                  <i class="bi bi-download"></i> Invoice
+                </button>
+                <button class="btn btn-outline-danger btn-sm" (click)="cancelOrder(order)" 
+                        *ngIf="canCancelOrder(order)">
+                  <i class="bi bi-x-circle"></i> Cancel
+                </button>
+                <button class="btn btn-primary btn-sm" *ngIf="order?.order_status === 'delivered'">
                   <i class="bi bi-arrow-repeat"></i> Reorder
                 </button>
               </div>
             </div>
           </div>
 
-          <div class="empty-state" *ngIf="!orderArray.length">
+          <!-- Pagination -->
+          <app-pagination 
+            *ngIf="totalPages > 1"
+            [paginationData]="{
+              data: filteredOrders,
+              total: totalItems,
+              page: currentPage,
+              limit: itemsPerPage,
+              totalPage: totalPages,
+              hasNextPage: currentPage < totalPages
+            }"
+            (pageChange)="onPageChange($event)">
+          </app-pagination>
+
+          <div class="empty-state" *ngIf="!filteredOrders.length && !isLoadingOrders">
             <i class="bi bi-bag-x"></i>
-            <h5>No orders yet</h5>
-            <p>When you place your first order, it will appear here</p>
-            <a href="#" class="btn btn-primary">Start Shopping</a>
+            <h5>No orders found</h5>
+            <p>{{orderStatus === 'all' ? 'When you place your first order, it will appear here' : 'No orders with this status'}}</p>
+            <a href="#" class="btn btn-primary" *ngIf="orderStatus === 'all'">Start Shopping</a>
           </div>
         </div>
 
         <!-- Wishlist Tab -->
-        <div class="account-content" *ngIf="tabType == 5">
+        <div class="account-content" *ngIf="activeTab === 'wishlist'">
           <div class="content-header">
             <h3>My Wishlist</h3>
             <p>Save items for later</p>
           </div>
 
-          <div class="wishlist-grid">
-            <div class="wishlist-item" *ngFor="let item of [1,2,3,4]">
+          <div class="wishlist-grid" *ngIf="wishlistItems.length > 0">
+            <div class="wishlist-item" *ngFor="let item of wishlistItems">
               <div class="item-image">
-                <img src="assets/images/product-placeholder.jpg" alt="Product">
-                <button class="remove-btn">
+                <img [src]="item?.product?.image || '/placeholder.svg?height=200&width=200'" alt="Product">
+                <button class="remove-btn" (click)="removeFromWishlist(item)">
                   <i class="bi bi-x"></i>
                 </button>
               </div>
               <div class="item-details">
-                <h6>Custom Banner Sign</h6>
-                <p class="item-price">₹29.99</p>
-                <button class="btn btn-primary btn-sm">Add to Cart</button>
+                <h6>{{item?.product?.productname}}</h6>
+                <p class="item-price">₹{{item?.product?.price}}</p>
+                <button class="btn btn-primary btn-sm" (click)="addToCart(item)">Add to Cart</button>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- Payment Methods Tab -->
-        <div class="account-content" *ngIf="tabType == 6">
-          <div class="content-header">
-            <h3>Payment Methods</h3>
-            <p>Manage your saved payment methods</p>
-            <button class="btn btn-primary">
-              <i class="bi bi-plus-circle"></i> Add Payment Method
-            </button>
-          </div>
-
-          <div class="payment-methods">
-            <div class="payment-card">
-              <div class="card-info">
-                <i class="bi bi-credit-card-2-front"></i>
-                <div class="card-details">
-                  <h6>•••• •••• •••• 4242</h6>
-                  <p>Expires 12/25</p>
-                </div>
-              </div>
-              <div class="card-actions">
-                <button class="btn btn-sm btn-outline-primary">Edit</button>
-                <button class="btn btn-sm btn-outline-danger">Remove</button>
-              </div>
-            </div>
+          <div class="empty-state" *ngIf="!wishlistItems.length">
+            <i class="bi bi-heart"></i>
+            <h5>Your wishlist is empty</h5>
+            <p>Save items you love for later</p>
+            <a href="#" class="btn btn-primary">Continue Shopping</a>
           </div>
         </div>
+
+
 
         <!-- Notifications Tab -->
-        <div class="account-content" *ngIf="tabType == 7">
+        <div class="account-content" *ngIf="activeTab === 'notifications'">
           <div class="content-header">
             <h3>Notifications</h3>
             <p>Stay updated with your account activity</p>
+            <button class="btn btn-outline-secondary" (click)="markAllAsRead()" *ngIf="hasUnreadNotifications()">
+              Mark All as Read
+            </button>
           </div>
 
-          <div class="notifications-list">
-            <div class="notification-item unread">
+          <div class="notifications-list" *ngIf="notifications.length > 0">
+            <div class="notification-item" *ngFor="let notification of notifications" 
+                 [ngClass]="{'unread': !notification.read}">
               <div class="notification-icon">
-                <i class="bi bi-bag-check text-success"></i>
+                <i class="bi" [ngClass]="getNotificationIcon(notification.type)"></i>
               </div>
               <div class="notification-content">
-                <h6>Order Delivered</h6>
-                <p>Your order #12345 has been delivered successfully</p>
-                <small>2 hours ago</small>
+                <h6>{{notification.title}}</h6>
+                <p>{{notification.message}}</p>
+                <small>{{formatDate(notification.createdAt)}}</small>
+              </div>
+              <div class="notification-actions" *ngIf="!notification.read">
+                <button class="btn btn-sm btn-outline-primary" (click)="markAsRead(notification)">
+                  Mark as Read
+                </button>
               </div>
             </div>
-            <div class="notification-item">
-              <div class="notification-icon">
-                <i class="bi bi-truck text-primary"></i>
-              </div>
-              <div class="notification-content">
-                <h6>Order Shipped</h6>
-                <p>Your order #12344 is on its way</p>
-                <small>1 day ago</small>
-              </div>
-            </div>
+          </div>
+
+          <div class="empty-state" *ngIf="!notifications.length">
+            <i class="bi bi-bell"></i>
+            <h5>No notifications</h5>
+            <p>You're all caught up!</p>
           </div>
         </div>
 
         <!-- Support Tab -->
-        <div class="account-content" *ngIf="tabType == 8">
+        <div class="account-content" *ngIf="activeTab === 'support'">
           <div class="content-header">
             <h3>Customer Support</h3>
             <p>Get help with your orders and account</p>
@@ -552,7 +635,7 @@
                   <i class="bi bi-chat-dots"></i>
                   <h5>Live Chat</h5>
                   <p>Chat with our support team</p>
-                  <button class="btn btn-primary">Start Chat</button>
+                  <button class="btn btn-primary" (click)="startLiveChat()">Start Chat</button>
                 </div>
               </div>
               <div class="col-md-6 mb-3">
@@ -560,7 +643,27 @@
                   <i class="bi bi-envelope"></i>
                   <h5>Email Support</h5>
                   <p>Send us an email</p>
-                  <button class="btn btn-outline-primary">Send Email</button>
+                  <button class="btn btn-outline-primary" (click)="openEmailSupport()">Send Email</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Support Queries -->
+          <div class="support-queries" *ngIf="supportQueries.length > 0">
+            <h5>Your Support Queries</h5>
+            <div class="query-list">
+              <div class="query-item" *ngFor="let query of supportQueries">
+                <div class="query-header">
+                  <h6>{{query.subject}}</h6>
+                  <span class="query-status" [ngClass]="query.status">{{query.status}}</span>
+                </div>
+                <p>{{query.description}}</p>
+                <small>Created: {{formatDate(query.createdAt)}}</small>
+                <div class="query-actions">
+                  <button class="btn btn-sm btn-outline-primary" (click)="viewQuery(query)">View Details</button>
+                  <button class="btn btn-sm btn-outline-secondary" (click)="updateQuery(query)" 
+                          *ngIf="query.status === 'open'">Update</button>
                 </div>
               </div>
             </div>
@@ -569,15 +672,17 @@
           <div class="faq-section">
             <h5>Frequently Asked Questions</h5>
             <div class="accordion" id="faqAccordion">
-              <div class="accordion-item">
+              <div class="accordion-item" *ngFor="let faq of faqs; let i = index">
                 <h2 class="accordion-header">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
-                    How can I track my order?
+                  <button class="accordion-button collapsed" type="button" 
+                          [attr.data-bs-target]="'#faq' + i" 
+                          [attr.aria-controls]="'faq' + i">
+                    {{faq.question}}
                   </button>
                 </h2>
-                <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div [id]="'faq' + i" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                   <div class="accordion-body">
-                    You can track your order in the Order History section of your account.
+                    {{faq.answer}}
                   </div>
                 </div>
               </div>
@@ -589,175 +694,45 @@
   </div>
 </div>
 
-<!-- Address Modal -->
-<div class="modal fade" id="addressModal" tabindex="-1">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">{{addressKeyType}} Address</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="row">
-            <input type="hidden" [(ngModel)]="addressObj._id" name="_id">
-            <div class="col-md-6 mb-3">
-              <label class="form-label">First Name</label>
-              <input type="text" class="form-control" [(ngModel)]="addressObj.firstname" name="firstname">
-            </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">Last Name</label>
-              <input type="text" class="form-control" [(ngModel)]="addressObj.lastname" name="lastname">
-            </div>
-            <div class="col-12 mb-3">
-              <label class="form-label">Phone Number</label>
-              <input type="tel" class="form-control" [(ngModel)]="addressObj.phone_no" name="phone_no">
-            </div>
-            <div class="col-12 mb-3">
-              <label class="form-label">Address</label>
-              <input type="text" class="form-control" [(ngModel)]="addressObj.address" name="address">
-            </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">City</label>
-              <input type="text" class="form-control" [(ngModel)]="addressObj.city" name="city">
-            </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">State</label>
-              <input type="text" class="form-control" [(ngModel)]="addressObj.state" name="state">
-            </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">Country</label>
-              <input type="text" class="form-control" [(ngModel)]="addressObj.country" name="country">
-            </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">Postal Code</label>
-              <input type="text" class="form-control" [(ngModel)]="addressObj.pincode" name="pincode">
-            </div>
-            <div class="col-12">
-              <div class="form-check mb-2">
-                <input class="form-check-input" type="checkbox" [(ngModel)]="addressObj.isBilling" name="billing" id="billing">
-                <label class="form-check-label" for="billing">Use as billing address</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" [(ngModel)]="addressObj.isShipping" name="shipping" id="shipping">
-                <label class="form-check-label" for="shipping">Use as shipping address</label>
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" (click)="submit()" *ngIf="addressKeyType == 'Add a New '">
-          Save Address
-        </button>
-        <button type="button" class="btn btn-primary" (click)="update()" *ngIf="addressKeyType == 'Edit'">
-          Update Address
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Order Details Modal -->
-<div class="modal fade" id="orderModal" tabindex="-1">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Order Details - #{{orderObj?.order_id}}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <div class="order-details">
-          <div class="row mb-4">
-            <div class="col-md-4">
-              <div class="detail-card">
-                <h6>Order Information</h6>
-                <p><strong>Order ID:</strong> {{orderObj?.order_id}}</p>
-                <p><strong>Status:</strong> 
-                  <span class="status-badge" [ngClass]="orderObj?.order_status?.toLowerCase()">
-                    {{orderObj?.order_status}}
-                  </span>
-                </p>
-                <p><strong>Total:</strong> ₹{{orderObj?.price}}</p>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="detail-card">
-                <h6>Billing Address</h6>
-                <p>{{orderObj?.billing_address?.firstname}} {{orderObj?.billing_address?.lastname}}</p>
-                <p>{{orderObj?.billing_address?.address}}</p>
-                <p>{{orderObj?.billing_address?.city}}, {{orderObj?.billing_address?.state}}</p>
-                <p>{{orderObj?.billing_address?.country}} {{orderObj?.billing_address?.pincode}}</p>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="detail-card">
-                <h6>Shipping Address</h6>
-                <p>{{orderObj?.shipping_address?.firstname}} {{orderObj?.shipping_address?.lastname}}</p>
-                <p>{{orderObj?.shipping_address?.address}}</p>
-                <p>{{orderObj?.shipping_address?.city}}, {{orderObj?.shipping_address?.state}}</p>
-                <p>{{orderObj?.shipping_address?.country}} {{orderObj?.shipping_address?.pincode}}</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="order-items">
-            <h6>Order Items ({{orderObj?.cart_id?.length || 0}} items)</h6>
-            <div class="items-list">
-              <div class="item-row" *ngFor="let item of orderObj?.cart_id">
-                <div class="item-image">
-                  <img [src]="item?.product_id?.image || 'assets/images/product-placeholder.jpg'" alt="Product">
-                </div>
-                <div class="item-details">
-                  <h6>{{item?.product_id?.productname}}</h6>
-                  <p>Size: {{item?.size}} | Qty: {{item?.qty}}</p>
-                  <p>Shape: {{item?.shape}}</p>
-                </div>
-                <div class="item-price">
-                  <p class="original-price" *ngIf="item?.orignal_price !== item?.after_discount_price">
-                    ₹{{item?.orignal_price}}
-                  </p>
-                  <p class="final-price">₹{{item?.after_discount_price}}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- Support Query Modal -->
-<div class="modal fade" id="reasonModal" tabindex="-1">
+<div class="modal fade" id="supportQueryModal" tabindex="-1" *ngIf="showSupportModal">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Contact Support</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <h5 class="modal-title">{{supportQueryForm.id ? 'Update' : 'Create'}} Support Query</h5>
+        <button type="button" class="btn-close" (click)="closeSupportModal()"></button>
       </div>
       <div class="modal-body">
         <form>
+          <div class="mb-3" *ngIf="supportQueryForm.orderId">
+            <label class="form-label">Order ID</label>
+            <input type="text" class="form-control" [value]="supportQueryForm.orderId" readonly>
+          </div>
           <div class="mb-3">
             <label class="form-label">Subject</label>
-            <input type="text" class="form-control" [(ngModel)]="queryObj.subject" name="subject">
+            <input type="text" class="form-control" [(ngModel)]="supportQueryForm.subject" name="subject" required>
           </div>
           <div class="mb-3">
             <label class="form-label">Description</label>
-            <textarea class="form-control" rows="4" [(ngModel)]="queryObj.description" name="description"></textarea>
+            <textarea class="form-control" rows="4" [(ngModel)]="supportQueryForm.description" 
+                      name="description" required></textarea>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" (click)="submitReason()" *ngIf="!queryObj.query_id">
-          Submit Query
-        </button>
-        <button type="button" class="btn btn-primary" (click)="updateReason()" *ngIf="queryObj.query_id">
-          Update Query
+        <button type="button" class="btn btn-secondary" (click)="closeSupportModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="submitSupportQuery()" 
+                [disabled]="isSubmittingSupportQuery">
+          {{isSubmittingSupportQuery ? 'Submitting...' : (supportQueryForm.id ? 'Update' : 'Submit')}} Query
         </button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" *ngIf="isLoadingProfile || isLoadingOrders || isLoadingAddresses">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Loading...</span>
   </div>
 </div>

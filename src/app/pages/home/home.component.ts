@@ -1,8 +1,9 @@
-import { Component, type OnInit } from "@angular/core"
+import { Component, OnInit } from "@angular/core"
 import { FormControl } from "@angular/forms"
 import { Api1Service } from "src/app/service/api1.service"
 import { GlobleService } from "src/app/service/globle.service"
 import { HttpService } from "src/app/service/http.service"
+import { PaginationService } from "src/app/service/pagination.service"
 import { APIURLs } from "src/environments/apiUrls"
 
 @Component({
@@ -109,6 +110,7 @@ export class HomeComponent implements OnInit {
   subCategory: any = []
   searchProductList: any = []
   allBlogs: any = []
+  mostValued: any = {}
 
   // Form data
   subCatValue: any = "0"
@@ -124,6 +126,7 @@ export class HomeComponent implements OnInit {
     private api1: Api1Service,
     public gs: GlobleService,
     private httpService: HttpService,
+    private paginationService: PaginationService,
   ) {}
 
   ngOnInit(): void {
@@ -141,6 +144,7 @@ export class HomeComponent implements OnInit {
     this.getAllMainCategory()
     this.getAllbanners()
     this.getAllBlogbanners()
+    this.getCouponDiscount()
   }
 
   initializeMobileMenu(): void {
@@ -148,15 +152,44 @@ export class HomeComponent implements OnInit {
     this.mobileSubmenuOpen = new Array(10).fill(false)
   }
 
+  getCouponDiscount() {
+    return this.httpService.get(APIURLs.getAllCouponAPI).subscribe(
+      (res: any) => {
+        const coupons = res.data?.data || res.data || []
+        if (Array.isArray(coupons) && coupons.length > 0) {
+          this.mostValued = coupons.reduce(
+            (max: { discount_amount: any }, curr: { discount_amount: any }) =>
+              Number(curr.discount_amount) > Number(max.discount_amount) ? curr : max,
+            coupons[0],
+          )
+        } else {
+          this.mostValued = coupons[0] || {}
+        }
+        console.log("Coupon discount:", coupons)
+      },
+      (err) => {
+        this.gs.errorToaster(err?.error?.msg || "Failed to apply coupon!")
+      },
+    )
+  }
+
   setupSearchControl(): void {
     this.searchControl.valueChanges.subscribe((value) => {
       if (value && value.length > 2) {
-        // Simulate search API call
-        this.searchProductList = this.products
-          .filter((item: any) => item.productname.toLowerCase().includes(value.toLowerCase()))
-          .slice(0, 6)
+        // Search in products
+        this.httpService.get(APIURLs.getAllProductAPI, { search: value, limit: 6 }).subscribe(
+          (res: any) => {
+            this.searchProductList = res.data?.data || res.data || []
+            this.showSearchDropdown = this.searchProductList.length > 0
+          },
+          (err) => {
+            this.searchProductList = []
+            this.showSearchDropdown = false
+          },
+        )
       } else {
         this.searchProductList = []
+        this.showSearchDropdown = false
       }
     })
   }
@@ -183,7 +216,7 @@ export class HomeComponent implements OnInit {
     if (this.email) {
       this.httpService.post(APIURLs.subscribeNewsLetterAPI, { email: this.email }).subscribe(
         (res: any) => {
-          this.gs.successToaster(res?.msg)
+          this.gs.successToaster(res?.msg || "Subscribed successfully!")
           this.email = ""
         },
         (err) => {
@@ -195,9 +228,9 @@ export class HomeComponent implements OnInit {
 
   // API Calls
   getBlogs(): void {
-    this.httpService.get(APIURLs.getLatestBlogAPI).subscribe(
+    this.httpService.get(APIURLs.getLatestBlogAPI, { limit: 10 }).subscribe(
       (res: any) => {
-        this.allBlogs = res.data
+        this.allBlogs = res.data?.data || res.data || []
       },
       (err) => {
         this.gs.errorToaster(err?.error?.msg || "Something went wrong!")
@@ -207,9 +240,9 @@ export class HomeComponent implements OnInit {
   }
 
   getLatestProd(): void {
-    this.httpService.get(APIURLs.getLatestProductAPI).subscribe(
+    this.httpService.get(APIURLs.getLatestProductAPI, { limit: 10 }).subscribe(
       (res: any) => {
-        this.products = res.data
+        this.products = res.data?.data || res.data || []
         this.processProductPrices()
       },
       (err) => {
@@ -234,9 +267,9 @@ export class HomeComponent implements OnInit {
   }
 
   getBestSelling(): void {
-    this.httpService.get(APIURLs.getAllBestSellerAPI).subscribe(
+    this.httpService.get(APIURLs.getAllBestSellerAPI, { limit: 10 }).subscribe(
       (res: any) => {
-        this.bestSellings = res.data
+        this.bestSellings = res.data?.data || res.data || []
       },
       (err) => {
         console.log("Error fetching best sellers:", err)
@@ -245,9 +278,9 @@ export class HomeComponent implements OnInit {
   }
 
   getMostLoved(): void {
-    this.httpService.get(APIURLs.getAllMostLovedAPI).subscribe(
+    this.httpService.get(APIURLs.getAllMostLovedAPI, { limit: 10 }).subscribe(
       (res: any) => {
-        this.mostLoved = res.data
+        this.mostLoved = res.data?.data || res.data || []
       },
       (err) => {
         console.log("Error fetching most loved:", err)
@@ -256,9 +289,9 @@ export class HomeComponent implements OnInit {
   }
 
   getMostPopular(): void {
-    this.httpService.get(APIURLs.getAllMostPopularAPI).subscribe(
+    this.httpService.get(APIURLs.getAllMostPopularAPI, { limit: 10 }).subscribe(
       (res: any) => {
-        this.mostPopular = res.data
+        this.mostPopular = res.data?.data || res.data || []
       },
       (err) => {
         console.log("Error fetching most popular:", err)
@@ -269,7 +302,7 @@ export class HomeComponent implements OnInit {
   getAllMainCategory(): void {
     this.httpService.get(APIURLs.getAllMainCatAPI).subscribe(
       (res: any) => {
-        this.mainCategory = res.data
+        this.mainCategory = res.data?.data || res.data || []
         this.initializeMobileMenu()
       },
       (err) => {
@@ -281,7 +314,7 @@ export class HomeComponent implements OnInit {
   getAllbanners(): void {
     this.httpService.get(APIURLs.getAllBannersAPI).subscribe(
       (res: any) => {
-        this.customeBannerList = res.data
+        this.customeBannerList = res.data?.data || res.data || []
       },
       (err) => {
         console.log("Error fetching banners:", err)
@@ -290,9 +323,9 @@ export class HomeComponent implements OnInit {
   }
 
   getAllBlogbanners(): void {
-    this.httpService.get(APIURLs.bannersListAPI).subscribe(
+    this.httpService.get(APIURLs.getAllBannersAPI).subscribe(
       (res: any) => {
-        this.blogBannerList = res.data
+        this.blogBannerList = res.data?.data || res.data || []
       },
       (err) => {
         console.log("Error fetching blog banners:", err)
@@ -311,7 +344,7 @@ export class HomeComponent implements OnInit {
     this.httpService.post(APIURLs.subCatByMainAPI, { id }).subscribe(
       (res: any) => {
         this.subCatValue = "0"
-        this.subCategory = res.data
+        this.subCategory = res.data?.data || res.data || []
       },
       (err) => {
         this.subCategory = []
@@ -329,9 +362,9 @@ export class HomeComponent implements OnInit {
   }
 
   getProductBycategory(payload: any): void {
-    this.httpService.post(APIURLs.getProductByCatAPI, payload).subscribe(
+    this.httpService.post(APIURLs.getProductByCatAPI, { ...payload, limit: 10 }).subscribe(
       (res: any) => {
-        this.customeBannerList = res.data
+        this.customeBannerList = res.data?.data || res.data || []
       },
       (err) => {
         console.log("Error fetching products by category:", err)
