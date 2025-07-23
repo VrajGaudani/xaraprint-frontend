@@ -1,0 +1,135 @@
+.pagination-wrapper {
+  margin-top: 2rem;
+  
+  .pagination-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background-color: #f8f9fa;
+    border-radius: 0.375rem;
+    
+    .results-summary {
+      .pagination-text {
+        font-size: 0.875rem;
+        color: #6c757d;
+        font-weight: 500;
+      }
+    }
+    
+    .items-per-page {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      
+      .form-label {
+        margin: 0;
+        font-size: 0.875rem;
+        color: #6c757d;
+        white-space: nowrap;
+      }
+      
+      .form-select {
+        width: auto;
+        min-width: 80px;
+      }
+    }
+  }
+  
+  .pagination-nav {
+    .pagination {
+      margin: 0;
+      
+      .page-link {
+        color: #6c757d;
+        border-color: #dee2e6;
+        padding: 0.5rem 0.75rem;
+        
+        &:hover {
+          color: #0d6efd;
+          background-color: #e9ecef;
+          border-color: #dee2e6;
+        }
+        
+        &:focus {
+          box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+      }
+      
+      .page-item {
+        &.active .page-link {
+          background-color: #0d6efd;
+          border-color: #0d6efd;
+          color: white;
+        }
+        
+        &.disabled .page-link {
+          color: #6c757d;
+          background-color: #fff;
+          border-color: #dee2e6;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+  
+  .mobile-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 0.375rem;
+    
+    .mobile-pagination-info {
+      font-size: 0.875rem;
+      color: #6c757d;
+      font-weight: 500;
+    }
+    
+    .mobile-pagination-controls {
+      display: flex;
+      gap: 0.5rem;
+    }
+  }
+}
+
+.no-results {
+  margin-top: 2rem;
+  
+  .text-center {
+    padding: 3rem 1rem;
+    
+    i {
+      opacity: 0.5;
+    }
+    
+    h5 {
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    p {
+      margin-bottom: 0;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .pagination-wrapper {
+    .pagination-info {
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+      
+      .items-per-page {
+        justify-content: center;
+      }
+    }
+    
+    .pagination-nav {
+      display: none;
+    }
+  }
+}

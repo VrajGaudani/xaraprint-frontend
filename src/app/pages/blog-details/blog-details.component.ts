@@ -36,7 +36,7 @@ export class BlogDetailsComponent {
   getBlog(_id: any) {
 
     this.httpService.get(APIURLs.getBlogByIdAPI + '/' + _id).subscribe((res: any) => {
-      this.formObj = res.data;
+      this.formObj = res.data?.data || res.data || []
     },(err) => {
       this.gs.errorToaster(err?.error?.msg || "something went wrong !!");
     })

@@ -1,0 +1,222 @@
+.pricing-details-page {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  padding-top: 30px;
+  padding-bottom: 50px;
+
+  .breadcrumb {
+    background: white;
+    border-radius: 8px;
+    padding: 12px 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+
+    .breadcrumb-item {
+      a {
+        color: #007bff;
+        font-weight: 500;
+        &:hover {
+          color: #0056b3;
+        }
+      }
+      &.active {
+        color: #6c757d;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .page-header {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+
+    .page-title {
+      color: #2c3e50;
+      font-weight: 700;
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+    }
+
+    .page-subtitle {
+      color: #6c757d;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 0;
+    }
+  }
+
+  .section-title {
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+
+    i {
+      color: #007bff;
+      font-size: 1.5em;
+      margin-right: 10px;
+    }
+  }
+
+  .pricing-info-section {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+
+    .pricing-card {
+      border: none;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+      }
+
+      .card-header {
+        border-bottom: none;
+        font-weight: 600;
+        padding: 15px;
+        font-size: 1.2rem;
+      }
+
+      .card-body {
+        padding: 25px;
+        .card-text {
+          margin-bottom: 10px;
+        }
+        .display-6 {
+          font-size: 3rem;
+        }
+        .lead {
+          font-size: 1.1rem;
+        }
+        hr {
+          margin: 15px auto;
+          width: 50%;
+          border-top: 1px dashed #e9ecef;
+        }
+      }
+    }
+  }
+
+  .important-notes-section {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+
+    ul {
+      padding-left: 0;
+      li {
+        display: flex;
+        align-items: flex-start;
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #495057;
+        i {
+          margin-top: 4px;
+          margin-right: 10px;
+          flex-shrink: 0;
+        }
+      }
+    }
+  }
+
+  .contact-section {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+
+    .contact-card {
+      .card {
+        transition: transform 0.3s ease;
+        border-radius: 8px;
+
+        &:hover {
+          transform: translateY(-3px);
+        }
+
+        .card-title {
+          font-weight: 600;
+          margin-bottom: 15px;
+        }
+
+        .card-text {
+          font-size: 14px;
+          line-height: 1.6;
+
+          a {
+            color: #495057;
+            font-weight: 500;
+
+            &:hover {
+              color: #007bff;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .cta-section {
+    text-align: center;
+    padding: 30px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+
+    .btn {
+      font-weight: 600;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,123,255,0.3);
+      }
+    }
+  }
+
+  // Responsive Design
+  @media (max-width: 768px) {
+    .page-header {
+      padding: 20px;
+      .page-title {
+        font-size: 2rem;
+      }
+      .page-subtitle {
+        font-size: 0.95rem;
+      }
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      i {
+        font-size: 1.2em;
+      }
+    }
+
+    .pricing-info-section,
+    .important-notes-section,
+    .contact-section,
+    .cta-section {
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .pricing-info-section .pricing-card .card-body .display-6 {
+      font-size: 2.5rem;
+    }
+  }
+}

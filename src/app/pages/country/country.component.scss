@@ -1,0 +1,329 @@
+.country-page {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+
+  .breadcrumb {
+    background: white;
+    border-radius: 8px;
+    padding: 12px 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+
+    .breadcrumb-item {
+      a {
+        color: #007bff;
+        font-weight: 500;
+
+        &:hover {
+          color: #0056b3;
+        }
+      }
+
+      &.active {
+        color: #6c757d;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .page-header {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+
+    .page-title {
+      color: #2c3e50;
+      font-weight: 700;
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+
+    .page-subtitle {
+      color: #6c757d;
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 0;
+    }
+  }
+
+  .special-offer-card {
+    .card {
+      border-radius: 12px;
+      background: linear-gradient(135deg, #007bff, #0056b3) !important;
+      
+      .card-body {
+        padding: 20px;
+        
+        h4 {
+          font-weight: 600;
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  .section-title {
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+
+    i {
+      color: #007bff;
+    }
+  }
+
+  .shipping-rates-section {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+
+    .table {
+      margin-bottom: 0;
+      border-radius: 8px;
+      overflow: hidden;
+
+      th {
+        font-weight: 600;
+        font-size: 13px;
+        padding: 15px 12px;
+        border: none;
+      }
+
+      td {
+        padding: 12px;
+        font-size: 14px;
+        border-color: #f1f3f4;
+        vertical-align: middle;
+      }
+
+      .table-dark {
+        background: linear-gradient(135deg, #2c3e50, #34495e);
+      }
+    }
+
+    .shipping-card {
+      .card {
+        border-radius: 8px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+        &:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+          border-bottom: none;
+          font-weight: 600;
+        }
+
+        .card-body {
+          .card-text {
+            font-size: 14px;
+            margin-bottom: 0;
+
+            strong {
+              font-size: 16px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .contact-section {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+
+    .contact-card {
+      .card {
+        transition: transform 0.3s ease;
+        border-radius: 8px;
+
+        &:hover {
+          transform: translateY(-3px);
+        }
+
+        .card-title {
+          font-weight: 600;
+          margin-bottom: 15px;
+        }
+
+        .card-text {
+          font-size: 14px;
+          line-height: 1.6;
+
+          a {
+            color: #495057;
+            font-weight: 500;
+
+            &:hover {
+              color: #007bff;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .cta-section {
+    text-align: center;
+    padding: 30px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+
+    .btn {
+      font-weight: 600;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,123,255,0.3);
+      }
+    }
+  }
+
+  .shipping-info-sidebar {
+    .sidebar-widget {
+      .widget-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        overflow: hidden;
+      }
+
+      .widget-header {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: white;
+        padding: 20px;
+
+        .widget-title {
+          margin: 0;
+          font-size: 1.1rem;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+        }
+      }
+
+      .widget-content {
+        padding: 25px;
+      }
+
+      .shipping-info-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+          display: flex;
+          align-items: flex-start;
+          margin-bottom: 15px;
+          font-size: 14px;
+          line-height: 1.5;
+          color: #495057;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          i {
+            margin-top: 2px;
+            margin-right: 10px;
+            flex-shrink: 0;
+          }
+        }
+      }
+    }
+  }
+
+  .countries-section {
+    background: white;
+    border-radius: 12px;
+    padding: 40px 30px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+
+    .countries-grid {
+      .country-item {
+        transition: transform 0.3s ease;
+        cursor: pointer;
+
+        &:hover {
+          transform: translateY(-5px);
+        }
+
+        .country-flag {
+          margin-bottom: 10px;
+
+          i {
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+          }
+        }
+
+        .country-name {
+          font-size: 13px;
+          font-weight: 500;
+          color: #495057;
+        }
+
+        &:hover {
+          .country-flag i {
+            opacity: 1;
+          }
+
+          .country-name {
+            color: #007bff;
+          }
+        }
+      }
+    }
+  }
+
+  // Responsive Design
+  @media (max-width: 768px) {
+    .page-header {
+      padding: 20px;
+
+      .page-title {
+        font-size: 1.6rem;
+      }
+    }
+
+    .shipping-rates-section,
+    .contact-section,
+    .cta-section {
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .shipping-info-sidebar {
+      margin-top: 30px;
+
+      .sidebar-widget {
+        .widget-content {
+          padding: 20px;
+        }
+      }
+    }
+
+    .countries-section {
+      padding: 30px 20px;
+    }
+  }
+}

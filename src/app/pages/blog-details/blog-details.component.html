@@ -1,145 +1,219 @@
-<div>
-    <div class="my-5 container d-flex flex-wrap container">
-        <div class="w-70 w-man-1 d-flex justify-content-between flex-wrap height-fitcontant">
-            <div class="w-100"><span class="d-inline f-size-12 dattee">BANNERBUZZ</span>
-                <p class="d-inline pl-1 sub-gray-text f-size-12 dattee"> {{formObj.updatedAt | date:'longDate'}}</p>
-                <h3 class="heading-color mb-2">{{formObj.title}}</h3>
-                <img [src]="formObj.image" alt="poster" class="mw-100">
-                <p class="black-color f-size-14 my-4">{{formObj.description}}</p>
-                <div class="d-flex my-5"><span class="px-2 py-1 rounded d-flex w-fit-content mr-2 cursor-pointer"
-                        style="background-color: rgb(24, 119, 242); color: rgb(255, 255, 255);"><img
-                            src="assets/images/facebook.png" alt="facebook" class="mr-1" style="width: 15px;"> Share
-                        0</span><span class="px-2 py-1 rounded d-flex w-fit-content mx-2 cursor-pointer"
-                        style="background-color: rgb(85, 172, 238); color: rgb(255, 255, 255);"><img
-                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAaCAYAAABGiCfwAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo0RDM5ODU0RjExNTYxMUU4ODE5QUQwMkI1RUY3MzYxRiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo0RDM5ODU1MDExNTYxMUU4ODE5QUQwMkI1RUY3MzYxRiI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjREMzk4NTREMTE1NjExRTg4MTlBRDAyQjVFRjczNjFGIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjREMzk4NTRFMTE1NjExRTg4MTlBRDAyQjVFRjczNjFGIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+1LAQcAAAA+pJREFUeNqsVltoVFcUXefeOzOZyTTRxFRtsEq0vlJb+uGHorWgtj+tFYkKJVb889MPFdEWqyKlBb/1SxR8YBXEWi30r2opqZRW4ytKldZoDNE8jMY8Zs5x7fuIc2fuzFh0w2KYe88+a5+9197nqpUnulHG6olPiQ+JRmIikSQGiQ7iKnGe+Im4W2ojVYJsOrGFaCZiKG9Z4jDxLXEjaoFVxHEz0Uase0kiMZv4krhObH1ZMonuO7ya7SZ+KEd2nPgCr8dWEqeKkX1DNOH12jK/hiGymcT2/7OLpYCMBnqoyd4hqsN4z/gDY0JLRWRzcsn2hipNp8EM0D3obaDyiBx6dQ0YPBk2mFGrMHUM0EfCO30G3c8MYnZBbPtcP1/iH+W+eUai+rRCBZ1aHmjUv6G8qP3oHzw1mMRnG+baaKxR0Hx+od3gl/80Gvj8YqdmMECFM7rlfOlRK0oQXYxudi2wZ6mDJZMt3Ow2rnMQSGVMYdd8Gx+8RXftRbykwcL3ix00z7ZQm1QYyhacrlnWLYyqSf8IT8GT7Vzk4L03szh1S+M20ySpWj3Dxtt1FgaeGGT8+lgsWioOXO4y6OTJncKmWhCkMWR1jOy3ewa/39GYN8VCU6ONT3jCPzoMWjo0a6SQGTKuKEbrLJvz/8FrGtcfGUwbq1wB5dhUIavJJxtguDNrLDg82WMKwaJTkisXv2O5MCQSQVg5ypGNhjKeuKoTBURi1U7kkNPeLnMnWa6mewckAMmtcZWpVJhILMYU3u/hZGYKk0UGnBy+pyCNKeDvLo2d5zJo74cr5WBvyZwO95HXV47CX/S5zzpW2JFcfUJ2K/+pOFfHFc61azykc2VCFW1uWZtOMAFM7el/NNLxwr707bbl30XhDYi4JcEq3Ow17jyX1JiIE8X5zmYwB1o1WqnEcRSXiSa7IGRHokbRCD36OSE2/ZrB2h9H0NZDaSderJFUVvF/slLh7I0s9l/NYmLan1fRdtjxL7rzQb/JWhlVDVUKH1P2SUY+IeW1g7yUesRFAGzsLIM58CeJrmTdtKcchNohx1qI1kCN6/3rfTTqQU6AyVXAUvZXhRCxyTV3ouLxbx8ohizOsEaXmLoJPF1lcaJg/9Bnwe7ghpVeeTxMsOjjUsqdk9V+CuX5PYqmg5Deq0t5Jy7Ogz3ExqAXA9vmf9B8LhGmY94MlBnXxtk47Os9xiqnKHMZxKrwOsm3nwOifDKx5cQxYlWwR8L2ECXo0jw4Sawo9w2ymvjqFW/oHflEpb6upH7vEofKHyBkR4n3/U+MAnNKOIo61xBfE5/5H6mziPGSXZm7RGdO65yWKVEqkucCDAD9xFmVFx89/AAAAABJRU5ErkJggg=="
-                            alt="facebook" class="mr-1" style="width: 20px;">Tweet</span><span
-                        class="px-2 py-1 rounded d-flex w-fit-content border mx-2 cursor-pointer"><img
-                            src="assets/images/mail.png" alt="mail" class="mr-1" style="width: 20px;"> Email</span>
-                </div>
-                <p>Posted in Lettering</p>
-                <p class="mb-2 font-weight-bold cursor-pointer">« Introduce New Product at BannerBuzz.com – Magnetic
-                    Signs</p>
-                <p class="text-right font-weight-bold cursor-pointer">Personalised Banners – Custom You Banner Using
-                    Banner Tool »</p>
-                <p class="bb-grey py-1">Both comments and pings are currently closed.</p>
-                <p class="text-center">Comments are closed.</p>
+<div class="blog-details-page">
+  <div class="container my-5">
+    <div class="row">
+      <!-- Main Content -->
+      <div class="col-lg-8">
+        <article class="blog-article">
+          <!-- Article Header -->
+          <header class="article-header mb-4">
+            <div class="article-meta mb-3">
+              <span class="badge bg-primary me-2">BANNERBUZZ</span>
+              <span class="text-muted">{{formObj.updatedAt | date:'longDate'}}</span>
             </div>
-        </div>
-        <div class="w-30 w-man-2">
-            <div>
+            <h1 class="article-title">{{formObj.title}}</h1>
+          </header>
 
-                <div class="py-1 ">
-                    <h5 class="py-1 mx-4 light-grey bb-grey mb-4">CATEGORIES</h5><a href="/blogs/category">
-                        <p class="py-1 mx-4 mb-1 light-grey bb-grey">Banners (333)</p>
-                    </a><a href="/blogs/category">
-                        <p class="py-1 mx-4 mb-1 light-grey bb-grey">Clothing (6)</p>
-                    </a><a href="/blogs/category">
-                        <p class="py-1 mx-4 mb-1 light-grey bb-grey">Banners (333)</p>
-                    </a><a href="/blogs/category">
-                        <p class="py-1 mx-4 mb-1 light-grey bb-grey">Banners (333)</p>
-                    </a><a href="/blogs/category">
-                        <p class="py-1 mx-4 mb-1 light-grey bb-grey">Clothing (6)</p>
-                    </a><a href="/blogs/category">
-                        <p class="py-1 mx-4 mb-1 light-grey bb-grey">Banners (333)</p>
-                    </a><a href="/blogs/category">
-                        <p class="py-1 mx-4 mb-1 light-grey bb-grey">Banners (333)</p>
-                    </a><a href="/blogs/category">
-                        <p class="py-1 mx-4 mb-1 light-grey bb-grey">Clothing (6)</p>
-                    </a><a href="/blogs/category">
-                        <p class="py-1 mx-4 mb-1 light-grey bb-grey">Banners (333)</p>
-                    </a><a href="/blogs/category">
-                        <p class="py-1 mx-4 mb-1 light-grey bb-grey">Banners (333)</p>
-                    </a><a href="/blogs/category">
-                        <p class="py-1 mx-4 mb-1 light-grey bb-grey">Clothing (6)</p>
-                    </a><a href="/blogs/category">
-                        <p class="py-1 mx-4 mb-1 light-grey bb-grey">Banners (333)</p>
-                    </a><a href="/blogs/category">
-                        <p class="py-1 mx-4 mb-1 light-grey bb-grey">Banners (333)</p>
-                    </a><a href="/blogs/category">
-                        <p class="py-1 mx-4 mb-1 light-grey bb-grey">Clothing (6)</p>
-                    </a><a href="/blogs/category">
-                        <p class="py-1 mx-4 mb-1 light-grey bb-grey">Banners (333)</p>
-                    </a><a href="/blogs/category">
-                        <p class="py-1 mx-4 mb-1 light-grey bb-grey">Banners (333)</p>
-                    </a><a href="/blogs/category">
-                        <p class="py-1 mx-4 mb-1 light-grey bb-grey">Clothing (6)</p>
-                    </a><a href="/blogs/category">
-                        <p class="py-1 mx-4 mb-1 light-grey bb-grey">Banners (333)</p>
-                    </a>
-                </div>
-                <div class="py-1 mt-5">
-                    <h5 class="py-1 mx-4 light-grey bb-grey mb-4">RELATED POSTS</h5>
-                    <p class="py-1 mx-4 mb-1 light-grey bb-grey f-size-12">New Product Launch: Introducing Our Latest
-                        Innovations</p>
-                    <p class="py-1 mx-4 mb-1 light-grey bb-grey f-size-12">How to Boost Your Website’s SEO and Increase
-                        Traffic</p>
-                    <p class="py-1 mx-4 mb-1 light-grey bb-grey f-size-12">10 Tips for Effective Social Media Marketing
-                    </p>
-                    <p class="py-1 mx-4 mb-1 light-grey bb-grey f-size-12">The Importance of Branding in the Digital Age
-                    </p>
-                    <p class="py-1 mx-4 mb-1 light-grey bb-grey f-size-12">Enhancing Customer Engagement with Email
-                        Marketing</p>
-                    <p class="py-1 mx-4 mb-1 light-grey bb-grey f-size-12">The Power of Visual Content in Marketing</p>
-                    <p class="py-1 mx-4 mb-1 light-grey bb-grey f-size-12">E-commerce Trends for the Future: What to
-                        Expect</p>
-                    <p class="py-1 mx-4 mb-1 light-grey bb-grey f-size-12">Content Marketing Strategies for Small
-                        Businesses</p>
-                    <p class="py-1 mx-4 mb-1 light-grey bb-grey f-size-12">The Art of Effective Storytelling in
-                        Marketing</p>
-                    <p class="py-1 mx-4 mb-1 light-grey bb-grey f-size-12">Video Marketing: Engage Your Audience with
-                        Visual Content</p>
-                    <p class="py-1 mx-4 mb-1 light-grey bb-grey f-size-12">Building a Strong Online Presence: Tips for
-                        Businesses</p>
-                    <p class="py-1 mx-4 mb-1 light-grey bb-grey f-size-12">The Impact of Influencer Marketing on Brands
-                    </p>
-                    <p class="py-1 mx-4 mb-1 light-grey bb-grey f-size-12">Effective Email Marketing Strategies for 2023
-                    </p>
-                    <p class="py-1 mx-4 mb-1 light-grey bb-grey f-size-12">Utilizing Data Analytics for Business Growth
-                    </p>
-                    <p class="py-1 mx-4 mb-1 light-grey bb-grey f-size-12">Creating Compelling Landing Pages for
-                        Conversions</p>
-                    <p class="py-1 mx-4 mb-1 light-grey bb-grey f-size-12">Navigating the World of E-commerce: Tips and
-                        Strategies</p>
-                    <p class="py-1 mx-4 mb-1 light-grey bb-grey f-size-12">The Future of Content Marketing: Trends and
-                        Predictions</p>
-                    <p class="py-1 mx-4 mb-1 light-grey bb-grey f-size-12">Customer-Centric Approach in Modern Marketing
-                    </p>
-                    <p class="py-1 mx-4 mb-1 light-grey bb-grey f-size-12">Maximizing ROI with Pay-Per-Click Advertising
-                    </p>
-                    <p class="py-1 mx-4 mb-1 light-grey bb-grey f-size-12">Effective Social Media Advertising: Best
-                        Practices</p>
-                </div>
-                <div class="py-1 mt-5">
-                    <h5 class="py-1 mx-4 light-grey bb-grey mb-4">ABOUT BANNER BUZZ</h5><img
-                        src="assets/images/logo.svg" class="mx-auto w-225px d-block mt-4" alt="logo">
-                    <p class="py-1 mx-4 mb-1 sub-gray-text f-size-12 text-center p-2 my-3">Design Print Banner, LLC
-                        (DBA: bannerbuzz.com) was established with a vision to capture online retail markets. With our
-                        parent company’s 20+ years of experience in the sign business and our…</p><span
-                        class="f-size-12 text-center d-block my-2 cursor-pointer" style="color: blue;">Read more</span>
-                </div>
-                <div class="py-1 mt-5">
-                    <h5 class="py-1 mx-4 light-grey bb-grey mb-4">CONNECT &amp; FOLLOW</h5>
-                    <div class="social-icons px-3 mx-auto"><img class="p-2"
-                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAaCAYAAABGiCfwAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo0RDM5ODU0RjExNTYxMUU4ODE5QUQwMkI1RUY3MzYxRiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo0RDM5ODU1MDExNTYxMUU4ODE5QUQwMkI1RUY3MzYxRiI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjREMzk4NTREMTE1NjExRTg4MTlBRDAyQjVFRjczNjFGIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjREMzk4NTRFMTE1NjExRTg4MTlBRDAyQjVFRjczNjFGIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+1LAQcAAAA+pJREFUeNqsVltoVFcUXefeOzOZyTTRxFRtsEq0vlJb+uGHorWgtj+tFYkKJVb889MPFdEWqyKlBb/1SxR8YBXEWi30r2opqZRW4ytKldZoDNE8jMY8Zs5x7fuIc2fuzFh0w2KYe88+a5+9197nqpUnulHG6olPiQ+JRmIikSQGiQ7iKnGe+Im4W2ojVYJsOrGFaCZiKG9Z4jDxLXEjaoFVxHEz0Uase0kiMZv4krhObH1ZMonuO7ya7SZ+KEd2nPgCr8dWEqeKkX1DNOH12jK/hiGymcT2/7OLpYCMBnqoyd4hqsN4z/gDY0JLRWRzcsn2hipNp8EM0D3obaDyiBx6dQ0YPBk2mFGrMHUM0EfCO30G3c8MYnZBbPtcP1/iH+W+eUai+rRCBZ1aHmjUv6G8qP3oHzw1mMRnG+baaKxR0Hx+od3gl/80Gvj8YqdmMECFM7rlfOlRK0oQXYxudi2wZ6mDJZMt3Ow2rnMQSGVMYdd8Gx+8RXftRbykwcL3ix00z7ZQm1QYyhacrlnWLYyqSf8IT8GT7Vzk4L03szh1S+M20ySpWj3Dxtt1FgaeGGT8+lgsWioOXO4y6OTJncKmWhCkMWR1jOy3ewa/39GYN8VCU6ONT3jCPzoMWjo0a6SQGTKuKEbrLJvz/8FrGtcfGUwbq1wB5dhUIavJJxtguDNrLDg82WMKwaJTkisXv2O5MCQSQVg5ypGNhjKeuKoTBURi1U7kkNPeLnMnWa6mewckAMmtcZWpVJhILMYU3u/hZGYKk0UGnBy+pyCNKeDvLo2d5zJo74cr5WBvyZwO95HXV47CX/S5zzpW2JFcfUJ2K/+pOFfHFc61azykc2VCFW1uWZtOMAFM7el/NNLxwr707bbl30XhDYi4JcEq3Ow17jyX1JiIE8X5zmYwB1o1WqnEcRSXiSa7IGRHokbRCD36OSE2/ZrB2h9H0NZDaSderJFUVvF/slLh7I0s9l/NYmLan1fRdtjxL7rzQb/JWhlVDVUKH1P2SUY+IeW1g7yUesRFAGzsLIM58CeJrmTdtKcchNohx1qI1kCN6/3rfTTqQU6AyVXAUvZXhRCxyTV3ouLxbx8ohizOsEaXmLoJPF1lcaJg/9Bnwe7ghpVeeTxMsOjjUsqdk9V+CuX5PYqmg5Deq0t5Jy7Ogz3ExqAXA9vmf9B8LhGmY94MlBnXxtk47Os9xiqnKHMZxKrwOsm3nwOifDKx5cQxYlWwR8L2ECXo0jw4Sawo9w2ymvjqFW/oHflEpb6upH7vEofKHyBkR4n3/U+MAnNKOIo61xBfE5/5H6mziPGSXZm7RGdO65yWKVEqkucCDAD9xFmVFx89/AAAAABJRU5ErkJggg=="><img
-                            class="p-2"
-                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAaCAYAAABGiCfwAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo1NURBNjYyNjExNTYxMUU4ODI4MzlCMDU0RkIxRDc3OCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo1NURBNjYyNzExNTYxMUU4ODI4MzlCMDU0RkIxRDc3OCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjU1REE2NjI0MTE1NjExRTg4MjgzOUIwNTRGQjFENzc4IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU1REE2NjI1MTE1NjExRTg4MjgzOUIwNTRGQjFENzc4Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+vtYfQQAAAypJREFUeNq8lltIFGEUx8/MuO6uq64rpaZGkaRFYgW9lGVSCEXlQ3QzJOhNeglEylKo6IaBFPSQ0LNFFEQkXTAwsgsSXUjUTMtizezBvKXtuu5u/zPOLrO7c7HCDvxYmPPt/Oc73/nOOUJhWQOZWBbYDorACrAA2IEHfAMdoBU0AbfRi+IMfLmgGpQDi4Y/CcwHBaAMXAaN4Dx4r/VCUUfoCOgGB3WEtEwCB0AXOD7bnfHX7ddaLAhEwSDi550m37R/5hnH1GYhi0WiQCAYWnoWrAJ7jHZ2U08oThJp0jNNff3DFIBiSrKdXMCZZJN9KqGQ7QZ39HZ2EuzS3pFAYz+9EPNRTUUxlRQuJZfTLu+Kd1pz6SE1P/tImWlJ0X8tVc7wmFpsGTihdxhBvHFwaJwuVG2h8tLVMf7kRBt58CE6xkl2DbSHwnjF6ORHxn5RQW5GjND4hJeG4eNfq9UosakhtDNO8WKjlRy+7AxnxLOmli6qrLuH0CVTwB+Ufw1sHd9RUS8h5OwRBTkD+9w/6PPAcITvTdcA9bR008v2fhqf9JLNeGds5bxig57XO+UnSRKo9tAmKsjLiPBtLcojuriP5rkc1Py8l3q/DOHsrEZi60Nh1BbDfeKzOH24JMa3Jj9bhu1151d61eExE8vhMKbSP5p7cJQcdtNC4zQMtDVeksNYd/UJ5eem07aNeWFf+4dBetzWh8ohIhunKDHBavpRLMYnn6AphhDyHauuf0Cb1+ZEiD160UuVR29RFs5yUWaKnCAaVURtoxzGHj0v/5krxJKFqTGpz6UqLSeNFme55ApjIsT2SVR60V+Z8GfLn4pKKfkf1igqja51joXa1LWxYo7FKtT9rBOcM0oUSRSirkUc+c2Tgq0evI1unjXRzS7c79Ecff6A3KFDTExOkUUSzYTug6pwQmlMVzei2zl3Zu7GDnu8qm7OiIqibk7eBjvNZpC94B04ox4JfD4/uUdGwotsVgs5EuLJjx1r2Cml889quuKBJV8ZfoLymUGQ544QXDE0hK6DlVpCZnNjhzIz1oIdypC6HKRzfnAkwXfV1bnLVcLoAH8LMAArrvuj2Bu+xgAAAABJRU5ErkJggg=="><img
-                            class="p-2"
-                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAaCAYAAABGiCfwAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo3ODBEOTgxODExNTYxMUU4QjgxMUY3NUVGNDNENUU5RCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo3ODBEOTgxOTExNTYxMUU4QjgxMUY3NUVGNDNENUU5RCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjc4MEQ5ODE2MTE1NjExRThCODExRjc1RUY0M0Q1RTlEIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjc4MEQ5ODE3MTE1NjExRThCODExRjc1RUY0M0Q1RTlEIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+JJRdIwAABK1JREFUeNqkln1MW1UYxp/23ra05WMtjO9kMNjAgETjn5s4zVicQ42Lc4lOEzVOM2fMolHclma6bEaTGVl0Tmc2/3AxbJJpQOYwxkz8x02Dk8j396DAQKB0QL/rc+4uWtpLYfFNfgnc3nuec877nPc9uqt5RVgmckglKSclJIuYiYeMkL9IE6kn1+MNpIsjtp5UkV3EgOUjSM6Sd0m71gv6JT58g3SQZ1coJEIiz5A2sn+lYmJ27+H/xRFyLvqhHPX/efJ47GbrgFAYQdc0mQHCYsd00JvNkGw26BIS+Hso+qsd5FvyqJbYoRghiugkCX6nE8G5GZjvuBNJFZshp9oR8nrh6+nFXPMfCDoHYMzNh95k4jyCkSM8oubwrUiDFKt7vVhIr4enpwOmwiJkOvYj9emnYFSdoFNfc7e1Y+z9DzD5xRkY0jIgpaREC4ooIy0LK/skZue4Ik93B6wb78O6hm9gTUrCxJ8tGDjxKfz9A9BxFUkVDyB77x7YznyG/nvuxsgr+5TnOkOMp06SDWJl61XnLVpV4MYNGDIzUdzyGyzMTa/jMIYOO5RVyQoGBOCHbUslCupqkWA0onvvPox/fBymfA4ZDkcLlgo3PhljCCY7ODuF9INVsFJo8NRp9FHIvmUb7vrpMnIc70Cyp8GcW4jJxnqMnTyl2Nq++znIyakIezxaDt0lJnlvjNbcHIw5BUiu3Ip57v8NrspqW401F2qQbLHCtKkc0+drERgZ5QqZ19+b4eN3xvw8GAsKaJweSNzOqNioVyvFYjE6Tc5IY8LTMDvsxPxoP2xbK2Gi0LyoU20dCE25mB8jjcL5BgIQxhe50nE7EQxprWytsvoYc8gyQu6bCHIQk20VDLIF3uEhjhlQ8uW+1AgfJyAlJlLEx4llKM+DU1MITk4BJqOW2CrNciVZE+Ht6oS77jsk0YUZDgdmL/8M/4xbMYi78Ue61cwd8CtHwLr5fkXM09oGb18P9FarZlkR73AqsCx+KkGfnAzna2/CwjxI9mQklJTAZLfB7/fD03wNgeA8fEPdWP3YTtgeepDOBFw1tQgHPMrOaLjRJcS61DbyX/BFQ0Ym/CMjaK/YhuDEKLKPHFUqrcS8ZB8/hrHqD2EpKUXuR9VKv3Fe+gF/f34axuw1WkIiemW1F22K/iXMFcjp6Qi5XMyLBEv5BoghJhu+R8qO7cgiYgv9ZPjc1xjavYfbZ1HqpUYFEfGLONSxpSqySU1Pw5Cbi8IrTTBwoNaiMoR9XqS+8LziwtkrVzFzsVEREkVATHKJKJPVRtekdd6UY0BTmNbmwUwh9+AgHcfKPz4B54GqWz1KtsKQk61YPo7Qr5G18SW1vcdEOOSnQexKB3XXN8A3fh0J+cWxedHeuoV4MbJ5tpKjmmL0mbFoHbz8e6L6BORE++020mPkWnSnPqA2u6gzZ4Ovsxt9L78Kb2cXXZq1lNu04iJ5Pd6Fp4Y8EVlNlDzddLNe5lAnvFKxC2T7cneQneTgv9tIx+kTrbecJlr/yoTejhaKd7sSF5ZS8qWSNnEH0elWIvKV2pUP3e69cSHyyMPqJVWcyUwi+ofwzFjE0akTVSLeQP8IMAA0zKEePZgCxgAAAABJRU5ErkJggg=="><img
-                            class="p-2"
-                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo5ODc0RDQwMkUwM0QxMUU5ODE4MUQxNjA3QzMxQTM5RiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo5ODc0RDQwM0UwM0QxMUU5ODE4MUQxNjA3QzMxQTM5RiI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjk4NzRENDAwRTAzRDExRTk4MTgxRDE2MDdDMzFBMzlGIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjk4NzRENDAxRTAzRDExRTk4MTgxRDE2MDdDMzFBMzlGIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+QcIhHwAACR9JREFUeNqcVmuMHWUZ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"><img
-                            class="p-2"
-                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAVCAYAAAAnzezqAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo4MkE5QTlDODExNTYxMUU4QThDM0NFMDE0OUVFOUE5MiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo4MkE5QTlDOTExNTYxMUU4QThDM0NFMDE0OUVFOUE5MiI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjgyQTlBOUM2MTE1NjExRThBOEMzQ0UwMTQ5RUU5QTkyIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjgyQTlBOUM3MTE1NjExRThBOEMzQ0UwMTQ5RUU5QTkyIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+yr6GlgAAAT9JREFUeNpi/CbDy4AEXIE4EYjNgVgEiBkZqAP+A/FbID4FxAuAeAdMghHJAXOAOJmBPmAREMeDGExQgRV0tBwE4oB4AywEAoD0eoaBAZEgBxwBMqwHyAHnQFGgxzBwQAPkABYSNKwG4gQgvkElBzCCHPCHBA1PgHghEGtCHXKGQgf8YSJRgyASG+QQUyD2A+K95LqAiYwCBR1sBmIXIHYC4o1A/JeWDsAH9gMxKEvbAfF3YjWxUNEBokAcC8S+QMxGTwdoAXEGtA7hIVUzqQ74hMT2AOJMaCIkG7CQ6AgJIA4F4mJojUkpYAEVxSBf8Q5QSfgdlAsuD2BRfAPkgL4BdEAPyAFrgXjdAFi+FYiXwQqiYGgrhV5gORD7oDfJQMATmp+NgVgIWlL+p7TGA+J/QPweVP9D65DNMEmAAAMALlM2fkj+n8UAAAAASUVORK5CYII=">
-                    </div>
-                </div>
+          <!-- Featured Image -->
+          <div class="featured-image mb-4">
+            <img [src]="formObj.image" 
+                 alt="Blog Featured Image" 
+                 class="img-fluid rounded shadow-sm">
+          </div>
 
+          <!-- Article Content -->
+          <div class="article-content">
+            <div class="content-body">
+              <p class="lead">{{formObj.description}}</p>
             </div>
+
+            <!-- Social Sharing -->
+            <div class="social-sharing my-5">
+              <h6 class="sharing-title mb-3">Share this article</h6>
+              <div class="sharing-buttons">
+                <button class="btn btn-facebook me-2">
+                  <i class="bi bi-facebook me-1"></i>
+                  Share
+                </button>
+                <button class="btn btn-twitter me-2">
+                  <i class="bi bi-twitter me-1"></i>
+                  Tweet
+                </button>
+                <button class="btn btn-outline-secondary">
+                  <i class="bi bi-envelope me-1"></i>
+                  Email
+                </button>
+              </div>
+            </div>
+
+            <!-- Article Footer -->
+            <footer class="article-footer">
+              <div class="article-category mb-3">
+                <span class="text-muted">Posted in</span>
+                <a href="#" class="category-link ms-1">Lettering</a>
+              </div>
+
+              <!-- Navigation -->
+              <nav class="article-navigation">
+                <div class="nav-previous mb-2">
+                  <a href="#" class="nav-link">
+                    <i class="bi bi-chevron-left me-1"></i>
+                    Introduce New Product at BannerBuzz.com – Magnetic Signs
+                  </a>
+                </div>
+                <div class="nav-next text-end">
+                  <a href="#" class="nav-link">
+                    Personalised Banners – Custom You Banner Using Banner Tool
+                    <i class="bi bi-chevron-right ms-1"></i>
+                  </a>
+                </div>
+              </nav>
+
+              <!-- Comments Section -->
+              <div class="comments-section mt-5">
+                <div class="comments-notice p-3 bg-light rounded">
+                  <p class="mb-2 text-muted">Both comments and pings are currently closed.</p>
+                  <p class="mb-0 text-center fw-bold">Comments are closed.</p>
+                </div>
+              </div>
+            </footer>
+          </div>
+        </article>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-lg-4">
+        <div class="blog-sidebar">
+          <!-- Categories Widget -->
+          <div class="sidebar-widget">
+            <div class="widget-card">
+              <div class="widget-header">
+                <h5 class="widget-title">
+                  <i class="bi bi-folder me-2"></i>
+                  Categories
+                </h5>
+              </div>
+              <div class="widget-content">
+                <ul class="category-list">
+                  <li><a href="/blogs/category">Banners <span class="count">(333)</span></a></li>
+                  <li><a href="/blogs/category">Clothing <span class="count">(6)</span></a></li>
+                  <li><a href="/blogs/category">Design Tips <span class="count">(45)</span></a></li>
+                  <li><a href="/blogs/category">Marketing <span class="count">(28)</span></a></li>
+                  <li><a href="/blogs/category">Business <span class="count">(67)</span></a></li>
+                  <li><a href="/blogs/category">Events <span class="count">(23)</span></a></li>
+                  <li><a href="/blogs/category">Printing <span class="count">(89)</span></a></li>
+                  <li><a href="/blogs/category">Signage <span class="count">(156)</span></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Related Posts Widget -->
+          <div class="sidebar-widget">
+            <div class="widget-card">
+              <div class="widget-header">
+                <h5 class="widget-title">
+                  <i class="bi bi-bookmark me-2"></i>
+                  Related Posts
+                </h5>
+              </div>
+              <div class="widget-content">
+                <ul class="related-posts-list">
+                  <li><a href="#">New Product Launch: Introducing Our Latest Innovations</a></li>
+                  <li><a href="#">How to Boost Your Website's SEO and Increase Traffic</a></li>
+                  <li><a href="#">10 Tips for Effective Social Media Marketing</a></li>
+                  <li><a href="#">The Importance of Branding in the Digital Age</a></li>
+                  <li><a href="#">Enhancing Customer Engagement with Email Marketing</a></li>
+                  <li><a href="#">The Power of Visual Content in Marketing</a></li>
+                  <li><a href="#">E-commerce Trends for the Future: What to Expect</a></li>
+                  <li><a href="#">Content Marketing Strategies for Small Businesses</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- About Widget -->
+          <div class="sidebar-widget">
+            <div class="widget-card">
+              <div class="widget-header">
+                <h5 class="widget-title">
+                  <i class="bi bi-info-circle me-2"></i>
+                  About BannerBuzz
+                </h5>
+              </div>
+              <div class="widget-content text-center">
+                <img src="assets/images/logo.svg" 
+                     alt="BannerBuzz Logo" 
+                     class="company-logo mb-3">
+                <p class="company-description">
+                  Design Print Banner, LLC (DBA: bannerbuzz.com) was established with a vision to 
+                  capture online retail markets. With our parent company's 20+ years of experience 
+                  in the sign business and our...
+                </p>
+                <a href="#" class="read-more-link">Read more</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Social Media Widget -->
+          <div class="sidebar-widget">
+            <div class="widget-card">
+              <div class="widget-header">
+                <h5 class="widget-title">
+                  <i class="bi bi-share me-2"></i>
+                  Connect & Follow
+                </h5>
+              </div>
+              <div class="widget-content">
+                <div class="social-links">
+                  <a href="https://www.facebook.com/bannerbuzz" target="_blank" class="social-link facebook">
+                    <i class="bi bi-facebook"></i>
+                  </a>
+                  <a href="https://twitter.com/bannerbuzz" target="_blank" class="social-link twitter">
+                    <i class="bi bi-twitter"></i>
+                  </a>
+                  <a href="https://www.instagram.com/bannerbuzz/" target="_blank" class="social-link instagram">
+                    <i class="bi bi-instagram"></i>
+                  </a>
+                  <a href="https://www.linkedin.com/company/bannerbuzz/" target="_blank" class="social-link linkedin">
+                    <i class="bi bi-linkedin"></i>
+                  </a>
+                  <a href="https://www.youtube.com/user/BannerBuzzTV" target="_blank" class="social-link youtube">
+                    <i class="bi bi-youtube"></i>
+                  </a>
+                  <a href="https://www.pinterest.com/bannerbuzz/" target="_blank" class="social-link pinterest">
+                    <i class="bi bi-pinterest"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-    <div class="w-100 text-center " style="background-color: rgb(67, 131, 184); color: white;">
-        <div class="w-100 text-center d-flex align-items-center justify-content-evenly p-3 Subscribe-box w-cm">
-            <p class="w-33">Subscribe to our newsletter and get 20% OFF on Your First Order + Free Shipping.</p><input
-                placeholder="Normal text" type="text" class="w-45 height-fitcontant form-control"><button type="button"
-                class="height-fitcontant px-2 my-2 btn btn-light">SUBSCRIBE</button>
+  </div>
+
+  <!-- Newsletter Section -->
+  <div class="newsletter-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <p class="newsletter-text mb-0">
+            Subscribe to our newsletter and get 20% OFF on Your First Order + Free Shipping.
+          </p>
         </div>
+        <div class="col-md-6">
+          <form class="newsletter-form-inline">
+            <div class="input-group">
+              <input type="email" 
+                     class="form-control" 
+                     placeholder="Enter your email">
+              <button class="btn btn-light" type="submit">
+                SUBSCRIBE
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

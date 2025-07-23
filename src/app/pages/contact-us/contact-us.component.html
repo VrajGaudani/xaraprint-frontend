@@ -1,0 +1,118 @@
+<div class="contact-us-container">
+  <div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <nav aria-label="breadcrumb" class="mb-4">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a routerLink="/home" class="text-decoration-none">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Contact Us</li>
+          </ol>
+        </nav>
+
+        <div class="contact-header text-center mb-5">
+          <h1 class="display-4 fw-bold text-primary">Get in Touch</h1>
+          <p class="lead text-muted">We're here to help! Reach out to us for any queries or support.</p>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
+              <div class="card-body p-4">
+                <h3 class="card-title text-secondary mb-4">Send Us a Message</h3>
+                <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Your Name</label>
+                    <input type="text" id="name" formControlName="name" class="form-control" placeholder="Enter your name"
+                           [class.is-invalid]="contactForm.get('name')?.invalid && contactForm.get('name')?.touched">
+                    <div *ngIf="contactForm.get('name')?.invalid && contactForm.get('name')?.touched" class="invalid-feedback">
+                      Name is required.
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="email" class="form-label">Your Email</label>
+                    <input type="email" id="email" formControlName="email" class="form-control" placeholder="Enter your email"
+                           [class.is-invalid]="contactForm.get('email')?.invalid && contactForm.get('email')?.touched">
+                    <div *ngIf="contactForm.get('email')?.invalid && contactForm.get('email')?.touched" class="invalid-feedback">
+                      Please enter a valid email.
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="subject" class="form-label">Subject</label>
+                    <input type="text" id="subject" formControlName="subject" class="form-control" placeholder="Subject of your message"
+                           [class.is-invalid]="contactForm.get('subject')?.invalid && contactForm.get('subject')?.touched">
+                    <div *ngIf="contactForm.get('subject')?.invalid && contactForm.get('subject')?.touched" class="invalid-feedback">
+                      Subject is required.
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="message" class="form-label">Message</label>
+                    <textarea id="message" formControlName="message" class="form-control" rows="5" placeholder="Your message"
+                              [class.is-invalid]="contactForm.get('message')?.invalid && contactForm.get('message')?.touched"></textarea>
+                    <div *ngIf="contactForm.get('message')?.invalid && contactForm.get('message')?.touched" class="invalid-feedback">
+                      Message is required.
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary w-100" [disabled]="contactForm.invalid">
+                    <i class="bi bi-send me-2"></i>
+                    Submit Message
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
+              <div class="card-body p-4">
+                <h3 class="card-title text-secondary mb-4">Contact Information</h3>
+                <ul class="list-unstyled contact-info-list">
+                  <li class="mb-3">
+                    <i class="bi bi-envelope-fill me-3 text-primary"></i>
+                    <div>
+                      <strong>Email:</strong><br>
+                      <a href="mailto:support&#64;xaraprint.com" class="text-decoration-none text-dark">support&#64;xaraprint.com</a>
+                    </div>
+                  </li>
+                  <li class="mb-3">
+                    <i class="bi bi-geo-alt-fill me-3 text-primary"></i>
+                    <div>
+                      <strong>Address:</strong><br>
+                      Surat, Gujarat, India
+                    </div>
+                  </li>
+                  <li class="mb-3">
+                    <i class="bi bi-clock-fill me-3 text-primary"></i>
+                    <div>
+                      <strong>Business Hours:</strong><br>
+                      Monday - Friday: 9:00 AM - 6:00 PM (IST)
+                    </div>
+                  </li>
+                  <li class="mb-3">
+                    <i class="bi bi-whatsapp me-3 text-success"></i>
+                    <div>
+                      <strong>WhatsApp Support:</strong><br>
+                      <a href="https://wa.me/919876543210?text=Hi, I need help with my order on xaraprint.com." 
+                         target="_blank" class="text-decoration-none text-success fw-bold">
+                        +91 9876543210
+                      </a>
+                    </div>
+                  </li>
+                  <li>
+                    <i class="bi bi-chat-dots-fill me-3 text-primary"></i>
+                    <div>
+                      <strong>Live Chat:</strong><br>
+                      Available during business hours for instant support.
+                    </div>
+                  </li>
+                </ul>
+                <div class="mt-4 text-center">
+                  <p class="text-muted">We aim to respond to all inquiries within 24-48 business hours.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

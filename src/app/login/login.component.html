@@ -1,85 +1,218 @@
-<div class="container">
-  <div class="d-flex flex-wrap justify-content-between text-center align-items-center my-3">
-    <div class="left-icon col-12 col-md-6 col-lg-3 icon-1 z-n1">Quality Guarantee</div>
-    <div class="left-icon col-12 col-md-6 col-lg-3 icon-2 z-n1">Best Prices</div>
-    <div class="left-icon col-12 col-md-6 col-lg-3 icon-3 z-n1">Free Shipping</div>
-    <div class="left-icon col-12 col-md-6 col-lg-3 icon-4 z-n1">Free Design Proofs</div>
-  </div>
-</div>
-<div class="container">
-  <h2 class="text-center pt-3 mt-5 heading-color">Log in to your account</h2>
-  <p class="black-color text-center f-size-14 my-2 sub-gray-text">Don't have an account? <a href="sign-up">Create an
-      account!</a></p>
-</div>
-<div>
-  <div class="d-flex col-12 col-lg-8 col-xl-6 flex-wrap justify-content-between mb-5 container">
-    <div class="col-12 col-sm-6 text-left px-3">
-      <form [formGroup]="loginForm">
-        <h4 class=" pt-3 mt-5 heading-color">Existing customers, log in</h4>
-      <p class="black-color f-size-14 my-2 sub-gray-text">Fill up some quick information to log in.</p>
-      <div class="form-group col-md-12 my-4 px-0">
-        <label class="sub-gray-text">Email Address<a>*</a></label>
-        <input type="email" formControlName="email" class="form-control" name="email">
-        <div *ngIf="(loginForm.get('email')?.invalid && loginForm.get('email')?.touched) || (loginForm.get('email')?.dirty || loginForm.get('email')?.touched) || isSubmitted">
-          <small class="input-err" *ngIf="loginForm.get('email')?.errors?.['required']">Email is required.</small>
-          <small class="input-err" *ngIf="loginForm.get('email')?.errors?.['email']">Enter a valid email.</small>
+<div class="login-wrapper">
+  <!-- Features Bar -->
+  <div class="features-bar">
+    <div class="container">
+      <div class="row">
+        <div class="col-6 col-md-3">
+          <div class="feature-item">
+            <i class="bi bi-shield-check"></i>
+            <span>Quality Guarantee</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="feature-item">
+            <i class="bi bi-tag"></i>
+            <span>Best Prices</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="feature-item">
+            <i class="bi bi-truck"></i>
+            <span>Free Shipping</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="feature-item">
+            <i class="bi bi-palette"></i>
+            <span>Free Design Proofs</span>
+          </div>
         </div>
       </div>
-      <div class="form-group col-md-12 my-4 px-0">
-        <label class="sub-gray-text">Password<a>*</a></label>
-        <input type="Password" formControlName="password" class="form-control" name="password">
-        <div *ngIf="(loginForm.get('password')?.invalid && loginForm.get('password')?.touched) || (loginForm.get('password')?.dirty || loginForm.get('password')?.touched) || isSubmitted">
-          <small class="input-err" *ngIf="loginForm.get('password')?.errors?.['required']">Password is required.</small>
-          <small class="input-err" *ngIf="loginForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters long.</small>
-        </div>
-      </div>
-      <p class="text-right"> <a>Forgot Password?</a> | <a>Login With Email OTP</a></p>
-      <div class="w-100 text-center"><button type="button" (click)="login()"
-          class="rounded-0 f-size-12 px-4 mx-auto w-fit-content btn btn-primary">LOG IN TO MY ACCOUNT</button>
-      </div>
-      </form>
-    </div>
-    <div class="col-6 d-none d-sm-block text-left px-3">
-      <h4 class=" pt-3 mt-5 heading-color">New customers, sign up</h4>
-      <p class="black-color f-size-14 my-2 sub-gray-text">Sign up quickly with your social accounts</p>
-      <div class="w-100 text-center my-4"><button type="button"
-          class="rounded-0 f-size-14 px-4 mx-auto w-100 d-flex align-items-center my-3 btn btn-primary"><img
-            src="assets/images/facebook.png" alt="facebookIcon" class="mw-100 w-24px mr-2">SIGN IN
-          WITH FACEBOOK</button>
-        <button (click)="socialLogin()" type="button"
-          class="rounded-0 f-size-14 px-4 mx-auto w-100 d-flex align-items-center my-3 border-0 btn btn-primary"
-          style="background-color: rgb(224, 47, 47);">
-          <img src="assets/images/social.png" alt="googleIcon" class="mw-100 w-24px mr-2">SIGN IN WITH
-          GOOGLE</button>
-        <button type="button"
-          class="rounded-0 f-size-14 px-4 mx-auto w-100 d-flex align-items-center my-3 border-0 btn btn-primary"
-          style="background-color: rgb(85, 172, 238);"><img
-            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAaCAYAAABGiCfwAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo0RDM5ODU0RjExNTYxMUU4ODE5QUQwMkI1RUY3MzYxRiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo0RDM5ODU1MDExNTYxMUU4ODE5QUQwMkI1RUY3MzYxRiI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjREMzk4NTREMTE1NjExRTg4MTlBRDAyQjVFRjczNjFGIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjREMzk4NTRFMTE1NjExRTg4MTlBRDAyQjVFRjczNjFGIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+1LAQcAAAA+pJREFUeNqsVltoVFcUXefeOzOZyTTRxFRtsEq0vlJb+uGHorWgtj+tFYkKJVb889MPFdEWqyKlBb/1SxR8YBXEWi30r2opqZRW4ytKldZoDNE8jMY8Zs5x7fuIc2fuzFh0w2KYe88+a5+9197nqpUnulHG6olPiQ+JRmIikSQGiQ7iKnGe+Im4W2ojVYJsOrGFaCZiKG9Z4jDxLXEjaoFVxHEz0Uase0kiMZv4krhObH1ZMonuO7ya7SZ+KEd2nPgCr8dWEqeKkX1DNOH12jK/hiGymcT2/7OLpYCMBnqoyd4hqsN4z/gDY0JLRWRzcsn2hipNp8EM0D3obaDyiBx6dQ0YPBk2mFGrMHUM0EfCO30G3c8MYnZBbPtcP1/iH+W+eUai+rRCBZ1aHmjUv6G8qP3oHzw1mMRnG+baaKxR0Hx+od3gl/80Gvj8YqdmMECFM7rlfOlRK0oQXYxudi2wZ6mDJZMt3Ow2rnMQSGVMYdd8Gx+8RXftRbykwcL3ix00z7ZQm1QYyhacrlnWLYyqSf8IT8GT7Vzk4L03szh1S+M20ySpWj3Dxtt1FgaeGGT8+lgsWioOXO4y6OTJncKmWhCkMWR1jOy3ewa/39GYN8VCU6ONT3jCPzoMWjo0a6SQGTKuKEbrLJvz/8FrGtcfGUwbq1wB5dhUIavJJxtguDNrLDg82WMKwaJTkisXv2O5MCQSQVg5ypGNhjKeuKoTBURi1U7kkNPeLnMnWa6mewckAMmtcZWpVJhILMYU3u/hZGYKk0UGnBy+pyCNKeDvLo2d5zJo74cr5WBvyZwO95HXV47CX/S5zzpW2JFcfUJ2K/+pOFfHFc61azykc2VCFW1uWZtOMAFM7el/NNLxwr707bbl30XhDYi4JcEq3Ow17jyX1JiIE8X5zmYwB1o1WqnEcRSXiSa7IGRHokbRCD36OSE2/ZrB2h9H0NZDaSderJFUVvF/slLh7I0s9l/NYmLan1fRdtjxL7rzQb/JWhlVDVUKH1P2SUY+IeW1g7yUesRFAGzsLIM58CeJrmTdtKcchNohx1qI1kCN6/3rfTTqQU6AyVXAUvZXhRCxyTV3ouLxbx8ohizOsEaXmLoJPF1lcaJg/9Bnwe7ghpVeeTxMsOjjUsqdk9V+CuX5PYqmg5Deq0t5Jy7Ogz3ExqAXA9vmf9B8LhGmY94MlBnXxtk47Os9xiqnKHMZxKrwOsm3nwOifDKx5cQxYlWwR8L2ECXo0jw4Sawo9w2ymvjqFW/oHflEpb6upH7vEofKHyBkR4n3/U+MAnNKOIo61xBfE5/5H6mziPGSXZm7RGdO65yWKVEqkucCDAD9xFmVFx89/AAAAABJRU5ErkJggg=="
-            alt="facebookIcon" class="mw-100 w-24px mr-2">SIGN IN WITH Twitter</button>
-      </div>
-    </div>
-    <div class="d-flex flex-wrap d-block d-sm-none px-3 text-center col-12 justify-content-center">
-      <p class="my-3">or Sign in with Social</p>
-      <div class="w-100 text-center d-flex"><button type="button"
-          class="rounded-0 f-size-14 px-4 mx-auto d-flex align-items-center my-3 btn btn-primary"><img
-            src="assets/images/facebook.49e67d43221b6bb1aa86.png" alt="facebookIcon"
-            class="mw-100 w-24px"></button><button type="button"
-          class="rounded-0 f-size-14 px-4 mx-auto d-flex align-items-center my-3 border-0 btn btn-primary"
-          style="background-color: rgb(224, 47, 47);"><img src="assets/images/social.png" alt="googleIcon"
-            class="mw-100 w-24px "></button><button type="button"
-          class="rounded-0 f-size-14 px-4 mx-auto d-flex align-items-center my-3 border-0 btn btn-primary"
-          style="background-color: rgb(85, 172, 238);"><img
-            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAaCAYAAABGiCfwAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo0RDM5ODU0RjExNTYxMUU4ODE5QUQwMkI1RUY3MzYxRiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo0RDM5ODU1MDExNTYxMUU4ODE5QUQwMkI1RUY3MzYxRiI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjREMzk4NTREMTE1NjExRTg4MTlBRDAyQjVFRjczNjFGIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjREMzk4NTRFMTE1NjExRTg4MTlBRDAyQjVFRjczNjFGIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+1LAQcAAAA+pJREFUeNqsVltoVFcUXefeOzOZyTTRxFRtsEq0vlJb+uGHorWgtj+tFYkKJVb889MPFdEWqyKlBb/1SxR8YBXEWi30r2opqZRW4ytKldZoDNE8jMY8Zs5x7fuIc2fuzFh0w2KYe88+a5+9197nqpUnulHG6olPiQ+JRmIikSQGiQ7iKnGe+Im4W2ojVYJsOrGFaCZiKG9Z4jDxLXEjaoFVxHEz0Uase0kiMZv4krhObH1ZMonuO7ya7SZ+KEd2nPgCr8dWEqeKkX1DNOH12jK/hiGymcT2/7OLpYCMBnqoyd4hqsN4z/gDY0JLRWRzcsn2hipNp8EM0D3obaDyiBx6dQ0YPBk2mFGrMHUM0EfCO30G3c8MYnZBbPtcP1/iH+W+eUai+rRCBZ1aHmjUv6G8qP3oHzw1mMRnG+baaKxR0Hx+od3gl/80Gvj8YqdmMECFM7rlfOlRK0oQXYxudi2wZ6mDJZMt3Ow2rnMQSGVMYdd8Gx+8RXftRbykwcL3ix00z7ZQm1QYyhacrlnWLYyqSf8IT8GT7Vzk4L03szh1S+M20ySpWj3Dxtt1FgaeGGT8+lgsWioOXO4y6OTJncKmWhCkMWR1jOy3ewa/39GYN8VCU6ONT3jCPzoMWjo0a6SQGTKuKEbrLJvz/8FrGtcfGUwbq1wB5dhUIavJJxtguDNrLDg82WMKwaJTkisXv2O5MCQSQVg5ypGNhjKeuKoTBURi1U7kkNPeLnMnWa6mewckAMmtcZWpVJhILMYU3u/hZGYKk0UGnBy+pyCNKeDvLo2d5zJo74cr5WBvyZwO95HXV47CX/S5zzpW2JFcfUJ2K/+pOFfHFc61azykc2VCFW1uWZtOMAFM7el/NNLxwr707bbl30XhDYi4JcEq3Ow17jyX1JiIE8X5zmYwB1o1WqnEcRSXiSa7IGRHokbRCD36OSE2/ZrB2h9H0NZDaSderJFUVvF/slLh7I0s9l/NYmLan1fRdtjxL7rzQb/JWhlVDVUKH1P2SUY+IeW1g7yUesRFAGzsLIM58CeJrmTdtKcchNohx1qI1kCN6/3rfTTqQU6AyVXAUvZXhRCxyTV3ouLxbx8ohizOsEaXmLoJPF1lcaJg/9Bnwe7ghpVeeTxMsOjjUsqdk9V+CuX5PYqmg5Deq0t5Jy7Ogz3ExqAXA9vmf9B8LhGmY94MlBnXxtk47Os9xiqnKHMZxKrwOsm3nwOifDKx5cQxYlWwR8L2ECXo0jw4Sawo9w2ymvjqFW/oHflEpb6upH7vEofKHyBkR4n3/U+MAnNKOIo61xBfE5/5H6mziPGSXZm7RGdO65yWKVEqkucCDAD9xFmVFx89/AAAAABJRU5ErkJggg=="
-            alt="facebookIcon" class="mw-100 w-24px "></button></div>
     </div>
   </div>
-  <div class="container mw-100 mt-5 mb-2 p-0">
-    <footer class=" text-center text-lg-start  w-100 ">
-      <div class="text-center p-3 container"><img
-          src="data:image/jpeg;base64,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"
-          alt="security" class="" style="max-width: 100%;">
-        <p class="f-size-12 py-3">© 2009-2023 bannerbuzz.com All rights reserved.</p>
+
+  <!-- Main Login Section -->
+  <div class="login-section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-10 col-xl-8">
+          <!-- Header -->
+          <div class="login-header text-center mb-5">
+            <h1>Welcome Back</h1>
+            <p class="lead">Sign in to your account to continue</p>
+            <p class="text-muted">
+              Don't have an account? 
+              <a href="sign-up" class="text-primary fw-bold">Create one now!</a>
+            </p>
+          </div>
+
+          <div class="row">
+            <!-- Login Form -->
+            <div class="col-lg-6">
+              <div class="login-card">
+                <div class="card-header">
+                  <h4>Sign In</h4>
+                  <p>Enter your credentials to access your account</p>
+                </div>
+
+                <form [formGroup]="loginForm" class="login-form">
+                  <div class="form-group mb-4">
+                    <label class="form-label">Email Address</label>
+                    <div class="input-group">
+                      <span class="input-group-text">
+                        <i class="bi bi-envelope"></i>
+                      </span>
+                      <input 
+                        type="email" 
+                        class="form-control" 
+                        formControlName="email" 
+                        placeholder="Enter your email"
+                        [class.is-invalid]="(loginForm.get('email')?.invalid && loginForm.get('email')?.touched) || isSubmitted">
+                    </div>
+                    <div class="invalid-feedback" *ngIf="(loginForm.get('email')?.invalid && loginForm.get('email')?.touched) || isSubmitted">
+                      <small *ngIf="loginForm.get('email')?.errors?.['required']">Email is required</small>
+                      <small *ngIf="loginForm.get('email')?.errors?.['email']">Please enter a valid email</small>
+                    </div>
+                  </div>
+
+                  <div class="form-group mb-4">
+                    <label class="form-label">Password</label>
+                    <div class="input-group">
+                      <span class="input-group-text">
+                        <i class="bi bi-lock"></i>
+                      </span>
+                      <input 
+                        [type]="showPassword ? 'text' : 'password'" 
+                        class="form-control" 
+                        formControlName="password" 
+                        placeholder="Enter your password"
+                        [class.is-invalid]="(loginForm.get('password')?.invalid && loginForm.get('password')?.touched) || isSubmitted">
+                      <button 
+                        type="button" 
+                        class="btn btn-outline-secondary password-toggle"
+                        (click)="showPassword = !showPassword">
+                        <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                      </button>
+                    </div>
+                    <div class="invalid-feedback" *ngIf="(loginForm.get('password')?.invalid && loginForm.get('password')?.touched) || isSubmitted">
+                      <small *ngIf="loginForm.get('password')?.errors?.['required']">Password is required</small>
+                      <small *ngIf="loginForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters</small>
+                    </div>
+                  </div>
+
+                  <div class="form-options mb-4">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="rememberMe">
+                      <label class="form-check-label" for="rememberMe">
+                        Remember me
+                      </label>
+                    </div>
+                    <div class="forgot-links">
+                      <a href="#" class="text-primary">Forgot Password?</a>
+                      <span class="separator">|</span>
+                      <a href="#" class="text-primary">Login with OTP</a>
+                    </div>
+                  </div>
+
+                  <button 
+                    type="button" 
+                    class="btn btn-primary btn-lg w-100 mb-3" 
+                    (click)="login()"
+                    [disabled]="isLoading">
+                    <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+                    <i class="bi bi-box-arrow-in-right me-2" *ngIf="!isLoading"></i>
+                    {{isLoading ? 'Signing In...' : 'Sign In to My Account'}}
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <!-- Social Login -->
+            <div class="col-lg-6">
+              <div class="social-login-card">
+                <div class="card-header">
+                  <h4>Quick Sign In</h4>
+                  <p>Use your social accounts for faster access</p>
+                </div>
+
+                <div class="social-buttons">
+                  <button type="button" class="btn btn-social btn-google w-100 mb-3" (click)="socialLogin('google')">
+                    <i class="bi bi-google"></i>
+                    <span>Continue with Google</span>
+                  </button>
+
+                  <button type="button" class="btn btn-social btn-facebook w-100" (click)="socialLogin('facebook')">
+                    <i class="bi bi-facebook"></i>
+                    <span>Continue with Facebook</span>
+                  </button>
+                </div>
+
+                <div class="divider">
+                  <span>or</span>
+                </div>
+
+                <div class="quick-actions">
+                  <h6>Quick Actions</h6>
+                  <div class="action-buttons">
+                    <a href="/sign-up" class="action-btn">
+                      <i class="bi bi-person-plus"></i>
+                      <span>Create Account</span>
+                    </a>
+                    <a href="/contact-us" class="action-btn">
+                      <i class="bi bi-headset"></i>
+                      <span>Get Help</span>
+                    </a>
+                    <a href="/" class="action-btn">
+                      <i class="bi bi-bag"></i>
+                      <span>Continue Shopping</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mobile Social Buttons -->
+          <div class="mobile-social d-lg-none">
+            <p class="text-center mb-3">or sign in with</p>
+            <div class="social-icons">
+              <button class="social-icon google" (click)="socialLogin('google')">
+                <i class="bi bi-google"></i>
+              </button>
+              <button class="social-icon facebook" (click)="socialLogin('facebook')">
+                <i class="bi bi-facebook"></i>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-    </footer>
+    </div>
+  </div>
+
+  <!-- Security Footer -->
+  <div class="security-footer">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <div class="security-badges">
+            <div class="badge-item">
+              <i class="bi bi-shield-lock"></i>
+              <span>SSL Secured</span>
+            </div>
+            <div class="badge-item">
+              <i class="bi bi-check-circle"></i>
+              <span>Verified Business</span>
+            </div>
+            <div class="badge-item">
+              <i class="bi bi-star-fill"></i>
+              <span>Trusted by 10,000+ customers</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 text-end">
+          <p class="copyright">© 2024 BannerBuzz. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

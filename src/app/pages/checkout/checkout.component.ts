@@ -1,289 +1,290 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Api1Service } from 'src/app/service/api1.service';
-import { GlobleService } from 'src/app/service/globle.service';
-import { HttpService } from 'src/app/service/http.service';
-import { APIURLs } from 'src/environments/apiUrls';
-declare var Razorpay: any;
+import { Component, OnInit } from "@angular/core"
+import { HttpService } from "../../service/http.service"
+import { GlobleService } from "../../service/globle.service"
+import { APIURLs } from "../../../environments/apiUrls"
+import { Router } from "@angular/router"
+
+declare var Razorpay: any
 
 @Component({
-  selector: 'app-checkout',
-  templateUrl: './checkout.component.html',
-  styleUrls: ['./checkout.component.scss']
+  selector: "app-checkout",
+  templateUrl: "./checkout.component.html",
+  styleUrls: ["./checkout.component.scss"],
 })
 export class CheckoutComponent implements OnInit {
-  profileData: any;
-  formObj: any = {
-    address_info: {
-      country: "",
-      state: "",
-    },
-    is_next_time: false
-  };
-  cartData: any = {
-    items: [],
-    subtotal: 0,
-    totalDiscount: 0,
-    finalPrice: 0,
-    cartLength: 0,
-    coupon_code: '',
-    coupon_discount: 0,
-    coupon_applied: false
-  };
+  cartSummary: any = null
+  addresses: any[] = []
+  selectedShippingAddress: any = null
+  selectedBillingAddress: any = null
+  useSameBilling = true
+  isLoadingAddresses = false
+  isProcessingOrder = false
+  isLoadingCalculations = false
+
+  paymentMethod = "online"
+  orderCalculations: any = null
 
   constructor(
+    private httpService: HttpService,
     public gs: GlobleService,
     private router: Router,
-    private route: ActivatedRoute,
-    private api1: Api1Service,
-    private httpService: HttpService,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    this.getProfile();
-    this.getAddressData();
-    this.getCartData();
+    this.loadCartSummary()
+    this.loadAddresses()
+    this.getOrderCalculations()
   }
 
-  getProfile() {
-    this.httpService.get(APIURLs.getProfileAPI).subscribe((res: any) => {
-      this.profileData = res.data
-    }, (err) => {
-      console.log("err -->", err)
-    })
-  }
-
-  getAddressData() {
-    this.httpService.get(APIURLs.getAllAdressAPI).subscribe((res: any) => {
-      if (res?.data?.length > 0) {
-        this.formObj.address_info = res.data;
-        this.setupAddressData()
-      }
-
-    }, (err) => {
-      this.gs.errorToaster(err?.error?.msg || "something went wrong !!");
-    })
-  }
-
-  setupAddressData() {
-    let shipping_add: any = {};
-    this.formObj.address_info.forEach((i: any) => {
-      if (i.isShipping) {
-        shipping_add = i
-        i['useSameBilling'] = true
-      }
-    })
-    this.formObj.shipping_address = shipping_add;
-    if (shipping_add?.useSameBilling) {
-      this.formObj.billing_address = shipping_add;
+  loadCartSummary() {
+    const cartData = localStorage.getItem("cartSummary")
+    if (cartData) {
+      this.cartSummary = JSON.parse(cartData)
+    } else {
+      this.gs.errorToaster("No cart data found!")
+      this.router.navigate(["/cart"])
     }
-    // console.log("this.formObj -->",this.formObj)
   }
 
-  onBillingCheckboxChange(event: any) {
-    if (!event.target.checked) {
-      this.formObj.address_info.forEach((i: any) => {
-        if (i.isShipping) {
-          i['useSameBilling'] = event.target.checked
-          this.formObj.shipping_address = i;
-        }
-        if (i.isBilling) {
-          this.formObj.billing_address = i;
-        }
-      })
+  loadAddresses() {
+    this.isLoadingAddresses = true
+
+    // Get addresses from user object
+    if (this.gs.userDataObj?.addresses && this.gs.userDataObj.addresses.length > 0) {
+      this.addresses = this.gs.userDataObj.addresses
+      this.selectedShippingAddress = this.addresses.find((addr) => addr.isShipping) || this.addresses[0]
+      this.selectedBillingAddress = this.addresses.find((addr) => addr.isBilling) || this.selectedShippingAddress
+      this.isLoadingAddresses = false
+    } else {
+      // Fallback to API call if addresses not in user object
+      this.httpService.get(APIURLs.getAllAdressAPI).subscribe(
+        (res: any) => {
+          this.addresses = res.data || []
+          if (this.addresses.length > 0) {
+            this.selectedShippingAddress = this.addresses[0]
+            this.selectedBillingAddress = this.addresses[0]
+          }
+          this.isLoadingAddresses = false
+        },
+        (err) => {
+          this.gs.errorToaster(err?.error?.msg || "Failed to load addresses")
+          this.isLoadingAddresses = false
+        },
+      )
     }
-    else {
-      this.formObj.address_info.forEach((i: any) => {
-        if (i.isShipping) {
-          i['useSameBilling'] = event.target.checked
-          this.formObj.shipping_address = i;
-          this.formObj.billing_address = i;
+  }
+
+  getOrderCalculations() {
+    this.isLoadingCalculations = true
+
+    // Get fresh calculations from backend
+    this.httpService.get(APIURLs.getCartAPI).subscribe(
+      (res: any) => {
+        if (res.data && res.data.calculations) {
+          this.orderCalculations = res.data.calculations
+          console.log("Order calculations from backend:", this.orderCalculations)
+        } else {
+          // Fallback to stored cart summary
+          this.orderCalculations = this.cartSummary?.calculations || this.calculateFallbackTotal()
+          console.log("Using fallback calculations:", this.orderCalculations)
         }
-      })
+        this.isLoadingCalculations = false
+      },
+      (err) => {
+        // Fallback calculation if API fails
+        this.orderCalculations = this.cartSummary?.calculations || this.calculateFallbackTotal()
+        this.isLoadingCalculations = false
+        console.warn("Order calculation API failed, using fallback calculation:", this.orderCalculations)
+      },
+    )
+  }
+
+  selectShippingAddress(address: any) {
+    this.selectedShippingAddress = address
+    if (this.useSameBilling) {
+      this.selectedBillingAddress = address
+    }
+  }
+
+  selectBillingAddress(address: any) {
+    this.selectedBillingAddress = address
+  }
+
+  onBillingCheckboxChange(event: Event) {
+    const target = event.target as HTMLInputElement
+    this.useSameBilling = target.checked
+
+    if (this.useSameBilling) {
+      this.selectedBillingAddress = this.selectedShippingAddress
+    }
+  }
+
+  calculateFallbackTotal() {
+    if (!this.cartSummary) return null
+
+    const subtotal = this.cartSummary.calculations.subtotal || 0
+    const totalDiscount = this.cartSummary.calculations.total_discount || 0
+    const couponDiscount = this.cartSummary.calculations.coupon_discount || 0
+    const taxableAmount = subtotal - totalDiscount
+    const finalTaxableAmount = Math.max(0, taxableAmount - couponDiscount)
+    const shippingCharge = finalTaxableAmount >= 999 ? 0 : 99
+    const totalTax = Math.round(finalTaxableAmount * 0.18) + Math.round(shippingCharge * 0.18)
+    const grandTotal = finalTaxableAmount + shippingCharge + totalTax
+
+    return {
+      subtotal,
+      total_discount: totalDiscount,
+      taxable_amount: taxableAmount,
+      coupon_discount: couponDiscount,
+      final_taxable_amount: finalTaxableAmount,
+      shipping_charge: shippingCharge,
+      total_tax: totalTax,
+      grand_total: grandTotal,
+    }
+  }
+
+  getFinalTotal(): number {
+    if (!this.orderCalculations) return 0
+
+    let total = this.orderCalculations.grand_total || 0
+    if (this.paymentMethod === "cod") {
+      total += 30 // COD charge
+    }
+    return total
+  }
+
+  onPaymentMethodChange(method: string) {
+    this.paymentMethod = method
+  }
+
+  placeOrder() {
+    if (!this.selectedShippingAddress) {
+      this.gs.errorToaster("Please select a delivery address")
+      return
     }
 
-    // console.log("this.formObj -->",this.formObj)
-  }
+    if (!this.useSameBilling && !this.selectedBillingAddress) {
+      this.gs.errorToaster("Please select a billing address")
+      return
+    }
 
-  onshippingAddressChange(selectedAddress: any): void {
-    let isSameBilling = false;
-    this.formObj.address_info.forEach((i: any) => {
-      if (i.isShipping && i.useSameBilling) {
-        isSameBilling = true
-      }
-    })
-    this.formObj.address_info.forEach((i: any) => {
-      i.isShipping = false
-      i['useSameBilling'] = false
-    })
-    this.formObj.address_info.forEach((i: any) => {
-      if (i._id == selectedAddress._id) {
-        i.isShipping = true
-        if (isSameBilling) {
-          i.useSameBilling = true
-        }
-      }
-    })
-    this.formObj.shipping_address = selectedAddress
-    // console.log('Updated Address Info:', this.formObj);
-  }
-  onBillingAddressChange(selectedAddress: any): void {
-    this.formObj.billing_address = selectedAddress
-    // console.log('Updated Address Info:', this.formObj);
-  }
+    if (!this.cartSummary || !this.cartSummary.items.length) {
+      this.gs.errorToaster("Your cart is empty")
+      return
+    }
 
-  getCartData() {
-    this.httpService.post(APIURLs.getCartAPI, '').subscribe((res: any) => {
-      if (res.data) {
-        this.cartData.items = res.data;
-        this.calculateCartTotals();
-      }
-    }, (err) => {
-      this.gs.errorToaster(err?.error?.msg || "something went wrong !!");
-    });
-  }
+    this.isProcessingOrder = true
 
-  calculateCartTotals() {
-    let subtotal = 0;
-    let totalDiscount = 0;
-    let finalPrice = 0;
-
-    this.cartData.items.forEach((item: any) => {
-      subtotal += item.orignal_price;
-      totalDiscount += item.discount_amount;
-      finalPrice += item.after_discount_price;
-    });
-
-    this.cartData.subtotal = subtotal;
-    this.cartData.totalDiscount = totalDiscount;
-    this.cartData.finalPrice = finalPrice;
-    this.cartData.cartLength = this.cartData.items.length;
-  }
-
-  submitOrder() {
-    // if (!this.gs.userDataObj || !this.gs.userDataObj._id) {
-    //   this.gs.errorToaster("please login");
-    //   return;
-    // }
-
-    let cartIds = this.cartData.items.map((item: any) => item._id);
-    const orderId = this.generateOrderID();
-
-    this.formObj.cart_id = cartIds;
-    this.formObj.price = this.cartData.finalPrice;
-    this.formObj.coupon_code = this.cartData.coupon_code;
-    this.formObj.coupon_discount = this.cartData.coupon_discount;
-    this.formObj.is_coupon_applyed = this.cartData.coupon_applied;
-    this.formObj.order_id = orderId;
-
-    // Create Razorpay order first
     const orderData = {
-      amount: this.cartData.finalPrice * 100, // Razorpay expects amount in smallest currency unit (paise)
-      currency: 'INR',
-      receipt: orderId,
-      payment_capture: 1
-    };
-
-    this.httpService.post(APIURLs.createRazorpayOrderAPI, orderData).subscribe(
-      (response: any) => {
-        this.initializeRazorpayPayment(response.data);
+      billing_address: {
+        firstname: (this.useSameBilling ? this.selectedShippingAddress : this.selectedBillingAddress).firstname,
+        lastname: (this.useSameBilling ? this.selectedShippingAddress : this.selectedBillingAddress).lastname,
+        email: this.gs.userDataObj?.email || "",
+        phone_no: (this.useSameBilling ? this.selectedShippingAddress : this.selectedBillingAddress).phone_no,
+        address: (this.useSameBilling ? this.selectedShippingAddress : this.selectedBillingAddress).address,
+        city: (this.useSameBilling ? this.selectedShippingAddress : this.selectedBillingAddress).city,
+        state: (this.useSameBilling ? this.selectedShippingAddress : this.selectedBillingAddress).state,
+        pincode: (this.useSameBilling ? this.selectedShippingAddress : this.selectedBillingAddress).pincode,
+        country: (this.useSameBilling ? this.selectedShippingAddress : this.selectedBillingAddress).country || "India",
       },
-      (error) => {
-        this.gs.errorToaster("Payment initialization failed");
-      }
-    );
+      shipping_address: {
+        firstname: this.selectedShippingAddress.firstname,
+        lastname: this.selectedShippingAddress.lastname,
+        email: this.gs.userDataObj?.email || "",
+        phone_no: this.selectedShippingAddress.phone_no,
+        address: this.selectedShippingAddress.address,
+        city: this.selectedShippingAddress.city,
+        state: this.selectedShippingAddress.state,
+        pincode: this.selectedShippingAddress.pincode,
+        country: this.selectedShippingAddress.country || "India",
+      },
+      payment_mode: this.paymentMethod,
+      cart_ids: this.cartSummary.items.map((item: any) => item._id),
+      coupon_code: this.cartSummary.appliedCoupon?.coupon_code || null,
+    }
+
+    this.httpService.post(APIURLs.orderCreateAPI, orderData).subscribe(
+      (res: any) => {
+        if (this.paymentMethod === "online") {
+          this.initiateRazorpayPayment(res.data)
+        } else {
+          // COD order
+          this.gs.successToaster("Order placed successfully!")
+          localStorage.removeItem("cartSummary")
+          this.router.navigate(["/order-success"], {
+            queryParams: { orderId: res.data.order?.order_id || res.data.order_id },
+          })
+        }
+        this.isProcessingOrder = false
+      },
+      (err) => {
+        this.gs.errorToaster(err?.error?.msg || "Failed to place order")
+        this.isProcessingOrder = false
+      },
+    )
   }
 
-  initializeRazorpayPayment(orderData: any) {
+  initiateRazorpayPayment(orderData: any) {
     const options = {
-      key: 'rzp_test_HJG5Rtuy8Xh2NB',
-      amount: orderData.amount,
-      currency: orderData.currency,
-      name: 'Your Company Name',
-      description: 'Order Payment',
-      order_id: orderData.id,
-      prefill: {
-        name: this.profileData?.firstname + ' ' + this.profileData?.lastname,
-        email: this.profileData?.email,
-        contact: this.formObj.shipping_address?.phone_no
-      },
+      key: orderData.razorpay_order?.key || "rzp_test_key", // Replace with your Razorpay key
+      amount: orderData.razorpay_order?.amount || this.getFinalTotal() * 100,
+      currency: orderData.razorpay_order?.currency || "INR",
+      name: orderData.razorpay_order?.name || "XaraPrint",
+      description: orderData.razorpay_order?.description || "Order Payment",
+      order_id: orderData.razorpay_order?.id,
       handler: (response: any) => {
-        this.handlePaymentSuccess(response);
+        this.verifyPayment(response)
+      },
+      prefill: {
+        name: `${this.selectedShippingAddress?.firstname} ${this.selectedShippingAddress?.lastname}`,
+        email: this.gs.userDataObj?.email || "",
+        contact: this.selectedShippingAddress?.phone_no || "",
+      },
+      theme: {
+        color: "#667eea",
       },
       modal: {
         ondismiss: () => {
-          this.gs.errorToaster("Payment cancelled");
-        }
-      }
-    };
+          this.gs.errorToaster("Payment cancelled")
+          this.isProcessingOrder = false
+        },
+      },
+    }
 
-    const razorpayInstance = new Razorpay(options);
-    razorpayInstance.open();
+    const rzp = new Razorpay(options)
+    rzp.open()
   }
 
-  handlePaymentSuccess(response: any) {
-    this.formObj.payment_mode = 'razorpay';
-    this.formObj.payment_id = response.razorpay_payment_id;
+  verifyPayment(paymentResponse: any) {
+    this.isProcessingOrder = true
+    const verificationData = {
+      razorpay_order_id: paymentResponse.razorpay_order_id,
+      razorpay_payment_id: paymentResponse.razorpay_payment_id,
+      razorpay_signature: paymentResponse.razorpay_signature,
+    }
 
-    this.formObj.payment_details = {
-      razorpay_order_id: response.razorpay_order_id,
-      razorpay_payment_id: response.razorpay_payment_id,
-      razorpay_signature: response.razorpay_signature,
-      payment_status: 'completed',
-      payment_method: 'razorpay',
-      payment_amount: this.cartData.finalPrice,
-      payment_currency: 'INR',
-      payment_date: new Date().toISOString()
-    };
-    this.formObj.order_status = 'pending'; // default status as per schema
-
-    // Verify payment on backend
-    const paymentVerificationData = {
-      razorpay_order_id: response.razorpay_order_id,
-      razorpay_payment_id: response.razorpay_payment_id,
-      razorpay_signature: response.razorpay_signature,
-      order_details: this.formObj
-    };
-
-    this.httpService.post(APIURLs.verifyPaymentAPI, paymentVerificationData).subscribe(
+    this.httpService.post(APIURLs.verifyPaymentAPI, verificationData).subscribe(
       (res: any) => {
-        // Create order after payment verification
-        this.httpService.post(APIURLs.orderCreateAPI, this.formObj).subscribe(
-          (orderRes: any) => {
-            this.gs.successToaster(orderRes?.msg);
-            this.router.navigate(['/order-success'], {
-              queryParams: {
-                order_id: this.formObj.order_id,
-                payment_id: response.razorpay_payment_id
-              }
-            });
-          },
-          (err) => {
-            this.gs.errorToaster(err?.error?.msg || "Order creation failed");
-          }
-        );
+        this.gs.successToaster("Payment successful! Order placed.")
+        localStorage.removeItem("cartSummary")
+        this.router.navigate(["/order-success"], {
+          queryParams: { orderId: res.data.order?.order_id || res.data.order_id },
+        })
+        this.isProcessingOrder = false
       },
       (err) => {
-        this.gs.errorToaster("Payment verification failed");
-      }
-    );
+        this.gs.errorToaster(err?.error?.msg || "Payment verification failed")
+        this.isProcessingOrder = false
+        this.gs.errorToaster(err?.error?.msg || "Payment verification failed")
+      },
+    )
   }
 
-  generateOrderID() {
-    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    let orderId = '';
-
-    // Generate the first 4 characters (alphabets)
-    for (let i = 0; i < 4; i++) {
-      orderId += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-    }
-
-    // Generate the 10-digit numeric part
-    for (let i = 0; i < 10; i++) {
-      orderId += Math.floor(Math.random() * 10);
-    }
-
-    return orderId;
+  goToAddresses() {
+    this.router.navigate(["/my-account"], { fragment: "addresses" })
   }
 
+  goBackToCart() {
+    this.router.navigate(["/cart"])
+  }
 }

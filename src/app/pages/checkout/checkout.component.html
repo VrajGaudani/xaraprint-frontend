@@ -1,88 +1,159 @@
-<div class="container">
-  <div class="d-flex flex-wrap justify-content-between text-center align-items-center mt-4 my-3">
-    <div class="left-icon col-12 col-md-6 col-lg-3 icon-1 z-n1">Quality Guarantee</div>
-    <div class="left-icon col-12 col-md-6 col-lg-3 icon-2 z-n1">Best Prices</div>
-    <div class="left-icon col-12 col-md-6 col-lg-3 icon-3 z-n1">Free Shipping</div>
-    <div class="left-icon col-12 col-md-6 col-lg-3 icon-4 z-n1">Free Design Proofs</div>
-  </div>
+<!-- Features Bar -->
+<section class="features-bar">
   <div class="container">
-    <div class="row">
-      <div class="col-12 col-lg-8">
-        <div class="py-5">
-          <h5 class="fs-6 mb-4">ACCOUNT DETAILS</h5>
-          <p>Welcome<span class="fw-bold">, {{profileData?.firstname}}</span></p>
-          <p class="mb-0">Email</p>
-          <p class="text-primary">{{profileData?.email}}</p>
+    <div class="features-grid">
+      <div class="feature-item">
+        <div class="feature-icon">
+          <i class="bi bi-award"></i>
         </div>
-
-        <h3 class="mb-4">{{formObj?.shipping_address?.useSameBilling ? 'Shipping & Billing Address' : 'Shipping Address'}}</h3>
-        <p class="text-muted">We will deliver your order here</p>
-
-        <!-- Address 1 -->
-        <div class="address-card" *ngFor="let address of formObj.address_info;">
-          <div class="d-flex align-items-start">
-            <input type="radio" name="address" id="address1" class="form-check-input address-radio me-2" [checked]="address.isShipping" (change)="onshippingAddressChange(address)">
-            <div class="flex-grow-1">
-              <strong>{{address?.firstname + ' ' + address?.lastname}}</strong>
-              <p class="mb-1">{{address.phone_no}}, {{address.address}}, {{address.city}}, {{address.state}}, {{address.country}}, {{address.pincode}}</p>
-              <label class="form-check-label d-block">
-                <input type="checkbox" class="form-check-input me-2" [checked]="address.useSameBilling" (change)="onBillingCheckboxChange($event)"> Use same address for billing
-              </label>
-              <!-- <label class="form-check-label d-block">
-                <input type="checkbox" class="form-check-input me-2"> I am in for SMS updates and automated calls
-              </label>
-              <label class="form-check-label d-block">
-                <input type="checkbox" class="form-check-input me-2"> Drop-ship
-                <i class="bi bi-info-circle" data-bs-toggle="tooltip"
-                  title="Select if this address is for drop-shipping"></i>
-              </label> -->
-            </div>
-            <a href="javascript:void(0)" class="btn-edit" routerLink="/account">Edit</a>
-          </div>
-        </div>
-        <!-- Add New Address -->
-        <div class="add-new-address" routerLink="/account">
-          <i class="bi bi-plus-circle-fill" ></i> Add a new address
-        </div>
-
-        <div *ngIf="!formObj?.shipping_address?.useSameBilling">
-          <h3 class="mb-4">Billing Address</h3>
-          <div class="address-card" *ngFor="let address of formObj.address_info;">
-            <div class="d-flex align-items-start">
-              <input type="radio" name="addressB" id="addressB1" class="form-check-input address-radio me-2" [checked]="address.isBilling" (change)="onBillingAddressChange(address)">
-              <div class="flex-grow-1">
-                <strong>{{address?.firstname + ' ' + address?.lastname}}</strong>
-                <p class="mb-1">{{address.phone_no}}, {{address.address}}, {{address.city}}, {{address.state}}, {{address.country}}, {{address.pincode}}</p>
-              </div>
-              <a href="javascript:void(0)" class="btn-edit">Edit</a>
-            </div>
-          </div>
-        </div>
-
+        <span class="feature-text">Quality Guarantee</span>
       </div>
-      <div class="col-12 col-lg-4 py-5">
-        <div class="p-3" style="background-color: aliceblue;">
-          <h5 class="fs-6 mb-2">ORDER SUMMARY</h5>
+      <div class="feature-item">
+        <div class="feature-icon">
+          <i class="bi bi-tag"></i>
+        </div>
+        <span class="feature-text">Best Prices</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">
+          <i class="bi bi-truck"></i>
+        </div>
+        <span class="feature-text">Free Shipping on ₹999+</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">
+          <i class="bi bi-palette"></i>
+        </div>
+        <span class="feature-text">Free Design Proofs</span>
+      </div>
+    </div>
+  </div>
+</section>
 
-          <div class="accordion" id="accordionExample">
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingOne">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                  Cart Items {{cartData?.cartLength}}
-                </button>
-              </h2>
-              <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                <div class="accordion-body">
-                  <div *ngFor="let item of cartData.items">
-                    <div class="d-flex align-items-start gap-2 pb-3">
-                      <div>
-                        <img [src]="item?.product_id?.product_images[0]" alt="image" style="padding: 5px;width: 50px; height: 50px; object-fit: contain; box-shadow: 0px 0px 5px -1px rgb(0 0 0 / 37%);" >
+<!-- Checkout Section -->
+<section class="checkout-section">
+  <div class="container">
+    <!-- Loading State -->
+    <div *ngIf="isLoadingAddresses || isLoadingCalculations" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-3">Loading checkout details...</p>
+    </div>
+
+    <div class="row" *ngIf="!isLoadingAddresses && !isLoadingCalculations">
+      <!-- Checkout Form -->
+      <div class="col-lg-8">
+        <div class="checkout-form">
+          <!-- Account Details -->
+          <div class="checkout-card">
+            <div class="card-header">
+              <h5 class="card-title">
+                <i class="bi bi-person-circle me-2"></i>
+                Account Details
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="account-info">
+                <p class="welcome-text">Welcome, <span class="user-name">{{gs.userDataObj?.firstname || 'User'}}</span>
+                </p>
+                <div class="email-info">
+                  <label class="info-label">Email</label>
+                  <p class="info-value">{{gs.userDataObj?.email}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shipping Address -->
+          <div class="checkout-card">
+            <div class="card-header">
+              <h5 class="card-title">
+                <i class="bi bi-geo-alt me-2"></i>
+                {{useSameBilling ? 'Shipping & Billing Address' : 'Shipping Address'}}
+              </h5>
+              <p class="card-subtitle">We will deliver your order here</p>
+            </div>
+            <div class="card-body">
+              <!-- Address List -->
+              <div class="address-list" *ngIf="addresses && addresses.length > 0">
+                <div class="address-card" *ngFor="let address of addresses"
+                  [class.selected]="selectedShippingAddress?._id === address._id">
+                  <div class="address-content">
+                    <div class="address-radio">
+                      <input type="radio" name="shippingAddress" class="form-check-input"
+                        [checked]="selectedShippingAddress?._id === address._id"
+                        (change)="selectShippingAddress(address)">
+                    </div>
+                    <div class="address-details">
+                      <div class="address-header">
+                        <h6 class="address-name">{{address?.firstname + ' ' + address?.lastname}}</h6>
+                        <button class="btn btn-link edit-btn" routerLink="/my-account">
+                          <i class="bi bi-pencil me-1"></i>
+                          Edit
+                        </button>
                       </div>
-                      <div style="font-size: 12px;">
-                        <p class="m-0" style="margin-top: -3px !important; line-height: 1.2; font-weight: 500; font-size: 13px; text-decoration: underline;">{{item.product_id.productname}}</p>
-                        <span class="d-block">Quantity: {{item.qty}}</span>
-                        <span class="d-block">Price: ${{item.after_discount_price}}</span>
+                      <p class="address-text">
+                        {{address.phone_no}}, {{address.address}}, {{address.city}},
+                        {{address.state}}, {{address.country}}, {{address.pincode}}
+                      </p>
+                      <div class="address-options">
+                        <label class="form-check-label">
+                          <input type="checkbox" class="form-check-input me-2" [checked]="useSameBilling"
+                            (change)="onBillingCheckboxChange($event)">
+                          Use same address for billing
+                        </label>
                       </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- No Address Message -->
+              <div *ngIf="!addresses || addresses.length === 0" class="no-address-message">
+                <p class="text-muted">No addresses found. Please add an address to continue.</p>
+              </div>
+
+              <!-- Add New Address -->
+              <div class="add-address-card" routerLink="/my-account">
+                <div class="add-address-content">
+                  <i class="bi bi-plus-circle add-icon"></i>
+                  <span class="add-text">Add a new address</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Billing Address (if different) -->
+          <div class="checkout-card" *ngIf="!useSameBilling && addresses && addresses.length > 0">
+            <div class="card-header">
+              <h5 class="card-title">
+                <i class="bi bi-credit-card me-2"></i>
+                Billing Address
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="address-list">
+                <div class="address-card" *ngFor="let address of addresses"
+                  [class.selected]="selectedBillingAddress?._id === address._id">
+                  <div class="address-content">
+                    <div class="address-radio">
+                      <input type="radio" name="billingAddress" class="form-check-input"
+                        [checked]="selectedBillingAddress?._id === address._id"
+                        (change)="selectBillingAddress(address)">
+                    </div>
+                    <div class="address-details">
+                      <div class="address-header">
+                        <h6 class="address-name">{{address?.firstname + ' ' + address?.lastname}}</h6>
+                        <button class="btn btn-link edit-btn" routerLink="/my-account">
+                          <i class="bi bi-pencil me-1"></i>
+                          Edit
+                        </button>
+                      </div>
+                      <p class="address-text">
+                        {{address.phone_no}}, {{address.address}}, {{address.city}},
+                        {{address.state}}, {{address.country}}, {{address.pincode}}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -90,22 +161,209 @@
             </div>
           </div>
 
-          <div class="d-flex align-items-center justify-content-between">
-            <span>Subtotal:</span>
-            <span>${{cartData.subtotal}}</span>
+          <!-- Payment Methods -->
+          <div class="checkout-card">
+            <div class="card-header">
+              <h5 class="card-title">
+                <i class="bi bi-credit-card me-2"></i>
+                Payment Methods
+              </h5>
+              <p class="card-subtitle">Choose your preferred payment method</p>
+            </div>
+            <div class="card-body">
+              <div class="payment-methods">
+                <!-- Online Payment -->
+                <div class="payment-method">
+                  <input type="radio" id="online" name="payment" value="online" [checked]="paymentMethod === 'online'"
+                    (change)="onPaymentMethodChange('online')" class="form-check-input">
+                  <label for="online" class="payment-label">
+                    <div class="payment-info">
+                      <h6 class="payment-title">Online Payment</h6>
+                      <p class="payment-desc">UPI, Cards, Net Banking, Wallets</p>
+                      <div class="payment-icons">
+                        <span class="badge bg-primary me-1">UPI</span>
+                        <span class="badge bg-success me-1">Cards</span>
+                        <span class="badge bg-info me-1">Net Banking</span>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+
+                <!-- Cash on Delivery -->
+                <div class="payment-method">
+                  <input type="radio" id="cod" name="payment" value="cod" [checked]="paymentMethod === 'cod'"
+                    (change)="onPaymentMethodChange('cod')" class="form-check-input">
+                  <label for="cod" class="payment-label">
+                    <div class="payment-info">
+                      <h6 class="payment-title">Cash on Delivery</h6>
+                      <p class="payment-desc">Pay when you receive your order</p>
+                      <div class="cod-fee" *ngIf="paymentMethod === 'cod'">
+                        <small class="text-warning">
+                          <i class="bi bi-info-circle me-1"></i>
+                          Additional ₹30 COD fee will be charged
+                        </small>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="d-flex mb-3 align-items-center justify-content-between">
-            <span>Total Discount:</span>
-            <span class="text-danger">-${{cartData.totalDiscount}}</span>
+        </div>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="col-lg-4">
+        <div class="order-summary-sticky">
+          <div class="order-summary-card">
+            <div class="summary-header">
+              <h5 class="summary-title">
+                <i class="bi bi-receipt me-2"></i>
+                Order Summary
+              </h5>
+            </div>
+            <div class="summary-body">
+              <!-- Cart Items -->
+              <div class="cart-items-section" *ngIf="cartSummary?.items && cartSummary.items.length > 0">
+                <div class="accordion" id="cartAccordion">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#cartItems">
+                        <i class="bi bi-bag me-2"></i>
+                        Cart Items ({{cartSummary.items.length}})
+                      </button>
+                    </h2>
+                    <div id="cartItems" class="accordion-collapse collapse show" data-bs-parent="#cartAccordion">
+                      <div class="accordion-body">
+                        <div class="cart-item" *ngFor="let item of cartSummary.items">
+                          <div class="item-image">
+                            <img [src]="item?.product_id.product_images[0]"
+                              [alt]="item?.product_id?.productname || 'Product'" class="product-thumbnail">
+                          </div>
+                          <div class="item-details">
+                            <h6 class="item-name">{{item?.product_id?.productname || 'Product'}}</h6>
+                            <div class="item-info">
+                              <span class="item-qty">Qty: {{item?.qty || 1}}</span>
+                              <span class="item-price">₹{{item?.after_discount_price || item?.single_price || 0}}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Empty Cart Message -->
+              <div *ngIf="!cartSummary?.items || cartSummary.items.length === 0" class="empty-cart-message">
+                <p class="text-muted text-center">Your cart is empty</p>
+              </div>
+
+              <!-- Price Breakdown -->
+              <div class="price-breakdown" *ngIf="orderCalculations">
+                <div class="price-row">
+                  <span class="price-label">Subtotal:</span>
+                  <span class="price-value">₹{{orderCalculations.subtotal || 0 | number:'1.2-2'}}</span>
+                </div>
+                <div class="price-row discount-row" *ngIf="(orderCalculations.total_discount || 0) > 0">
+                  <span class="price-label">Product Discount:</span>
+                  <span class="price-value discount-value">-₹{{orderCalculations.total_discount || 0 | number:'1.2-2'}}</span>
+                </div>
+                <div class="price-row" *ngIf="(orderCalculations.coupon_discount || 0) > 0">
+                  <span class="price-label">Coupon Discount:</span>
+                  <span class="price-value discount-value">-₹{{orderCalculations.coupon_discount || 0 | number:'1.2-2'}}</span>
+                </div>
+                <div class="price-row">
+                  <span class="price-label">
+                    Shipping:
+                    <small *ngIf="(orderCalculations.shipping_charge || 0) === 0" class="text-success">(Free)</small>
+                  </span>
+                  <span class="price-value">₹{{orderCalculations.shipping_charge || 0 | number:'1.2-2'}}</span>
+                </div>
+                <div class="price-row">
+                  <span class="price-label">Tax (GST):</span>
+                  <span class="price-value">₹{{orderCalculations.total_tax || 0 | number:'1.2-2'}}</span>
+                </div>
+                <div class="price-row" *ngIf="paymentMethod === 'cod'">
+                  <span class="price-label">COD Charges:</span>
+                  <span class="price-value">₹30</span>
+                </div>
+                <hr>
+                <div class="price-row total-row">
+                  <span class="price-label">Total:</span>
+                  <span class="price-value total-value">₹{{getFinalTotal() | number:'1.2-2'}}</span>
+                </div>
+
+                <!-- Free Shipping Message -->
+                <div *ngIf="(orderCalculations.shipping_charge || 0) > 0" class="free-shipping-message">
+                  <small class="text-info">
+                    <i class="bi bi-truck me-1"></i>
+                    Add ₹{{999 - (orderCalculations.taxable_amount || 0) | number:'1.2-2'}} more for free shipping
+                  </small>
+                </div>
+              </div>
+
+              <!-- Terms & Place Order -->
+              <div class="order-actions" *ngIf="cartSummary?.items && cartSummary.items.length > 0">
+                <div class="terms-notice">
+                  <p class="terms-text">
+                    By clicking on the button below, I accept the
+                    <a href="/terms-conditions" class="terms-link">Terms & Conditions</a> of XaraPrint.
+                  </p>
+                </div>
+                <button class="btn btn-primary place-order-btn w-100" (click)="placeOrder()"
+                  [disabled]="isProcessingOrder || !selectedShippingAddress || (!useSameBilling && !selectedBillingAddress)">
+                  <span *ngIf="isProcessingOrder" class="spinner-border spinner-border-sm me-2"></span>
+                  <i *ngIf="!isProcessingOrder" class="bi bi-check-circle me-2"></i>
+                  {{isProcessingOrder ? 'Processing...' : 'Place Your Order'}}
+                </button>
+
+                <!-- Security Notice -->
+                <div class="security-notice mt-3">
+                  <small class="text-muted">
+                    <i class="bi bi-shield-check me-1"></i>
+                    Your payment information is secure and encrypted
+                  </small>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="d-flex align-items-center justify-content-between">
-            <h6>Total:</h6>
-            <h6 class="text-primary">${{cartData.finalPrice}}</h6>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recommended Categories -->
+    <div class="recommended-section mt-5">
+      <div class="text-center mb-4">
+        <h3>Recommended Categories</h3>
+        <p class="text-muted">More Trending Custom-Built Category by BannerBuzz</p>
+      </div>
+
+      <div class="row">
+        <div class="col-6 col-md-4 col-lg-2 mb-4" *ngFor="let i of [1,2,3,4,5,6]">
+          <div class="category-card">
+            <a href="/stands-and-displays" class="text-decoration-none">
+              <div class="category-image">
+                <img src="assets/images/468.jpg" alt="Category" class="img-fluid rounded">
+              </div>
+              <p class="category-name text-center mt-3 mb-0">Custom Flags</p>
+            </a>
           </div>
-          <p class="mt-3">By clicking on the button below, I accept the T&amp;C of BannerBuzz.</p><a><button
-              (click)="submitOrder()" class="w-100 btn btn-primary btn-lg">Place Your Order</button></a>
         </div>
       </div>
     </div>
   </div>
-</div>
+</section>
+
+<!-- Footer -->
+<footer class="cart-footer bg-light py-4">
+  <div class="container text-center">
+    <div class="payment-methods mb-3">
+      <i class="bi bi-credit-card fs-1 text-muted me-3"></i>
+      <i class="bi bi-paypal fs-1 text-muted me-3"></i>
+      <i class="bi bi-apple fs-1 text-muted"></i>
+    </div>
+    <p class="text-muted small mb-0">© 2009-2023 bannerbuzz.com All rights reserved.</p>
+  </div>
+</footer>

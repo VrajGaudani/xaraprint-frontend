@@ -1,65 +1,103 @@
-import { environment } from "./environment.prod";
-
 export const APIURLs = {
-  registerAPI : environment.baseUrl + 'user/auth/register',
-  loginAPI : environment.baseUrl + 'user/auth/login',
-  getProfileAPI : environment.baseUrl + 'user/profile/get',
-  updateProfileAPI : environment.baseUrl + 'user/profile/update',
-  updatePasswordAPI : environment.baseUrl + 'user/profile/updatePassword',
-  getAllAdressAPI : environment.baseUrl + 'user/address/getAll',
-  addAdressAPI : environment.baseUrl + 'user/address/add',
-  updateAdressAPI : environment.baseUrl + 'user/address/update',
-  deleteAdressAPI : environment.baseUrl + 'user/address/delete',
+  // Base URL
+  baseURL: "http://localhost:3000/v1/",
 
-  // product
-  getAllProductAPI : environment.baseUrl + 'user/product/getAll',
-  getProductByIdAPI : environment.baseUrl + 'user/product/getById',
-  getProductBySlugAPI : environment.baseUrl + 'user/product/bySlug',
-  getLatestProductAPI : environment.baseUrl + 'user/product/latest',
-  getAllBestSellerAPI : environment.baseUrl + 'user/product/bestselling',
-  getAllMostLovedAPI : environment.baseUrl + 'user/product/mostLoved',
-  getAllMostPopularAPI : environment.baseUrl + 'user/product/mostPopular',
-  getProductByCatAPI : environment.baseUrl + 'user/product/bycategory',
-  getAllBannersAPI : environment.baseUrl + 'user/product/getAllBanners',
-  bannersListAPI : environment.baseUrl + 'banner/getAll',
+  // User Authentication APIs
+  userRegisterAPI: "user/auth/register",
+  userLoginAPI: "user/auth/login",
+  loginAPI: "user/auth/login", // Added this for backward compatibility
+  signupAPI: "user/auth/register", // Added this for backward compatibility
 
-  // cart
-  getCartAPI : environment.baseUrl + 'user/cart/getItems',
-  addItemInCartAPI : environment.baseUrl + 'user/cart/addItem',
-  cartQntUpdateAPI : environment.baseUrl + 'user/cart/updateQnt',
-  deleteCartItemAPI : environment.baseUrl + 'user/cart/deleteItem',
-  updateCartAPI : environment.baseUrl + 'user/cart/updateCart',
+  // User Profile APIs
+  getProfileAPI: "user/profile/get",
+  updateProfileAPI: "user/profile/update",
+  updatePasswordAPI: "user/profile/updatePassword",
 
-  // order
-  getOrderAPI : environment.baseUrl + 'user/order/getOrder',
-  getOrderByIdAPI : environment.baseUrl + 'user/order/getByid',
-  orderCreateAPI : environment.baseUrl + 'user/order/create',
-  orderCancelAPI : environment.baseUrl + 'user/order/cancel',
-  addOrderQueryAPI : environment.baseUrl + 'user/order/addQuery',
-  updateOrderQueryAPI : environment.baseUrl + 'user/order/updateQuery',
-  getOrderAddressAPI : environment.baseUrl + 'user/order/getAddress',
+  // User Address APIs
+  addAddressAPI: "user/address/add",
+  updateAddressAPI: "user/address/update",
+  deleteAddressAPI: "user/address/delete",
+  getAllAdressAPI: "user/address/getAll",
+  getAddressByIdAPI: "user/address/getById",
 
-  // coupon
-  getCouponDiscountAPI : environment.baseUrl + 'user/coupon/getDiscount',
+  // User Cart APIs
+  addItemInCartAPI: "user/cart/addItem",
+  getCartAPI: "user/cart/getItems",
+  applyCouponAPI: "user/cart/apply-coupon",
+  removeCouponAPI: "user/cart/remove-coupon",
+  updateCartQntAPI: "user/cart/updateQnt",
+  deleteCartItemAPI: "user/cart/deleteItem",
+  updateCartAPI: "user/cart/updateCart",
+  clearCartAPI: "user/cart/clear",
 
-  // category
-  getAllCatAPI : environment.baseUrl + 'category/getAll',
-  subCatByMainAPI : environment.baseUrl + 'category/Sub-category/bycat',
-  getAllMainCatAPI : environment.baseUrl + 'category/Main-category/list',
+  // User Order APIs
+  orderCreateAPI: "user/order/create",
+  getOrderCalculationsAPI: "user/order/calculations",
+  verifyPaymentAPI: "user/order/verify-payment",
+  cancelOrderAPI: "user/order/cancel",
+  addOrderQueryAPI: "user/order/add-query",
+  updateOrderQueryAPI: "user/order/update-query",
+  getOrderAddressAPI: "user/order/address",
+  getOrderAPI: "user/order/",
+  getOrderByIdAPI: "user/order",
+  trackOrderAPI: "user/order/track",
+  getInvoiceAPI: "user/order/invoice",
+  downloadInvoiceAPI: "user/order/download-invoice",
+  shiprocketWebhookAPI: "user/order/shiprocket-webhook",
 
-  // newletter
-  subscribeNewsLetterAPI : environment.baseUrl + 'newsLetter/subscribe',
+  // User Coupon APIs
+  getDiscountAPI: "user/coupon/getDiscount",
+  getAllCouponAPI: "user/coupon/getAll",
 
-  // blog
-  getLatestBlogAPI : environment.baseUrl + 'blog/getLatest',
-  getBlogByIdAPI : environment.baseUrl + 'blog/getById',
+  // User Product APIs
+  getAllProductAPI: "user/product/getAll",
+  getProductByIdAPI: "user/product/getById",
+  getProductBySlugAPI: "user/product/bySlug",
+  getLatestProductAPI: "user/product/latest",
+  getAllBestSellerAPI: "user/product/bestselling",
+  getAllMostLovedAPI: "user/product/mostLoved",
+  getAllMostPopularAPI: "user/product/mostPopular",
+  getProductByCatAPI: "user/product/bycategory",
 
-  // review
-  addReviewAPI : environment.baseUrl + 'user/review/addReview',
-  getProductReviewAPI : environment.baseUrl + 'user/review/getAllReview',
-  getReviewSummaryAPI : environment.baseUrl + 'user/review/getReviewSummary',
+  // User Review APIs
+  addReviewAPI: "user/review/addReview",
+  getProductReviewAPI: "user/review/getAllReview",
+  getReviewSummaryAPI: "user/review/getReviewSummary",
 
-  // Razorpay
-  createRazorpayOrderAPI: environment.baseUrl + 'user/order/create-razorpay-order',
-  verifyPaymentAPI: environment.baseUrl + 'user/order/verify-payment',
+  // Category APIs
+  uploadCategoryImageAPI: "category/uploadImage",
+  getAllCatAPI: "category/getAll",
+  getAllMainCatAPI: "category/Main-category/list",
+  getMainCatByIdAPI: "category/Main-category/getById",
+  addMainCatAPI: "category/Main-category/addNew",
+  updateMainCatAPI: "category/Main-category/update",
+  deleteMainCatAPI: "category/Main-category/delete",
+  getAllSubCatAPI: "category/Sub-category/list",
+  getSubCatByIdAPI: "category/Sub-category/getById",
+  addSubCatAPI: "category/Sub-category/addNew",
+  updateSubCatAPI: "category/Sub-category/update",
+  deleteSubCatAPI: "category/Sub-category/delete",
+  subCatByMainAPI: "category/Sub-category/bycat",
+
+  // Banner APIs
+  getAllBannersAPI: "banner/getAll",
+
+  // Blog APIs
+  uploadBlogImageAPI: "blog/uploadImage",
+  getAllBlogAPI: "blog/getAll",
+  getBlogByIdAPI: "blog/getById",
+  addBlogAPI: "blog/add",
+  updateBlogAPI: "blog/update",
+  deleteBlogAPI: "blog/delete",
+  getLatestBlogAPI: "blog/getLatest",
+
+  // Newsletter APIs
+  getAllNewsLetterAPI: "newsLetter/getAll",
+  getNewsLetterByIdAPI: "newsLetter/getById",
+  subscribeNewsLetterAPI: "newsLetter/subscribe",
+  updateNewsLetterAPI: "newsLetter/update",
+  deleteNewsLetterAPI: "newsLetter/delete",
+
+  // Banner List API (seems to be used in frontend)
+  bannersListAPI: "banner/getAll",
 }
