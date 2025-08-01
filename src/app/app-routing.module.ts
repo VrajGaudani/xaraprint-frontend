@@ -12,6 +12,7 @@ import { BlogsComponent } from './pages/blogs/blogs.component';
 import { BlogDetailsComponent } from './pages/blog-details/blog-details.component';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
 import { OrderSuccessComponent } from './pages/order-success/order-success.component';
+import { OrderStatusComponent } from './pages/order-status/order-status.component';
 import { MyAccountComponent } from './my-account/my-account.component';
 import { CountryComponent } from './pages/country/country.component';
 import { AboutUsComponent } from './pages/about-us/about-us.component';
@@ -36,6 +37,7 @@ const routes: Routes = [
       { path: 'privacy-and-policy', component: PrivacyPolicyComponent },
       { path: 'checkout', component: CheckoutComponent },
       { path: 'order-success', component: OrderSuccessComponent },
+      { path: 'order-status/:id', component: OrderStatusComponent },
       { path: 'country', component: CountryComponent },
       { path: 'account', component: MyAccountComponent },
       { path: "about-us", component: AboutUsComponent },

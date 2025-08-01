@@ -213,14 +213,14 @@ export class ProductDetailsComponent implements OnInit {
         if (this.formObj.otherObj && this.formObj.otherObj.length > 0) {
           for (const i in this.formObj.otherObj) {
             if (this.formObj.otherObj[i].details && this.formObj.otherObj[i].details.length > 0) {
-              this.formObj.otherObj[i].details[0].ngClass = "active"
+              // No option is active by default
+              this.formObj.otherObj[i].details.forEach(detail => detail.ngClass = "");
             }
           }
         }
 
-        setTimeout(() => {
-          this.FinalCalculation()
-        }, 500)
+        // Calculate pricing immediately after initialization
+        this.FinalCalculation()
       },
       (err) => {
         this.gs.errorToaster(err?.error?.msg || "something went wrong !!")
@@ -294,21 +294,21 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   FinalCalculation(): void {
-    // Always start with the base price
+    // Start with the base product price
     let basePrice = Number(this.formObj.price) || 0;
 
-    // If a size is selected (ngClass == 'active'), use its price
+    // If a size is selected (ngClass == 'active'), use its price instead of base price
     let sizeActiveData = this.formObj.sizes?.find((size: any) => size.ngClass == "active");
     if (sizeActiveData) {
-      basePrice = Number(sizeActiveData.price) || basePrice;
+      basePrice = Number(sizeActiveData.price) || 0;
     }
 
-    // If custom size is enabled and selected, use custom size price
+    // If custom size is enabled and selected, use custom size price instead of base price
     if (this.formObj.add_custom_size && this.custom_size.totalft) {
       basePrice = Number(this.custom_size.totalft) * Number(this.formObj.custom_size_price || 0);
     }
 
-    // Add any selected options
+    // Add any selected options to the base price
     let additionalPrice = 0;
     if (this.formObj.otherObj) {
       const detailsActiveData = this.formObj.otherObj.map((obj: any) => ({
@@ -351,14 +351,17 @@ export class ProductDetailsComponent implements OnInit {
     // Calculate total price for quantity
     const totalPrice = unitPrice * quantity;
 
-    // Get discount percentage (from product or size or custom logic)
+    // Get discount percentage - prioritize bulk quantity discount over product discount
     let discountPercentage = 0;
-    if (this.formObj.discount) {
-      discountPercentage = Number(this.formObj.discount) || 0;
-    }
-    if (this.formObj.bulk_qty) {
-      // If you want to use bulk_qty logic, keep this, otherwise comment out
+    
+    // First check if bulk quantity discount applies
+    if (this.formObj.bulk_qty && this.formObj.bulk_qty.length > 0) {
       discountPercentage = this.calculateDiscount(quantity, this.formObj.bulk_qty);
+    }
+    
+    // If no bulk discount applies, use product discount
+    if (discountPercentage === 0 && this.formObj.discount) {
+      discountPercentage = Number(this.formObj.discount) || 0;
     }
 
     // Calculate discount amount
@@ -403,23 +406,39 @@ export class ProductDetailsComponent implements OnInit {
     this.cartObj.product_id = this.formObj._id
 
     if (this.custom_size.totalft) {
+      // Custom size selected
       this.cartObj.custom_size = true
-      this.cartObj.price = this.formObj.custom_size_price
-      this.cartObj.shape = ""
+      this.cartObj.price = Number(this.formObj.custom_size_price || 0)
+      this.cartObj.shape = "Custom"
       this.cartObj.size = `${this.custom_size.height}x${this.custom_size.width}`
       this.cartObj.sq_ft = this.custom_size.totalft
-      this.cartObj.size_total_price =
-        Number.parseFloat(this.custom_size.totalft.toString()) * Number.parseFloat((this.formObj.custom_size_price || 0).toString())
+      this.cartObj.size_total_price = Number(this.custom_size.totalft) * Number(this.formObj.custom_size_price || 0)
+      this.cartObj.single_price = this.display_price // Use display_price for single unit price
     } else if (sizeActiveData) {
+      // Predefined size selected
       this.cartObj.custom_size = false
       this.cartObj.price = sizeActiveData.price
       this.cartObj.shape = sizeActiveData.shape
       this.cartObj.size = sizeActiveData.size
       this.cartObj.sq_ft = sizeActiveData.sq_ft
       this.cartObj.size_total_price = sizeActiveData.total_price
+      this.cartObj.single_price = this.display_price // Use display_price for single unit price
+    } else {
+      // No size selected, use base product price
+      this.cartObj.custom_size = false
+      this.cartObj.price = Number(this.formObj.price || 0)
+      this.cartObj.shape = ""
+      this.cartObj.size = ""
+      this.cartObj.sq_ft = 0
+      this.cartObj.size_total_price = Number(this.formObj.price || 0)
+      this.cartObj.single_price = this.display_price // Use display_price for single unit price
     }
 
-    this.cartObj.discount_amount = (Number(this.discount) * (this.cartObj.orignal_price || 0)) / 100
+    // Set the original price (before discount) for the cart item
+    this.cartObj.orignal_price = this.product_price
+    this.cartObj.after_discount_price = this.discount_price
+    this.cartObj.discount_percentage = this.discount
+    this.cartObj.discount_amount = (Number(this.discount) * this.product_price) / 100
     this.cartObj.cart_status = "cart"
 
     this.httpService.post(APIURLs.addItemInCartAPI, this.cartObj).subscribe(
@@ -484,23 +503,39 @@ export class ProductDetailsComponent implements OnInit {
     this.cartObj.user_id = this.gs.userDataObj?._id
 
     if (this.custom_size.totalft) {
+      // Custom size selected
       this.cartObj.custom_size = true
-      this.cartObj.price = this.formObj.custom_size_price
-      this.cartObj.shape = ""
+      this.cartObj.price = Number(this.formObj.custom_size_price || 0)
+      this.cartObj.shape = "Custom"
       this.cartObj.size = `${this.custom_size.height}x${this.custom_size.width}`
       this.cartObj.sq_ft = this.custom_size.totalft
-      this.cartObj.size_total_price =
-        Number.parseFloat(this.custom_size.totalft.toString()) * Number.parseFloat((this.formObj.custom_size_price || 0).toString())
+      this.cartObj.size_total_price = Number(this.custom_size.totalft) * Number(this.formObj.custom_size_price || 0)
+      this.cartObj.single_price = this.display_price // Use display_price for single unit price
     } else if (sizeActiveData) {
+      // Predefined size selected
       this.cartObj.custom_size = false
       this.cartObj.price = sizeActiveData.price
       this.cartObj.shape = sizeActiveData.shape
       this.cartObj.size = sizeActiveData.size
       this.cartObj.sq_ft = sizeActiveData.sq_ft
       this.cartObj.size_total_price = sizeActiveData.total_price
+      this.cartObj.single_price = this.display_price // Use display_price for single unit price
+    } else {
+      // No size selected, use base product price
+      this.cartObj.custom_size = false
+      this.cartObj.price = Number(this.formObj.price || 0)
+      this.cartObj.shape = ""
+      this.cartObj.size = ""
+      this.cartObj.sq_ft = 0
+      this.cartObj.size_total_price = Number(this.formObj.price || 0)
+      this.cartObj.single_price = this.display_price // Use display_price for single unit price
     }
 
-    this.cartObj.discount_amount = (Number(this.discount) * (this.cartObj.orignal_price || 0)) / 100
+    // Set the original price (before discount) for the cart item
+    this.cartObj.orignal_price = this.product_price
+    this.cartObj.after_discount_price = this.discount_price
+    this.cartObj.discount_percentage = this.discount
+    this.cartObj.discount_amount = (Number(this.discount) * this.product_price) / 100
     this.cartObj.cart_status = "cart"
 
     this.httpService.post(APIURLs.updateCartAPI, this.cartObj).subscribe(

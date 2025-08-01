@@ -101,9 +101,16 @@
                         </p>
                         <p class="spec-item mb-1" *ngIf="item.size">
                           <span class="text-muted">Size:</span> {{item.size}}
+                          <span *ngIf="item.custom_size" class="badge bg-info ms-1">Custom</span>
                         </p>
                         <p class="spec-item mb-1" *ngIf="item.shape">
                           <span class="text-muted">Shape:</span> {{item.shape}}
+                        </p>
+                        <p class="spec-item mb-1" *ngIf="item.sq_ft && item.sq_ft > 0">
+                          <span class="text-muted">Area:</span> {{item.sq_ft}} sq ft
+                        </p>
+                        <p class="spec-item mb-1" *ngIf="item.custom_size">
+                          <span class="text-muted">Custom Size Price:</span> ₹{{item.price || 0 | number:'1.2-2'}} per sq ft
                         </p>
                         <p class="spec-item mb-3">
                           <span class="text-muted">Final Price:</span> <strong>₹{{item.after_discount_price || item.single_price || 0 | number:'1.2-2'}}</strong>
@@ -302,7 +309,7 @@
       <div class="recommended-section mt-5">
         <div class="text-center mb-4">
           <h3>Recommended Categories</h3>
-          <p class="text-muted">More Trending Custom-Built Category by xaraprint/p>
+          <p class="text-muted">More Trending Custom-Built Category by BannerBuzz</p>
         </div>
 
         <div class="row">
@@ -329,7 +336,7 @@
         <i class="bi bi-paypal fs-1 text-muted me-3"></i>
         <i class="bi bi-apple fs-1 text-muted"></i>
       </div>
-      <p class="text-muted small mb-0">© 2009-2023 xaraprint.com All rights reserved.</p>
+      <p class="text-muted small mb-0">© 2009-2023 bannerbuzz.com All rights reserved.</p>
     </div>
   </footer>
 </div>

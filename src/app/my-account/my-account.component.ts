@@ -354,7 +354,7 @@ export class MyAccountComponent implements OnInit {
   }
 
   viewOrderDetails(order: Order): void {
-    this.router.navigate(["/order-details"], { queryParams: { orderId: order._id } })
+    this.router.navigate(["/order-status", order.order_id])
   }
 
   canTrackOrder(order: Order): boolean {
@@ -362,16 +362,7 @@ export class MyAccountComponent implements OnInit {
   }
 
   trackOrder(order: Order): void {
-    this.httpService.get(`${APIURLs.trackOrderAPI}/${order._id}`).subscribe(
-      (res: any) => {
-        this.gs.successToaster("Tracking information retrieved!")
-        // Handle tracking data display
-        console.log("Tracking data:", res.data)
-      },
-      (err) => {
-        this.gs.errorToaster(err?.error?.msg || "Failed to get tracking information")
-      },
-    )
+    this.router.navigate(["/order-status", order.order_id])
   }
 
   canCancelOrder(order: Order): boolean {
