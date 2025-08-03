@@ -26,10 +26,9 @@ export class HttpService {
     if (useBasic) {
       headersConfig["Authorization"] = `Basic ${this.basicToken}`
     } else {
-      const stored = localStorage.getItem("token")
-      const bearer = stored ? JSON.parse(stored) : ""
-      if (bearer) {
-        headersConfig["Authorization"] = `Bearer ${bearer}`
+      const token = this.gs.getItem("token")
+      if (token) {
+        headersConfig["Authorization"] = `Bearer ${token}`
       }
     }
 

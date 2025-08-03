@@ -107,11 +107,6 @@
                         Remember me
                       </label>
                     </div>
-                    <div class="forgot-links">
-                      <a href="#" class="text-primary">Forgot Password?</a>
-                      <span class="separator">|</span>
-                      <a href="#" class="text-primary">Login with OTP</a>
-                    </div>
                   </div>
 
                   <button 
@@ -141,9 +136,9 @@
                     <span>Continue with Google</span>
                   </button>
 
-                  <button type="button" class="btn btn-social btn-facebook w-100" (click)="socialLogin('facebook')">
+                  <button type="button" class="btn btn-social btn-facebook w-100" disabled>
                     <i class="bi bi-facebook"></i>
-                    <span>Continue with Facebook</span>
+                    <span>Facebook Login (Coming Soon)</span>
                   </button>
                 </div>
 
@@ -179,7 +174,7 @@
               <button class="social-icon google" (click)="socialLogin('google')">
                 <i class="bi bi-google"></i>
               </button>
-              <button class="social-icon facebook" (click)="socialLogin('facebook')">
+              <button class="social-icon facebook" disabled>
                 <i class="bi bi-facebook"></i>
               </button>
             </div>

@@ -18,10 +18,12 @@ export class GlobleService {
     private http: HttpClient,
     private toast: ToastrService
   ) {
-
     this.userDataObj = this.getItem("userData");
-    if(this.getItem('token')){
-      this.isLogin = true
+    const token = this.getItem('token');
+    if(token){
+      this.isLogin = true;
+    } else {
+      this.isLogin = false;
     }
   }
 

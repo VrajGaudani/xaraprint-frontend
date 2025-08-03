@@ -730,8 +730,9 @@ export class MyAccountComponent implements OnInit {
 
   logout(): void {
     if (confirm("Are you sure you want to logout?")) {
-      this.gs.removeItem("token")
-      this.gs.removeItem("userData")
+      // Clear all stored data
+      this.gs.clear()
+      this.gs.isLogin = false
       this.gs.userDataObj = null
       this.router.navigate(["/login"])
       this.gs.successToaster("Logged out successfully!")

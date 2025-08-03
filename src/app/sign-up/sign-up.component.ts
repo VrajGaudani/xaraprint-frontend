@@ -137,7 +137,7 @@ export class SignUpComponent implements OnInit {
       this.gs.errorToaster("Google signup feature coming soon!")
     } else if (provider === 'facebook') {
       // Facebook signup implementation
-      this.gs.errorToaster("Facebook signup feature coming soon!")
+      this.gs.errorToaster("Facebook signup coming soon!")
     }
   }
 

@@ -36,6 +36,10 @@ export class CheckoutComponent implements OnInit {
     this.getOrderCalculations()
   }
 
+  addAddress() {
+    this.router.navigate(["/account"], { fragment: "addresses" })
+  }
+
   loadCartSummary() {
     const cartData = localStorage.getItem("cartSummary")
     if (cartData) {
@@ -281,7 +285,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   goToAddresses() {
-    this.router.navigate(["/my-account"], { fragment: "addresses" })
+    this.router.navigate(["/account"], { fragment: "addresses" })
   }
 
   goBackToCart() {

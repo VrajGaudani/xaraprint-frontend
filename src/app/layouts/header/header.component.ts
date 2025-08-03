@@ -190,9 +190,14 @@ export class HeaderComponent implements OnInit {
   }
 
   logout(): void {
-    localStorage.removeItem("token")
-    this.gs.isLogin = false
-    this.router.navigate(["/login"])
+    if (confirm("Are you sure you want to logout?")) {
+      // Clear all stored data
+      this.gs.clear()
+      this.gs.isLogin = false
+      this.gs.userDataObj = null
+      this.router.navigate(["/login"])
+      this.gs.successToaster("Logged out successfully!")
+    }
   }
 
   navigateTo(path: string): void {

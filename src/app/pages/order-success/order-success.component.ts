@@ -50,7 +50,7 @@ export class OrderSuccessComponent implements OnInit {
   }
 
   viewOrderDetails() {
-    this.router.navigate(["/my-account"], { fragment: "orders" })
+    this.router.navigate(["/account"], { fragment: "orders" })
   }
 
   downloadInvoice() {

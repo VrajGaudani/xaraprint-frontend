@@ -137,6 +137,6 @@ export class OrderStatusComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/my-account']);
+    this.router.navigate(['/account']);
   }
 }
