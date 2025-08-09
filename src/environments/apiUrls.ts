@@ -65,7 +65,7 @@ export const APIURLs = {
   getReviewSummaryAPI: "user/review/getReviewSummary",
 
   // Category APIs
-  uploadCategoryImageAPI: "category/uploadImage",
+  uploadCategoryImageAPI: "upload/upload-file",
   getAllCatAPI: "category/getAll",
   getAllMainCatAPI: "category/Main-category/list",
   getMainCatByIdAPI: "category/Main-category/getById",
@@ -83,7 +83,7 @@ export const APIURLs = {
   getAllBannersAPI: "banner/getAll",
 
   // Blog APIs
-  uploadBlogImageAPI: "blog/uploadImage",
+  uploadBlogImageAPI: "upload/upload-file",
   getAllBlogAPI: "blog/getAll",
   getBlogByIdAPI: "blog/getById",
   addBlogAPI: "blog/add",
