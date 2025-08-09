@@ -38,6 +38,22 @@ export class LoginComponent implements OnInit {
     })
   }
 
+  private handleLoginSuccess(res: any) {
+    const token = res?.data?.token
+    const user = res?.data?.user || res?.data?.data || res?.data
+    if (token) {
+      this.gs.setItem("token", token)
+    }
+    if (user) {
+      this.gs.setItem("userData", user)
+      this.gs.userDataObj = user
+    }
+    this.gs.isLogin = true
+    this.router.navigate(["/home"]) // Trigger header to update via route change
+    this.gs.successToaster(res?.msg || res?.message || "Login successful!")
+    this.isSubmitted = false
+  }
+
   login() {
     this.isSubmitted = true
 
@@ -52,20 +68,15 @@ export class LoginComponent implements OnInit {
     this.httpService.postBasic(APIURLs.userLoginAPI, loginData).subscribe(
       (res: any) => {
         this.isLoading = false
-        if (res && res.status) {
-          this.gs.setItem("token", res?.data?.token)
-          this.gs.setItem("userData", res.data)
-          this.gs.userDataObj = res.data?.data || res.data || []
-          this.router.navigate(["/home"])
-          this.gs.successToaster(res?.msg || res?.message || "Login successful!")
-          this.isSubmitted = false
+        if (res && (res.status === 200 || res.status === 201)) {
+          this.handleLoginSuccess(res)
         } else {
-          this.gs.errorToaster(res?.message || "Login failed. Please try again.")
+          this.gs.errorToaster(res?.msg || res?.message || "Login failed. Please try again.")
         }
       },
       (err) => {
         this.isLoading = false
-        this.gs.errorToaster(err?.error?.message || err?.error?.msg || "Login failed. Please try again.")
+        this.gs.errorToaster(err?.error?.msg || err?.error?.message || "Login failed. Please try again.")
       },
     )
   }
@@ -74,28 +85,31 @@ export class LoginComponent implements OnInit {
     if (provider === 'google') {
       signInWithPopup(this.gs.socialLogin(), new GoogleAuthProvider())
         .then((res) => {
-          this.formObj.email = res.user.email
-          this.formObj.password = res.user.uid
-          this.formObj.firstname = res.user.displayName
-          this.formObj.social_id = res.user.uid
+          const payload = {
+            email: res.user.email,
+            password: res.user.uid,
+            firstname: res.user.displayName,
+            social_id: res.user.uid,
+          }
 
-          this.api1.user("/login", this.formObj).subscribe((res: any) => {
-            if (res && res.status) {
-              this.gs.setItem("userData", res.data)
-              this.gs.userDataObj = res.data?.data || res.data || []
-              this.router.navigate(["/home"])
-              this.gs.successToaster(res.message)
-            } else {
-              this.gs.errorToaster(res.message)
+          this.httpService.postBasic(APIURLs.userLoginAPI, payload).subscribe(
+            (apiRes: any) => {
+              if (apiRes && (apiRes.status === 200 || apiRes.status === 201)) {
+                this.handleLoginSuccess(apiRes)
+              } else {
+                this.gs.errorToaster(apiRes?.msg || apiRes?.message || 'Login failed')
+              }
+            },
+            (error) => {
+              this.gs.errorToaster(error?.error?.msg || 'Login failed')
             }
-          })
+          )
         })
         .catch((error) => {
           console.log("google error: ", error)
           this.gs.errorToaster("Google login failed. Please try again.")
         })
     } else if (provider === 'facebook') {
-      // Facebook login implementation
       this.gs.errorToaster("Facebook login coming soon!")
     }
   }

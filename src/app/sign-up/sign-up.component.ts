@@ -5,6 +5,7 @@ import { APIURLs } from 'src/environments/apiUrls';
 import { HttpService } from '../service/http.service';
 import { GlobleService } from '../service/globle.service';
 import { Router } from '@angular/router';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 @Component({
   selector: 'app-sign-up',
@@ -116,28 +117,68 @@ export class SignUpComponent implements OnInit {
     this.httpService.postBasic(APIURLs.userRegisterAPI, signupData).subscribe(
       (res: any) => {
         this.isLoading = false
-        if (res.success) {
-          this.gs.successToaster("Account created successfully! Please verify your email.")
-          // Redirect to login or verification page
-          this.router.navigate(["/login"])
+        if (res && (res.status === 200 || res.status === 201)) {
+          const token = res?.data?.token
+          const user = res?.data?.user || res?.data
+          if (token) this.gs.setItem('token', token)
+          if (user) {
+            this.gs.setItem('userData', user)
+            this.gs.userDataObj = user
+          }
+          this.gs.isLogin = true
+          this.gs.successToaster(res?.msg || 'Account created successfully!')
+          this.router.navigate(["/home"]) 
         } else {
-          this.gs.errorToaster(res.message || "Registration failed")
+          this.gs.errorToaster(res?.msg || res?.message || "Registration failed")
         }
       },
       (err) => {
         this.isLoading = false
-        this.gs.errorToaster(err?.error?.message || "Registration failed. Please try again.")
+        this.gs.errorToaster(err?.error?.msg || err?.error?.message || "Registration failed. Please try again.")
       },
     )
   }
 
   socialSignup(provider: 'google' | 'facebook') {
     if (provider === 'google') {
-      // Google signup implementation
-      this.gs.errorToaster("Google signup feature coming soon!")
+      signInWithPopup(this.gs.socialLogin(), new GoogleAuthProvider())
+        .then((res) => {
+          const payload = {
+            email: res.user.email,
+            password: res.user.uid,
+            firstname: res.user.displayName,
+            social_id: res.user.uid,
+          }
+
+          // Use login endpoint which will create the user if not exists (social flow)
+          this.httpService.postBasic(APIURLs.userLoginAPI, payload).subscribe(
+            (apiRes: any) => {
+              if (apiRes && (apiRes.status === 200 || apiRes.status === 201)) {
+                const token = apiRes?.data?.token
+                const user = apiRes?.data?.user || apiRes?.data
+                if (token) this.gs.setItem('token', token)
+                if (user) {
+                  this.gs.setItem('userData', user)
+                  this.gs.userDataObj = user
+                }
+                this.gs.isLogin = true
+                this.gs.successToaster(apiRes?.msg || 'Signed up successfully!')
+                this.router.navigate(['/home'])
+              } else {
+                this.gs.errorToaster(apiRes?.msg || apiRes?.message || 'Signup failed')
+              }
+            },
+            (error) => {
+              this.gs.errorToaster(error?.error?.msg || 'Signup failed')
+            }
+          )
+        })
+        .catch((error) => {
+          console.log('google error: ', error)
+          this.gs.errorToaster('Google signup failed. Please try again.')
+        })
     } else if (provider === 'facebook') {
-      // Facebook signup implementation
-      this.gs.errorToaster("Facebook signup coming soon!")
+      this.gs.errorToaster('Facebook signup coming soon!')
     }
   }
 

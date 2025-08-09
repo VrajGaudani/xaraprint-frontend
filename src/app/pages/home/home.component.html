@@ -247,7 +247,7 @@
     </div>
     <div class="categories-grid">
       <div class="category-item" *ngFor="let item of mainCategory">
-        <a [routerLink]="['/product-list', item.slug]" [queryParams]="{ cat_url: item._id }" class="category-link">
+        <a [routerLink]="['/product-list', item.slug]" [queryParams]="{ category: item._id }" class="category-link">
           <div class="category-card">
             <div class="category-image">
               <img [src]="item?.image" [alt]="item?.name" />

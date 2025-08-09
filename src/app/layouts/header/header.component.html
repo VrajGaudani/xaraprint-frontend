@@ -20,27 +20,6 @@
             <span class="text-warning fw-bold">Up to {{mostValued?.discount_amount}}% Off Sitewide.</span>
             <span class="ms-1">Use Code: <span class="code-highlight">{{mostValued.coupon_code}}</span></span>
           </div>
-          <!-- <div class="countdown-timer d-flex gap-1" *ngIf="countdown">
-            <div class="time-unit">
-              <span class="time-value">{{countdown.days}}</span>
-              <span class="time-label">D</span>
-            </div>
-            <span class="time-separator">:</span>
-            <div class="time-unit">
-              <span class="time-value">{{countdown.hours}}</span>
-              <span class="time-label">H</span>
-            </div>
-            <span class="time-separator">:</span>
-            <div class="time-unit">
-              <span class="time-value">{{countdown.minutes}}</span>
-              <span class="time-label">M</span>
-            </div>
-            <span class="time-separator">:</span>
-            <div class="time-unit">
-              <span class="time-value">{{countdown.seconds}}</span>
-              <span class="time-label">S</span>
-            </div>
-          </div> -->
         </div>
       </div>
     </div>
@@ -53,7 +32,7 @@
     <div class="row align-items-center">
       <div class="col-md-6">
         <div class="d-flex align-items-center gap-4">
-          <div class="dropdown custom-dropdown">
+          <div class="dropdown custom-dropdown" *ngIf="gs.isLogin">
             <button class="btn btn-link p-0 text-decoration-none dropdown-toggle custom-dropdown-toggle" 
                     data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-list me-1"></i>
@@ -84,7 +63,7 @@
             <a class="dropdown-toggle custom-dropdown-toggle text-decoration-none d-flex align-items-center" 
                href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-person-circle me-1"></i>
-              <span>Hi, {{profileData?.firstname}}</span>
+              <span>Hi, {{profileData?.firstname || gs.userDataObj?.firstname}}</span>
             </a>
             <ul class="dropdown-menu custom-dropdown-menu shadow-lg">
               <li>
@@ -115,35 +94,6 @@
             <i class="bi bi-bag me-1"></i>
             <span>Item(s) <span class="fw-bold">{{allData.length}}</span></span>
           </a>
-
-          <!-- Country Selector -->
-          <!-- <div class="dropdown custom-dropdown">
-            <a class="dropdown-toggle custom-dropdown-toggle text-decoration-none d-flex align-items-center" 
-               href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="assets/images/usa.svg" alt="usa" width="20" height="15" class="me-1" />
-              <span class="small">US</span>
-            </a>
-            <ul class="dropdown-menu custom-dropdown-menu shadow-lg">
-              <li>
-                <a class="dropdown-item custom-dropdown-item" href="#">
-                  <img src="assets/images/uk.svg" alt="uk" width="20" class="me-2" />
-                  <span>United Kingdom</span>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item custom-dropdown-item" href="#">
-                  <img src="assets/images/au.svg" alt="au" width="20" class="me-2" />
-                  <span>Australia</span>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item custom-dropdown-item" href="#">
-                  <img src="assets/images/ca.svg" alt="ca" width="20" class="me-2" />
-                  <span>Canada</span>
-                </a>
-              </li>
-            </ul>
-          </div> -->
         </div>
       </div>
     </div>
@@ -185,7 +135,8 @@
             <div class="search-results-body">
               <div class="row g-2">
                 <div class="col-4" *ngFor="let item of searchProductList.slice(0, 6)">
-                  <a [routerLink]="'/product-details/' + item._id" 
+                  <a [routerLink]="'/product-list/' + (item.slug || '')" 
+                     [queryParams]="{ category: item.cat_id?._id, subCategory: item.sub_cat_id?._id }"
                      class="search-result-item"
                      (mousedown)="selectSearchItem(item)">
                     <div class="search-result-image">
@@ -251,7 +202,7 @@
         <li class="nav-item dropdown custom-nav-dropdown" *ngFor="let item of header">
           <a class="nav-link custom-nav-link" 
              [routerLink]="['/product-list', item.slug]" 
-             [queryParams]="{ cat_url: item._id }"
+             [queryParams]="{ category: item._id }"
              [class.dropdown-toggle]="item.subCatArray.length > 0"
              role="button" 
              [attr.data-bs-toggle]="item.subCatArray.length > 0 ? 'dropdown' : null">
@@ -261,7 +212,7 @@
             <li *ngFor="let subItem of item.subCatArray">
               <a class="dropdown-item custom-nav-dropdown-item" 
                  [routerLink]="['/product-list', subItem.slug]" 
-                 [queryParams]="{ sub_cat: subItem._id }">
+                 [queryParams]="{ category: item._id, subCategory: subItem._id }">
                 {{ subItem.name }}
               </a>
             </li>
@@ -288,7 +239,7 @@
              [class.has-submenu]="item.subCatArray.length > 0"
              (click)="toggleMobileSubmenu(i)">
           <a [routerLink]="['/product-list', item.slug]" 
-             [queryParams]="{ cat_url: item._id }"
+             [queryParams]="{ category: item._id }"
              class="mobile-menu-link">
             {{ item.name }}
           </a>
@@ -303,7 +254,7 @@
              [class.show]="mobileSubmenuOpen[i]">
           <a *ngFor="let subItem of item.subCatArray"
              [routerLink]="['/product-list', subItem.slug]" 
-             [queryParams]="{ sub_cat: subItem._id }"
+             [queryParams]="{ category: item._id, subCategory: subItem._id }"
              class="mobile-submenu-link">
             {{ subItem.name }}
           </a>

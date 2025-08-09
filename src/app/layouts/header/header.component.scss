@@ -329,6 +329,12 @@
 
 // Navigation Styles
 .navbar {
+  .custom-nav-dropdown:hover > .custom-nav-dropdown-menu {
+    display: block;
+  }
+  .dropdown-menu {
+    margin-top: 0;
+  }
   .custom-nav-link {
     font-weight: 600;
     color: #333 !important;

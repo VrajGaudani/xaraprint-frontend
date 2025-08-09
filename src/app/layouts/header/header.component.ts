@@ -50,6 +50,17 @@ export class HeaderComponent implements OnInit {
     )
   }
 
+  private refreshAuthState() {
+    const token = this.gs.getItem('token')
+    this.gs.isLogin = !!token
+    const userData = this.gs.getItem('userData')
+    if (userData) {
+      this.gs.userDataObj = userData
+      // Show name immediately without waiting for API
+      this.profileData = { ...this.profileData, ...userData }
+    }
+  }
+
   toggleMobileSubmenu(index: number): void {
     this.mobileSubmenuOpen[index] = !this.mobileSubmenuOpen[index]
   }
@@ -63,6 +74,7 @@ export class HeaderComponent implements OnInit {
 
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
+        this.refreshAuthState()
         const currentUrl = event.urlAfterRedirects
         if (this.gs.isLogin) {
           if (currentUrl !== "/login") {
@@ -73,6 +85,7 @@ export class HeaderComponent implements OnInit {
       }
     })
 
+    this.refreshAuthState()
     if (this.gs.isLogin) {
       this.getProfile()
       this.getCart()

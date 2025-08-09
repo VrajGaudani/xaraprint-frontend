@@ -751,3 +751,37 @@
     padding: 16px;
   }
 }
+
+.products-grid {
+  .product-item {
+    .product-card {
+      .product-image-container {
+        .product-badge {
+          display: flex;
+          gap: 6px;
+          flex-wrap: wrap;
+          max-width: calc(100% - 24px);
+        }
+      }
+      .product-content {
+        .product-features {
+          .feature-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            .badge-feature {
+              background: #f1f3f5;
+              color: #495057;
+              border: 1px solid #e9ecef;
+              font-weight: 600;
+              padding: 4px 8px;
+              border-radius: 12px;
+              font-size: 0.72rem;
+              white-space: nowrap;
+            }
+          }
+        }
+      }
+    }
+  }
+}
