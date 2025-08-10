@@ -2,10 +2,12 @@ import { Component, OnInit } from "@angular/core"
 import { Router } from "@angular/router"
 import { GlobleService } from "../service/globle.service"
 import { HttpService } from "../service/http.service"
+import { ApiService } from "../service/api.service"
 import { APIURLs } from "src/environments/apiUrls"
 import { ValidationService } from "../shared/validation.service"
 
 interface Order {
+  showTracking: boolean
   _id: string
   order_id: string
   order_status: string
@@ -169,6 +171,7 @@ export class MyAccountComponent implements OnInit {
 
   constructor(
     private httpService: HttpService,
+    private apiService: ApiService,
     public gs: GlobleService,
     private router: Router,
     private validationService: ValidationService,
@@ -264,7 +267,7 @@ export class MyAccountComponent implements OnInit {
     }
 
     this.isUpdatingPassword = true
-    this.httpService.put(APIURLs.updatePasswordAPI, this.passwordForm).subscribe(
+    this.apiService.updatePassword(this.passwordForm).subscribe(
       (res: any) => {
         this.gs.successToaster("Password updated successfully!")
         this.passwordForm = { old_pass: "", new_pass: "", confirm_pass: "" }
@@ -365,6 +368,10 @@ export class MyAccountComponent implements OnInit {
 
   trackOrder(order: Order): void {
     this.router.navigate(["/order-status", order.order_id])
+  }
+
+  toggleOrderTracking(order: Order): void {
+    order.showTracking = !order.showTracking
   }
 
   canCancelOrder(order: Order): boolean {

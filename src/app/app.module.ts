@@ -35,6 +35,7 @@ import { SlickCarouselModule } from 'ngx-slick-carousel';
 // Shared Components
 import { PaginationComponent } from "./shared/pagination/pagination.component"
 import { WhatsAppButtonComponent } from "./shared/whatsapp-button/whatsapp-button.component"
+import { OrderTrackingComponent } from "./shared/order-tracking/order-tracking.component"
 
 // Services
 import { HttpService } from "./service/http.service"
@@ -43,6 +44,7 @@ import { Api1Service } from "./service/api1.service"
 import { FileUploadService } from "./service/file-upload.service"
 import { PaginationService } from "./service/pagination.service"
 import { CartService } from "./service/cart.service"
+
 import { ToastrModule } from "ngx-toastr"
 
 @NgModule({
@@ -73,6 +75,7 @@ import { ToastrModule } from "ngx-toastr"
     PricingDetailsComponent,
     PaginationComponent,
     WhatsAppButtonComponent,
+    OrderTrackingComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, ReactiveFormsModule, HttpClientModule, SlickCarouselModule, ToastrModule.forRoot()],
   providers: [HttpService, GlobleService, Api1Service, FileUploadService, PaginationService, CartService],

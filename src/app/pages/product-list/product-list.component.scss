@@ -296,15 +296,36 @@
               }
             }
             
-            .product-badge {
+            .product-badges {
               position: absolute;
               top: 12px;
               left: 12px;
+              display: flex;
+              flex-direction: column;
+              gap: 4px;
+              z-index: 2;
               
               .badge {
                 font-size: 0.7rem;
                 padding: 4px 8px;
                 border-radius: 4px;
+                font-weight: 600;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                
+                &.badge-best-seller {
+                  background: linear-gradient(135deg, #007bff, #0056b3);
+                  color: white;
+                }
+                
+                &.badge-most-loved {
+                  background: linear-gradient(135deg, #dc3545, #c82333);
+                  color: white;
+                }
+                
+                &.badge-popular {
+                  background: linear-gradient(135deg, #28a745, #1e7e34);
+                  color: white;
+                }
               }
             }
             
@@ -354,22 +375,31 @@
             }
             
             .product-details {
-              margin-bottom: 12px;
+              margin-bottom: 16px;
               
-              .product-size {
+              .product-info-row {
                 display: flex;
-                align-items: center;
-                gap: 4px;
+                flex-direction: column;
+                gap: 8px;
                 
-                .detail-label {
+                .product-size,
+                .product-sku {
+                  display: flex;
+                  align-items: center;
+                  gap: 6px;
                   color: #6c757d;
                   font-size: 0.85rem;
-                }
-                
-                .detail-value {
-                  color: #333;
-                  font-weight: 600;
-                  font-size: 0.85rem;
+                  
+                  i {
+                    color: #007bff;
+                    font-size: 0.9rem;
+                  }
+                  
+                  .detail-value {
+                    color: #333;
+                    font-weight: 600;
+                    font-size: 0.85rem;
+                  }
                 }
               }
             }
@@ -378,17 +408,80 @@
               margin-bottom: 20px;
               
               .price-info {
-                .price-label {
-                  display: block;
-                  color: #6c757d;
-                  font-size: 0.85rem;
-                  margin-bottom: 4px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                
+                .price-container {
+                  display: flex;
+                  flex-direction: column;
+                  gap: 2px;
+                  
+                  .price-value {
+                    font-weight: 700;
+                    color: #007bff;
+                    font-size: 1.3rem;
+                    line-height: 1;
+                  }
+                  
+                  .price-label {
+                    color: #6c757d;
+                    font-size: 0.75rem;
+                    font-weight: 500;
+                  }
                 }
                 
-                .price-value {
-                  font-weight: 700;
-                  color: #007bff;
-                  font-size: 1.2rem;
+                .discount-badge {
+                  .discount-text {
+                    background: linear-gradient(135deg, #28a745, #20c997);
+                    color: white;
+                    padding: 4px 8px;
+                    border-radius: 12px;
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                    box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+                  }
+                }
+              }
+            }
+            
+            .product-features {
+              margin-bottom: 20px;
+              
+              .feature-badges {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+                
+                .badge-feature {
+                  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+                  color: #495057;
+                  border: 1px solid #dee2e6;
+                  font-size: 0.7rem;
+                  padding: 6px 10px;
+                  border-radius: 16px;
+                  font-weight: 600;
+                  display: flex;
+                  align-items: center;
+                  gap: 4px;
+                  transition: all 0.3s ease;
+                  
+                  i {
+                    font-size: 0.8rem;
+                    color: #007bff;
+                  }
+                  
+                  &:hover {
+                    background: linear-gradient(135deg, #007bff, #0056b3);
+                    color: white;
+                    border-color: #007bff;
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+                    
+                    i {
+                      color: white;
+                    }
+                  }
                 }
               }
             }

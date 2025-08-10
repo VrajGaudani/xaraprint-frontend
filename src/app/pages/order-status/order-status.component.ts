@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpService } from '../../service/http.service';
 import { GlobleService } from '../../service/globle.service';
+import { OrderTrackingService, OrderTracking } from '../../shared/order-tracking.service';
 import { APIURLs } from '../../../environments/apiUrls';
 
 @Component({
@@ -12,14 +13,16 @@ import { APIURLs } from '../../../environments/apiUrls';
 export class OrderStatusComponent implements OnInit {
   orderId: string = '';
   orderDetails: any = null;
+  trackingData: OrderTracking | null = null;
   isLoading: boolean = false;
-  trackingSteps: any[] = [];
-  currentStep: number = 0;
+  isRefreshing: boolean = false;
+  error: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private httpService: HttpService,
+    private orderTrackingService: OrderTrackingService,
     public gs: GlobleService
   ) {}
 
@@ -32,83 +35,73 @@ export class OrderStatusComponent implements OnInit {
     });
   }
 
-  loadOrderDetails() {
+  loadOrderDetails(): void {
     this.isLoading = true;
-    this.httpService.get(`${APIURLs.getOrderByIdAPI}/${this.orderId}`).subscribe(
-      (res: any) => {
-        this.orderDetails = res.data?.data || res.data || null;
-        if (this.orderDetails) {
-          this.setupTrackingSteps();
+    this.error = null;
+
+    this.httpService.get(`${APIURLs.getOrderByIdAPI}/${this.orderId}`).subscribe({
+      next: (res: any) => {
+        this.orderDetails = res.data;
+        this.isLoading = false;
+        
+        // Load tracking data if order has tracking information
+        if (this.orderDetails?.tracking_number || this.orderDetails?.shiprocket_order_id) {
+          this.loadTrackingData();
         }
-        this.isLoading = false;
       },
-      (err) => {
-        this.gs.errorToaster(err?.error?.msg || 'Failed to load order details');
+      error: (err) => {
+        this.error = err?.error?.msg || 'Failed to load order details';
         this.isLoading = false;
       }
-    );
+    });
   }
 
-  setupTrackingSteps() {
-    const statusOrder = ['pending', 'confirmed', 'processing', 'shipped', 'delivered'];
-    const currentStatus = this.orderDetails.order_status;
-    this.currentStep = statusOrder.indexOf(currentStatus);
+  loadTrackingData(): void {
+    this.orderTrackingService.getOrderTracking(this.orderDetails._id || this.orderId).subscribe({
+      next: (data) => {
+        this.trackingData = data;
+      },
+      error: (err) => {
+        console.error('Failed to load tracking data:', err);
+        // Don't show error for tracking data as it's optional
+      }
+    });
+  }
+
+  refreshTracking(): void {
+    this.isRefreshing = true;
+    this.loadTrackingData();
     
-    this.trackingSteps = [
-      {
-        title: 'Order Placed',
-        description: 'Your order has been placed successfully',
-        status: 'completed',
-        icon: 'bi-check-circle-fill'
-      },
-      {
-        title: 'Order Confirmed',
-        description: 'Your order has been confirmed and is being processed',
-        status: this.currentStep >= 1 ? 'completed' : 'pending',
-        icon: this.currentStep >= 1 ? 'bi-check-circle-fill' : 'bi-circle'
-      },
-      {
-        title: 'Processing',
-        description: 'Your order is being prepared for shipping',
-        status: this.currentStep >= 2 ? 'completed' : 'pending',
-        icon: this.currentStep >= 2 ? 'bi-check-circle-fill' : 'bi-circle'
-      },
-      {
-        title: 'Shipped',
-        description: 'Your order has been shipped',
-        status: this.currentStep >= 3 ? 'completed' : 'pending',
-        icon: this.currentStep >= 3 ? 'bi-check-circle-fill' : 'bi-circle'
-      },
-      {
-        title: 'Delivered',
-        description: 'Your order has been delivered',
-        status: this.currentStep >= 4 ? 'completed' : 'pending',
-        icon: this.currentStep >= 4 ? 'bi-check-circle-fill' : 'bi-circle'
-      }
-    ];
+    // Simulate refresh delay
+    setTimeout(() => {
+      this.isRefreshing = false;
+    }, 2000);
   }
 
-  getStatusBadgeClass(status: string): string {
-    switch (status) {
-      case 'pending': return 'badge-secondary';
-      case 'confirmed': return 'badge-primary';
-      case 'processing': return 'badge-info';
-      case 'shipped': return 'badge-warning';
-      case 'delivered': return 'badge-success';
-      case 'cancelled': return 'badge-danger';
-      default: return 'badge-secondary';
+  openShiprocketTracking(): void {
+    const trackingNumber = this.trackingData?.courier_info?.tracking_number || this.orderDetails?.tracking_number;
+    if (trackingNumber) {
+      const trackingUrl = this.orderTrackingService.getCourierTrackingUrl('shiprocket', trackingNumber);
+      window.open(trackingUrl, '_blank');
+    } else {
+      this.gs.errorToaster('Tracking number not available');
     }
   }
 
-  getPaymentStatusBadgeClass(paymentMode: string): string {
-    return paymentMode === 'online' ? 'badge-success' : 'badge-warning';
+  copyTrackingNumber(): void {
+    const trackingNumber = this.trackingData?.courier_info?.tracking_number || this.orderDetails?.tracking_number;
+    if (trackingNumber) {
+      navigator.clipboard.writeText(trackingNumber).then(() => {
+        this.gs.successToaster('Tracking number copied to clipboard');
+      }).catch(() => {
+        this.gs.errorToaster('Failed to copy tracking number');
+      });
+    }
   }
 
-  downloadInvoice() {
-    if (!this.orderDetails) return;
-    
-    this.httpService.downloadFile(`${APIURLs.downloadInvoiceAPI}/${this.orderDetails._id}`).subscribe(
-      (blob: Blob) => {
+  downloadInvoice(): void {
+    this.httpService.downloadFile(`${APIURLs.downloadInvoiceAPI}/${this.orderId}`).subscribe({
+      next: (blob: Blob) => {
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
@@ -116,27 +109,69 @@ export class OrderStatusComponent implements OnInit {
         link.click();
         window.URL.revokeObjectURL(url);
       },
-      (err) => {
-        this.gs.errorToaster('Failed to download invoice');
+      error: (err) => {
+        this.gs.errorToaster(err?.error?.msg || 'Failed to download invoice');
       }
-    );
+    });
   }
 
-  trackOrder() {
-    if (this.orderDetails?.tracking_number) {
-      window.open(`https://track.shiprocket.in/tracking/${this.orderDetails.tracking_number}`, '_blank');
-    } else {
-      this.gs.errorToaster('Tracking information not available');
+  contactSupport(): void {
+    // Navigate to support page or open support modal
+    this.router.navigate(['/contact-us'], { 
+      queryParams: { 
+        orderId: this.orderId,
+        subject: `Order Query - ${this.orderDetails.order_id}`
+      }
+    });
+  }
+
+  cancelOrder(): void {
+    if (confirm('Are you sure you want to cancel this order?')) {
+      this.httpService.put(APIURLs.cancelOrderAPI, { order_id: this.orderId }).subscribe({
+        next: (res: any) => {
+          this.gs.successToaster('Order cancelled successfully');
+          this.loadOrderDetails(); // Refresh order details
+        },
+        error: (err) => {
+          this.gs.errorToaster(err?.error?.msg || 'Failed to cancel order');
+        }
+      });
     }
   }
 
-  contactSupport() {
-    const message = `Hi, I need help with my order #${this.orderDetails.order_id} on xaraprint.com.`;
-    const whatsappUrl = `https://wa.me/919876543210?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+  canDownloadInvoice(): boolean {
+    return this.orderDetails?.order_status === 'delivered' || 
+           this.orderDetails?.order_status === 'shipped' ||
+           this.orderDetails?.order_status === 'processing';
   }
 
-  goBack() {
-    this.router.navigate(['/account']);
+  canCancelOrder(): boolean {
+    return this.orderDetails?.order_status === 'pending' || 
+           this.orderDetails?.order_status === 'confirmed';
+  }
+
+  getStatusBadgeClass(status: string): string {
+    return this.orderTrackingService.getStatusBadgeClass(status);
+  }
+
+  getStatusIcon(status: string): string {
+    return this.orderTrackingService.getStatusIcon(status);
+  }
+
+  getProgressPercentage(): number {
+    if (!this.trackingData?.status_history) return 0;
+    return this.orderTrackingService.calculateProgress(this.trackingData.status_history);
+  }
+
+  getEstimatedDeliveryText(estimatedDate: Date): string {
+    return this.orderTrackingService.getEstimatedDeliveryText(estimatedDate);
+  }
+
+  formatDate(date: Date | string): string {
+    return this.orderTrackingService.formatDate(date);
+  }
+
+  getProductImage(item: any): string {
+    return item.product_id?.product_images?.[0] || 'assets/images/placeholder.png';
   }
 }

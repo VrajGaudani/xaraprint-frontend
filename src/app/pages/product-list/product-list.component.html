@@ -234,17 +234,7 @@
                   </option>
                 </select>
               </div>
-              <div class="items-per-page">
-                <select 
-                  class="form-select" 
-                  [value]="paginationParams.limit"
-                  (change)="onLimitChange(+getValue($event))">
-                  <option value="10">10 per page</option>
-                  <option value="20">20 per page</option>
-                  <option value="50">50 per page</option>
-                  <option value="100">100 per page</option>
-                </select>
-              </div>
+              <!-- Removed duplicate items per page selector - now only in pagination component -->
               <div class="view-toggle">
                 <button class="btn btn-outline-secondary btn-sm active" title="Grid View">
                   <i class="bi bi-grid-3x3-gap"></i>
@@ -280,14 +270,10 @@
                       </button>
                     </div>
                   </div>
-                  <div class="product-badge" *ngIf="data.isBestSelling">
-                    <span class="badge bg-primary">Best Seller</span>
-                  </div>
-                  <div class="product-badge" *ngIf="data.isMostLoved">
-                    <span class="badge bg-danger">Most Loved</span>
-                  </div>
-                  <div class="product-badge" *ngIf="data.isMostPopular">
-                    <span class="badge bg-success">Popular</span>
+                  <div class="product-badges">
+                    <span class="badge badge-best-seller" *ngIf="data.isBestSelling">Best Seller</span>
+                    <span class="badge badge-most-loved" *ngIf="data.isMostLoved">Most Loved</span>
+                    <span class="badge badge-popular" *ngIf="data.isMostPopular">Popular</span>
                   </div>
                 </div>
                 <div class="product-content">
@@ -302,31 +288,43 @@
                     <span class="review-count" *ngIf="data.review_count > 0">({{data.review_count}} reviews)</span>
                   </div>
                   <div class="product-details">
-                    <div class="product-size" *ngIf="data?.min_size_obj?.size">
-                      <span class="detail-label">Size:</span>
-                      <span class="detail-value">{{data.min_size_obj.size}}</span>
-                    </div>
-                    <div class="product-sku" *ngIf="data.SKU">
-                      <span class="detail-label">SKU:</span>
-                      <span class="detail-value">{{data.SKU}}</span>
+                    <div class="product-info-row">
+                      <div class="product-size" *ngIf="data?.min_size_obj?.size">
+                        <i class="bi bi-arrows-angle-expand me-1"></i>
+                        <span class="detail-value">{{data.min_size_obj.size}}</span>
+                      </div>
+                      <div class="product-sku" *ngIf="data.SKU">
+                        <i class="bi bi-upc-scan me-1"></i>
+                        <span class="detail-value">{{data.SKU}}</span>
+                      </div>
                     </div>
                   </div>
+                  
                   <div class="product-pricing">
                     <div class="price-info">
-                      <span class="price-label">Starts at</span>
                       <div class="price-container">
                         <span class="price-value">₹{{data?.price}}</span>
-                        <span class="original-price" *ngIf="data.discount && data.sell_price">₹{{data.sell_price}}</span>
-                        <span class="discount-badge" *ngIf="data.discount">{{data.discount}}% OFF</span>
+                        <span class="price-label">Starting Price</span>
+                      </div>
+                      <div class="discount-badge" *ngIf="data.discount && data.sell_price">
+                        <span class="discount-text">{{data.discount}}% OFF</span>
                       </div>
                     </div>
                   </div>
                   <div class="product-features" *ngIf="data.design_support || data.free_design_proof || data.premium_quality || data.free_shipping">
                     <div class="feature-badges">
-                      <span class="badge badge-feature" *ngIf="data.design_support">Design Support</span>
-                      <span class="badge badge-feature" *ngIf="data.free_design_proof">Free Proof</span>
-                      <span class="badge badge-feature" *ngIf="data.premium_quality">Premium Quality</span>
-                      <span class="badge badge-feature" *ngIf="data.free_shipping">Free Shipping</span>
+                      <span class="badge badge-feature" *ngIf="data.design_support">
+                        <i class="bi bi-palette me-1"></i>Design Support
+                      </span>
+                      <span class="badge badge-feature" *ngIf="data.free_design_proof">
+                        <i class="bi bi-check-circle me-1"></i>Free Proof
+                      </span>
+                      <span class="badge badge-feature" *ngIf="data.premium_quality">
+                        <i class="bi bi-award me-1"></i>Premium Quality
+                      </span>
+                      <span class="badge badge-feature" *ngIf="data.free_shipping">
+                        <i class="bi bi-truck me-1"></i>Free Shipping
+                      </span>
                     </div>
                   </div>
                   <div class="product-actions">

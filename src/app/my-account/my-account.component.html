@@ -486,13 +486,12 @@
               <div class="order-body">
                 <div class="order-items">
                   <div class="item-summary" *ngFor="let item of order?.cart_id?.slice(0, 2)">
-                    <div class="item-image">
+                    <!-- <div class="item-image">
                       <img [src]="getProductImage(item)" alt="Product">
-                    </div>
+                    </div> -->
                     <div class="item-details">
                       <h6>{{item?.product_id?.productname}}</h6>
-                      <p>Qty: {{item?.qty}} | Size: {{item?.size}}</p>
-                      <p>Shape: {{item?.shape}}</p>
+                      <p>Qty: {{order?.cart_id.length}}</p>
                     </div>
                   </div>
                   <div class="more-items" *ngIf="order?.cart_id?.length > 2">
@@ -511,9 +510,9 @@
                         *ngIf="canContactSupport(order)">
                   <i class="bi bi-chat-dots"></i> Contact Support
                 </button>
-                <button class="btn btn-outline-info btn-sm" (click)="trackOrder(order)" 
+                <button class="btn btn-outline-info btn-sm" (click)="toggleOrderTracking(order)" 
                         *ngIf="canTrackOrder(order)">
-                  <i class="bi bi-geo-alt"></i> Track Order
+                  <i class="bi bi-geo-alt"></i> {{ order.showTracking ? 'Hide Tracking' : 'Track Order' }}
                 </button>
                 <button class="btn btn-outline-success btn-sm" (click)="downloadInvoice(order)" 
                         *ngIf="canDownloadInvoice(order)">
@@ -526,6 +525,14 @@
                 <button class="btn btn-primary btn-sm" *ngIf="order?.order_status === 'delivered'">
                   <i class="bi bi-arrow-repeat"></i> Reorder
                 </button>
+              </div>
+              
+              <!-- Order Tracking Component -->
+              <div class="order-tracking-section mt-3" *ngIf="order.showTracking">
+                <app-order-tracking 
+                  [orderId]="order._id" 
+                  [showDetails]="false">
+                </app-order-tracking>
               </div>
             </div>
           </div>
