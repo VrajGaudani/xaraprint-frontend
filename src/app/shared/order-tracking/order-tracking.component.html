@@ -1,0 +1,151 @@
+<div class="order-tracking-container" *ngIf="trackingData as t">
+  <!-- Header Section -->
+  <div class="tracking-header">
+    <div class="header-left">
+      <h3 class="tracking-title">
+        <i class="bi bi-truck me-2"></i>
+        Order Tracking
+      </h3>
+      <div class="order-meta">
+        <span class="order-id">Order #{{ t.order_id }}</span>
+        <span class="separator">•</span>
+        <span class="last-updated">Last updated: {{ formatDate(t.last_updated) }}</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-outline-primary btn-sm" (click)="refreshTracking()" [disabled]="isLoading">
+        <i class="bi bi-arrow-clockwise me-1"></i>
+        Refresh
+      </button>
+      <button class="btn btn-primary btn-sm" (click)="openCourierTracking()" *ngIf="t.courier_info?.website">
+        <i class="bi bi-box-arrow-up-right me-1"></i>
+        Track on Courier
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-2">Updating tracking information...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error-state">
+    <div class="alert alert-danger">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      {{ error }}
+      <button class="btn btn-sm btn-outline-danger ms-2" (click)="loadTrackingData()">Retry</button>
+    </div>
+  </div>
+
+  <!-- Tracking Content -->
+  <div *ngIf="!isLoading && !error" class="tracking-content">
+    <!-- Courier Information -->
+    <div class="courier-section" *ngIf="t.courier_info as c">
+      <div class="section-header">
+        <h5><i class="bi bi-truck me-2"></i>Courier Information</h5>
+      </div>
+      <div class="courier-details">
+        <div class="detail-row">
+          <span class="label">Courier:</span>
+          <span class="value">{{ c.name }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Tracking Number:</span>
+          <span class="value tracking-number">
+            {{ formatTrackingNumber(c.tracking_number) }}
+            <button class="btn btn-sm btn-outline-secondary ms-2" (click)="copyTrackingNumber()">
+              <i class="bi bi-clipboard"></i>
+            </button>
+          </span>
+        </div>
+        <div class="detail-row" *ngIf="c.phone">
+          <span class="label">Contact:</span>
+          <span class="value">
+            <a href="tel:{{ c.phone }}" class="text-decoration-none">{{ c.phone }}</a>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delivery Information -->
+    <div class="delivery-section">
+      <div class="section-header">
+        <h5><i class="bi bi-geo-alt me-2"></i>Delivery Information</h5>
+      </div>
+      <div class="delivery-details">
+        <div class="detail-row">
+          <span class="label">Delivery Address:</span>
+          <span class="value">{{ t.delivery_address }}</span>
+        </div>
+        <div class="detail-row" *ngIf="t.estimated_delivery">
+          <span class="label">Estimated Delivery:</span>
+          <span class="value eta-badge">
+            <i class="bi bi-calendar-event me-1"></i>
+            {{ formatDate(t.estimated_delivery) }}
+            <span class="eta-text">({{ getEstimatedDeliveryText() }})</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-section">
+      <div class="progress-header">
+        <h5><i class="bi bi-graph-up me-2"></i>Order Progress</h5>
+        <span class="progress-text">{{ getProgressPercentage() }}% Complete</span>
+      </div>
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" 
+             [style.width.%]="getProgressPercentage()"
+             [attr.aria-valuenow]="getProgressPercentage()" 
+             aria-valuemin="0" aria-valuemax="100">
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="timeline-section">
+      <div class="section-header">
+        <h5><i class="bi bi-clock-history me-2"></i>Order Timeline</h5>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item" *ngFor="let status of t.status_history; let i = index" 
+             [class.active]="i === 0"
+             [class.completed]="i > 0">
+          <div class="timeline-marker">
+            <i [class]="getStatusIcon(status.status)"></i>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <h6 class="status-title">{{ status.status }}</h6>
+              <span class="status-time">{{ formatDate(status.timestamp) }}</span>
+            </div>
+            <p class="status-description">{{ status.description }}</p>
+            <div class="status-details" *ngIf="status.location || status.courier">
+              <small class="text-muted">
+                <i class="bi bi-geo-alt me-1" *ngIf="status.location"></i>
+                {{ status.location }}
+                <span *ngIf="status.location && status.courier"> • </span>
+                <i class="bi bi-truck me-1" *ngIf="status.courier"></i>
+                {{ status.courier }}
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Data State -->
+  <div *ngIf="!trackingData && !isLoading && !error" class="no-data-state">
+    <div class="text-center py-4">
+      <i class="bi bi-question-circle text-muted" style="font-size: 3rem;"></i>
+      <h5 class="mt-3">No tracking information available</h5>
+      <p class="text-muted">Please check back later or contact support if you have questions.</p>
+    </div>
+  </div>
+</div> 

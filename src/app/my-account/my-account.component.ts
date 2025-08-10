@@ -3,6 +3,7 @@ import { Router } from "@angular/router"
 import { GlobleService } from "../service/globle.service"
 import { HttpService } from "../service/http.service"
 import { APIURLs } from "src/environments/apiUrls"
+import { ValidationService } from "../shared/validation.service"
 
 interface Order {
   _id: string
@@ -170,6 +171,7 @@ export class MyAccountComponent implements OnInit {
     private httpService: HttpService,
     public gs: GlobleService,
     private router: Router,
+    private validationService: ValidationService,
   ) {}
 
   ngOnInit(): void {
@@ -498,6 +500,13 @@ export class MyAccountComponent implements OnInit {
   }
 
   saveAddress(): void {
+    // Validate address before saving
+    const validation = this.validationService.validateAddressObject(this.addressForm);
+    if (!validation.isValid) {
+      this.gs.errorToaster(validation.errors[0]); // Show first error
+      return;
+    }
+
     this.isLoadingAddresses = true
 
     if (this.editingAddress) {

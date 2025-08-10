@@ -162,6 +162,10 @@ export class CheckoutComponent implements OnInit {
   }
 
   placeOrder() {
+    if (this.isProcessingOrder) {
+      return; // Prevent duplicate submissions
+    }
+
     if (!this.selectedShippingAddress) {
       this.gs.errorToaster("Please select a delivery address")
       return
