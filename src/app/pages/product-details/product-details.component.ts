@@ -49,6 +49,7 @@ interface Product {
     discount: number
   }>
   discount?: number | string
+  canReview?: boolean
 }
 
 interface CartItem {

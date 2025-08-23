@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core"
-import { Router } from "@angular/router"
+import { Router, ActivatedRoute } from "@angular/router"
 import { GlobleService } from "../service/globle.service"
 import { HttpService } from "../service/http.service"
 import { ApiService } from "../service/api.service"
@@ -174,10 +174,18 @@ export class MyAccountComponent implements OnInit {
     private apiService: ApiService,
     public gs: GlobleService,
     private router: Router,
+    private route: ActivatedRoute,
     private validationService: ValidationService,
   ) {}
 
   ngOnInit(): void {
+    // Check for query parameters to set active tab
+    this.route.queryParams.subscribe(params => {
+      if (params['tab']) {
+        this.setActiveTab(params['tab'])
+      }
+    })
+    
     this.loadProfileData()
     this.loadInitialData()
   }

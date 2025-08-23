@@ -18,32 +18,54 @@ export class HomeComponent implements OnInit {
   // Mobile menu state
   mobileSubmenuOpen: boolean[] = []
 
-  // Blog Banner Slider Configuration
   blogBannerSlideConfig = {
     slidesToShow: 1,
     slidesToScroll: 1,
     dots: true,
     infinite: true,
     autoplay: true,
-    autoplaySpeed: 4000,
+    autoplaySpeed: 5000,
     arrows: true,
-    fade: true,
-    prevArrow: '<button class="slick-arrow slick-prev"><i class="bi bi-chevron-left"></i></button>',
-    nextArrow: '<button class="slick-arrow slick-next"><i class="bi bi-chevron-right"></i></button>',
+    fade: false,
+    adaptiveHeight: false,
+    pauseOnHover: true,
+    pauseOnFocus: false,
+    swipe: true,
+    touchMove: true,
+    prevArrow:
+      '<button class="slick-arrow slick-prev banner-nav-btn" aria-label="Previous Banner"><i class="bi bi-chevron-left"></i></button>',
+    nextArrow:
+      '<button class="slick-arrow slick-next banner-nav-btn" aria-label="Next Banner"><i class="bi bi-chevron-right"></i></button>',
+    responsive: [
+      {
+        breakpoint: 768,
+        settings: {
+          arrows: true,
+          dots: true,
+          autoplay: true,
+          pauseOnHover: true,
+        },
+      },
+    ],
   }
 
-  // Fixed Slider configurations
+  // Fixed Slider configurations for Most Loved Products
   slideConfigForML = {
     slidesToShow: 2,
     slidesToScroll: 1,
-    dots: true,
+    dots: false,
     infinite: true,
     autoplay: true,
     autoplaySpeed: 4000,
     arrows: true,
     centerMode: false,
-    prevArrow: '<button class="slick-arrow slick-prev"><i class="bi bi-chevron-left"></i></button>',
-    nextArrow: '<button class="slick-arrow slick-next"><i class="bi bi-chevron-right"></i></button>',
+    pauseOnHover: false,
+    pauseOnFocus: false,
+    swipe: true,
+    touchMove: true,
+    prevArrow:
+      '<button class="slick-arrow slick-prev" aria-label="Previous"><i class="bi bi-chevron-left"></i></button>',
+    nextArrow: '<button class="slick-arrow slick-next" aria-label="Next"><i class="bi bi-chevron-right"></i></button>',
     responsive: [
       {
         breakpoint: 998,
@@ -51,49 +73,69 @@ export class HomeComponent implements OnInit {
           slidesToShow: 1,
           centerMode: false,
           arrows: true,
+          autoplay: true,
         },
       },
       {
         breakpoint: 650,
         settings: {
           slidesToShow: 1,
-          arrows: false,
-          dots: true,
+          arrows: true,
+          dots: false,
+          autoplay: true,
         },
       },
     ],
   }
 
-  slideConfig = {
+  slideConfigRedesigned = {
     slidesToShow: 4,
     slidesToScroll: 1,
-    dots: true,
-    infinite: true,
+    dots: false,
+    infinite: false, // Changed to false to prevent issues with few items
     autoplay: true,
-    autoplaySpeed: 3500,
+    autoplaySpeed: 4000,
     arrows: true,
     centerMode: false,
-    prevArrow: '<button class="slick-arrow slick-prev"><i class="bi bi-chevron-left"></i></button>',
-    nextArrow: '<button class="slick-arrow slick-next"><i class="bi bi-chevron-right"></i></button>',
+    pauseOnHover: true,
+    pauseOnFocus: false,
+    swipe: true,
+    touchMove: true,
+    variableWidth: false, // Ensure consistent width
+    prevArrow:
+      '<button class="slick-arrow slick-prev products-nav-btn" aria-label="Previous Products"><i class="bi bi-chevron-left"></i></button>',
+    nextArrow:
+      '<button class="slick-arrow slick-next products-nav-btn" aria-label="Next Products"><i class="bi bi-chevron-right"></i></button>',
     responsive: [
       {
         breakpoint: 1200,
-        settings: { slidesToShow: 3 },
+        settings: {
+          slidesToShow: 3,
+          arrows: true,
+          autoplay: true,
+          infinite: false,
+        },
       },
       {
         breakpoint: 768,
         settings: {
           slidesToShow: 2,
-          arrows: false,
-          dots: true,
+          arrows: true,
+          dots: false,
+          autoplay: true,
+          infinite: false,
         },
       },
       {
         breakpoint: 576,
         settings: {
           slidesToShow: 1,
-          arrows: false,
-          dots: true,
+          arrows: true,
+          dots: false,
+          autoplay: true,
+          infinite: false,
+          centerMode: true,
+          centerPadding: "20px",
         },
       },
     ],
@@ -112,10 +154,11 @@ export class HomeComponent implements OnInit {
   allBlogs: any = []
   mostValued: any = {}
 
-  // Form data
-  subCatValue: any = "0"
+  subCatValue: any = ""
   selectedMainCategory = ""
   email: any = ""
+  isLoadingProducts = false
+  isLoadingSubCategories = false
 
   // Mock data for demo
   cartItems = 0
@@ -142,7 +185,6 @@ export class HomeComponent implements OnInit {
     this.getMostLoved()
     this.getMostPopular()
     this.getAllMainCategory()
-    this.getAllbanners()
     this.getAllBlogbanners()
     this.getCouponDiscount()
   }
@@ -228,7 +270,7 @@ export class HomeComponent implements OnInit {
 
   // API Calls
   getBlogs(): void {
-    this.httpService.get(APIURLs.getLatestBlogAPI, { limit: 10 }).subscribe(
+    this.httpService.get(APIURLs.getLatestBlogAPI, { limit: 4 }).subscribe(
       (res: any) => {
         this.allBlogs = res.data?.data || res.data || []
       },
@@ -304,20 +346,14 @@ export class HomeComponent implements OnInit {
       (res: any) => {
         this.mainCategory = res.data?.data || res.data || []
         this.initializeMobileMenu()
+        console.log("Categories loaded:", this.mainCategory.length)
+        // Initialize with first category after fetching
+        if (this.mainCategory.length > 0) {
+          this.initializeFirstCategory()
+        }
       },
       (err) => {
         console.log("Error fetching categories:", err)
-      },
-    )
-  }
-
-  getAllbanners(): void {
-    this.httpService.get(APIURLs.getAllBannersAPI).subscribe(
-      (res: any) => {
-        this.customeBannerList = res.data?.data || res.data || []
-      },
-      (err) => {
-        console.log("Error fetching banners:", err)
       },
     )
   }
@@ -333,47 +369,139 @@ export class HomeComponent implements OnInit {
     )
   }
 
-  // Category and subcategory handling
-  changeCategory(event: any): void {
-    this.selectedMainCategory = event.target.value
-    this.getSubCategory(event.target.value)
-    this.getProductBycategory({ catid: event.target.value })
+  initializeFirstCategory(): void {
+    if (this.mainCategory.length > 0) {
+      const firstCategory = this.mainCategory[0]
+      this.selectedMainCategory = firstCategory._id
+      console.log("Initializing with first category:", firstCategory.name)
+      this.loadSubCategories(firstCategory._id, true)
+    }
   }
 
-  getSubCategory(id: string): void {
-    this.httpService.post(APIURLs.subCatByMainAPI, { id }).subscribe(
-      (res: any) => {
-        this.subCatValue = "0"
-        this.subCategory = res.data?.data || res.data || []
-      },
-      (err) => {
-        this.subCategory = []
-        this.subCatValue = "0"
-        console.log("Error fetching subcategories:", err)
-      },
-    )
+  onCategoryChange(event: any): void {
+    const categoryId = event.target.value
+    if (!categoryId) return
+
+    console.log("Category changed to:", categoryId)
+    this.selectedMainCategory = categoryId
+    this.clearProductData() // Clear existing data immediately
+    this.loadSubCategories(categoryId, true)
   }
 
-  changeSubCategory(event: any): void {
-    this.getProductBycategory({
+  onSubCategoryChange(event: any): void {
+    const subCatId = event.target.value
+    if (!subCatId) return
+
+    console.log("Subcategory changed to:", subCatId)
+    this.subCatValue = subCatId
+    this.loadProducts({
       catid: this.selectedMainCategory,
-      subCatid: event.target.value,
+      subCatid: subCatId,
     })
   }
 
-  getProductBycategory(payload: any): void {
-    this.httpService.post(APIURLs.getProductByCatAPI, { ...payload, limit: 10 }).subscribe(
+  loadSubCategories(categoryId: string, autoSelectFirst = false): void {
+    this.isLoadingSubCategories = true
+    this.subCategory = []
+    this.subCatValue = ""
+
+    console.log("Loading subcategories for category:", categoryId)
+    this.httpService.post(APIURLs.subCatByMainAPI, { id: categoryId }).subscribe(
       (res: any) => {
-        this.customeBannerList = res.data?.data || res.data || []
+        this.isLoadingSubCategories = false
+        this.subCategory = res.data?.data || res.data || []
+        console.log("Subcategories loaded:", this.subCategory.length)
+
+        if (this.subCategory.length > 0 && autoSelectFirst) {
+          // Auto-select first subcategory
+          this.subCatValue = this.subCategory[0]._id
+          console.log("Auto-selected first subcategory:", this.subCatValue)
+          this.loadProducts({
+            catid: this.selectedMainCategory,
+            subCatid: this.subCatValue,
+          })
+        } else if (this.subCategory.length === 0) {
+          // No subcategories, load products by main category only
+          console.log("No subcategories, loading products by main category only")
+          this.loadProducts({ catid: this.selectedMainCategory })
+        }
       },
       (err) => {
-        console.log("Error fetching products by category:", err)
-        this.customeBannerList = []
+        this.isLoadingSubCategories = false
+        this.subCategory = []
+        this.subCatValue = ""
+        console.log("Error fetching subcategories:", err)
+        // Load products by main category only if subcategory fetch fails
+        this.loadProducts({ catid: this.selectedMainCategory })
       },
     )
   }
 
-  // Utility functions
+  loadProducts(payload: any): void {
+    this.isLoadingProducts = true
+    this.clearProductData()
+
+    console.log("Loading products with payload:", payload)
+
+    this.httpService.post(APIURLs.getProductByCatAPI, { ...payload, limit: 12 }).subscribe(
+      (res: any) => {
+        this.isLoadingProducts = false
+        const products = res.data?.data || res.data || []
+        this.customeBannerList = [...products] // Create new array to trigger change detection
+        console.log("Products loaded successfully:", this.customeBannerList.length)
+      },
+      (err) => {
+        this.isLoadingProducts = false
+        console.log("Error fetching products by category:", err)
+        this.customeBannerList = []
+        this.gs.errorToaster("Failed to load products. Please try again.")
+      },
+    )
+  }
+
+  clearProductData(): void {
+    this.customeBannerList = []
+  }
+
+  resetFilters(): void {
+    this.selectedMainCategory = ""
+    this.subCatValue = ""
+    this.subCategory = []
+    this.clearProductData()
+    this.isLoadingProducts = false
+    this.isLoadingSubCategories = false
+  }
+
+  // Utility methods for better UI handling
+  trackByProductId(index: number, item: any): any {
+    return item._id || index
+  }
+
+  onImageError(event: any): void {
+    event.target.src = "assets/images/placeholder-product.jpg"
+  }
+
+  quickViewProduct(product: any): void {
+    // Implement quick view functionality
+    console.log("Quick view for product:", product.productname)
+  }
+
+  getStarArray(rating: number): number[] {
+    const fullStars = Math.floor(rating)
+    return Array(fullStars).fill(0)
+  }
+
+  hasHalfStar(rating: number): boolean {
+    return rating % 1 >= 0.5
+  }
+
+  getEmptyStarArray(rating: number): number[] {
+    const fullStars = Math.floor(rating)
+    const hasHalf = rating % 1 >= 0.5
+    const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0)
+    return Array(Math.max(0, emptyStars)).fill(0)
+  }
+
   redirectbannerTo(link: any): void {
     window.open(link, "_blank")
   }

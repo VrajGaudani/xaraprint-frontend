@@ -326,7 +326,7 @@
         <div class="tab-pane fade show active" id="description" role="tabpanel">
           <div class="description-content">
             <div class="description-text">
-              <p>{{formObj?.product_description}}</p>
+              <div [innerHTML]="formObj?.product_description || 'No description available'"></div>
             </div>
           </div>
         </div>
@@ -392,10 +392,16 @@
                   </div>
                 </div>
                 <div class="col-md-3">
-                  <button class="btn btn-primary write-review-btn" data-bs-toggle="modal" data-bs-target="#reviewAddmodal">
+                  <button *ngIf="formObj?.canReview" class="btn btn-primary write-review-btn" data-bs-toggle="modal" data-bs-target="#reviewAddmodal">
                     <i class="bi bi-pencil me-2"></i>
                     Write a Review
                   </button>
+                  <div *ngIf="!formObj?.canReview" class="review-info">
+                    <p class="text-muted mb-0">
+                      <i class="bi bi-info-circle me-1"></i>
+                      Purchase this product to leave a review
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

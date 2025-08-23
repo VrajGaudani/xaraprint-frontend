@@ -137,66 +137,147 @@
   </div>
 </section>
 
-<!-- Custom Banners Section - Fixed Category Selection and Cards -->
-<section class="custom-banners-section">
+<!-- Custom Banners Section - Fixed Card Sizes and Proper Category Handling -->
+<section class="custom-banners-section-redesigned">
   <div class="container">
-    <div class="section-header">
-      <h2 class="section-title">Customize Your Signs & Displays to Unlock Unlimited Opportunities</h2>
-      <div class="category-filters-compact">
-        <div class="filter-group">
-          <label class="filter-label">Select Your Product:</label>
-          <div class="filter-selects">
-            <select class="form-select category-select-compact" (change)="changeCategory($event)">
-              <option disabled selected>Category</option>
+    <div class="section-header-redesigned">
+      <h2 class="section-title-redesigned">Customize Your Signs & Displays to Unlock Unlimited Opportunities</h2>
+      
+      <!-- Improved Category Filters with Better Validation and Error Handling -->
+      <div class="category-filters-redesigned">
+        <div class="filter-row">
+          <div class="filter-group-redesigned">
+            <label class="filter-label-redesigned">Select Category:</label>
+            <select class="form-select category-select-redesigned" 
+                    [(ngModel)]="selectedMainCategory" 
+                    (change)="onCategoryChange($event)">
+              <option value="" disabled>Choose a category</option>
               <option *ngFor="let item of mainCategory" [value]="item?._id">{{item?.name}}</option>
             </select>
-            <select class="form-select category-select-compact" [(ngModel)]="subCatValue" (change)="changeSubCategory($event)">
-              <option disabled selected value="0">Sub-category</option>
+          </div>
+          
+          <div class="filter-group-redesigned">
+            <label class="filter-label-redesigned">Select Subcategory:</label>
+            <select class="form-select subcategory-select-redesigned" 
+                    [(ngModel)]="subCatValue" 
+                    (change)="onSubCategoryChange($event)"
+                    [disabled]="!selectedMainCategory || isLoadingSubCategories">
+              <option value="" disabled>
+                {{isLoadingSubCategories ? 'Loading...' : (subCategory.length === 0 ? 'No subcategories available' : 'Choose a subcategory')}}
+              </option>
               <option *ngFor="let item of subCategory" [value]="item?._id">{{item?.name}}</option>
             </select>
           </div>
         </div>
-        <p class="results-count">Found <strong>{{customeBannerList?.length}} Banners</strong> for your selection</p>
+        
+        <!-- Improved Product Count Display with Proper Validation -->
+        <div class="results-info-redesigned">
+          <div class="results-count-redesigned" *ngIf="selectedMainCategory">
+            <span *ngIf="isLoadingProducts" class="loading-text">
+              <i class="bi bi-hourglass-split me-2"></i>Loading products...
+            </span>
+            <span *ngIf="!isLoadingProducts && customeBannerList.length > 0" class="success-text">
+              <i class="bi bi-check-circle me-2"></i>
+              Found <strong>{{customeBannerList.length}}</strong> {{customeBannerList.length === 1 ? 'product' : 'products'}} for your selection
+            </span>
+            <span *ngIf="!isLoadingProducts && customeBannerList.length === 0" class="no-results-text">
+              <i class="bi bi-exclamation-circle me-2"></i>
+              No products found for the selected {{subCatValue ? 'subcategory' : 'category'}}
+            </span>
+          </div>
+          <div class="selection-info" *ngIf="!selectedMainCategory">
+            <i class="bi bi-info-circle me-2"></i>
+            Please select a category to view available products
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Fixed Slider Container with Proper Spacing -->
-    <div class="products-slider-container">
-      <div class="products-slider-wrapper">
-        <ngx-slick-carousel [config]="slideConfig" class="products-carousel">
-          <div ngxSlickItem *ngFor="let item of customeBannerList" class="product-slide">
-            <div class="product-card-fixed">
-              <div class="product-image-fixed">
-                <img [src]="item?.product_images?.[0]" [alt]="item?.productname" />
-                <div class="product-overlay">
-                  <button class="btn btn-sm btn-light quick-view-btn">
-                    <i class="bi bi-eye me-1"></i>
-                    Quick View
-                  </button>
-                </div>
-              </div>
-              <div class="product-content-fixed">
-                <h6 class="product-title-fixed">{{item?.productname}}</h6>
-                <div class="product-rating-fixed">
-                  <div class="rating-stars">
-                    <i class="bi bi-star-fill" *ngFor="let star of [1,2,3,4]"></i>
-                    <i class="bi bi-star-half"></i>
+    <!-- Completely Redesigned Products Display with Fixed Card Grid and Proper Centering -->
+    <div class="products-display-redesigned" *ngIf="selectedMainCategory">
+      <!-- Loading State -->
+      <div class="loading-state" *ngIf="isLoadingProducts">
+        <div class="loading-spinner">
+          <i class="bi bi-hourglass-split"></i>
+        </div>
+        <p>Loading products...</p>
+      </div>
+      
+      <!-- Products Grid/Slider -->
+      <div class="products-container-redesigned" *ngIf="!isLoadingProducts && customeBannerList.length > 0">
+        <div class="products-slider-redesigned">
+          <ngx-slick-carousel [config]="slideConfigRedesigned" class="products-carousel-redesigned">
+            <div ngxSlickItem *ngFor="let item of customeBannerList; trackBy: trackByProductId" class="product-slide-redesigned">
+              <div class="product-card-redesigned">
+                <div class="product-image-container-redesigned">
+                  <img [src]="item?.product_images?.[0] || 'assets/images/placeholder-product.jpg'" 
+                       [alt]="item?.productname" 
+                       class="product-image-redesigned"
+                       (error)="onImageError($event)" />
+                  <div class="product-overlay-redesigned">
+                    <button class="btn btn-light quick-view-btn-redesigned" 
+                            (click)="quickViewProduct(item)">
+                      <i class="bi bi-eye me-1"></i>
+                      Quick View
+                    </button>
                   </div>
-                  <span class="rating-value">{{item?.rating || '4.5'}}</span>
+                  <div class="product-badge-redesigned" *ngIf="item?.isNew">
+                    <span>New</span>
+                  </div>
                 </div>
-                <div class="product-price-fixed">
-                  <span class="price-label">Starts at</span>
-                  <span class="price-value">₹{{item?.price}}</span>
+                
+                <div class="product-content-redesigned">
+                  <h6 class="product-title-redesigned" [title]="item?.productname">
+                    {{item?.productname}}
+                  </h6>
+                  
+                  <div class="product-rating-redesigned">
+                    <div class="rating-stars-redesigned">
+                      <i class="bi bi-star-fill" *ngFor="let star of getStarArray(item?.rating || 4.5)"></i>
+                      <i class="bi bi-star-half" *ngIf="hasHalfStar(item?.rating || 4.5)"></i>
+                      <i class="bi bi-star" *ngFor="let star of getEmptyStarArray(item?.rating || 4.5)"></i>
+                    </div>
+                    <span class="rating-value-redesigned">({{item?.rating || '4.5'}})</span>
+                  </div>
+                  
+                  <div class="product-price-redesigned">
+                    <span class="price-label-redesigned">Starting at</span>
+                    <span class="price-value-redesigned">₹{{item?.price || '0.00'}}</span>
+                  </div>
+                  
+                  <a [routerLink]="['/product-details', item._id]" 
+                     class="btn btn-primary product-btn-redesigned">
+                    <span>Customize Now</span>
+                    <i class="bi bi-arrow-right ms-1"></i>
+                  </a>
                 </div>
-                <a [routerLink]="['/product-details', item._id]" class="btn btn-primary product-btn-fixed">
-                  <span>Customize</span>
-                  <i class="bi bi-arrow-right ms-1"></i>
-                </a>
               </div>
             </div>
-          </div>
-        </ngx-slick-carousel>
+          </ngx-slick-carousel>
+        </div>
       </div>
+      
+      <!-- No Products State -->
+      <div class="no-products-state" *ngIf="!isLoadingProducts && customeBannerList.length === 0">
+        <div class="no-products-icon">
+          <i class="bi bi-box-seam"></i>
+        </div>
+        <h5>No Products Found</h5>
+        <p>We couldn't find any products for the selected {{subCatValue ? 'subcategory' : 'category'}}.</p>
+        <button class="btn btn-outline-primary" (click)="resetFilters()">
+          <i class="bi bi-arrow-clockwise me-2"></i>
+          Reset Filters
+        </button>
+      </div>
+    </div>
+    
+    <!-- Initial State -->
+    <div class="initial-state" *ngIf="!selectedMainCategory">
+      <div class="initial-state-icon">
+        <i class="bi bi-funnel"></i>
+      </div>
+      <h5>Select a Category</h5>
+      <p>Choose a category above to explore our amazing collection of custom signs and displays.</p>
     </div>
   </div>
 </section>
