@@ -423,7 +423,9 @@
           <div ngxSlickItem *ngFor="let item of mostLoved" class="loved-product-slide">
             <div class="loved-product-card-fixed">
               <div class="loved-product-image-fixed">
-                <img [src]="item?.product_images?.[0]" [alt]="item?.productname" />
+                <img [src]="item?.product_images?.[0] || 'assets/images/placeholder-product.jpg'" 
+                     [alt]="item?.productname" 
+                     (error)="onImageError($event)" />
               </div>
               <div class="loved-product-content-fixed">
                 <h6 class="loved-product-title-fixed">{{item?.productname}}</h6>
@@ -440,7 +442,7 @@
                 </div>
                 <a [routerLink]="['/product-details', item._id]" class="btn btn-primary loved-product-btn-fixed">
                   <span>View Details</span>
-                  <i class="bi bi-arrow-right ms-1"></i>
+                  <i class="bi bi-arrow-right"></i>
                 </a>
               </div>
             </div>
@@ -458,11 +460,21 @@
       <h2 class="section-title">Check out our Blog For Printing Tips & Suggestions</h2>
     </div>
     
-    <div class="blog-grid">
+    <!-- Loading State -->
+    <div class="loading-state text-center py-5" *ngIf="isLoadingBlogs">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-3">Loading blogs...</p>
+    </div>
+    
+    <div class="blog-grid" *ngIf="!isLoadingBlogs && allBlogs.length > 0">
       <div class="blog-item" *ngFor="let item of allBlogs">
         <div class="blog-card">
           <div class="blog-image">
-            <img [src]="item.image" [alt]="item.title" />
+            <img [src]="item.image || 'assets/images/placeholder-blog.jpg'" 
+                 [alt]="item.title" 
+                 (error)="onImageError($event)" />
           </div>
           <div class="blog-content">
             <h6 class="blog-title">{{item.title}}</h6>
@@ -479,7 +491,13 @@
       </div>
     </div>
     
-    <div class="section-footer">
+    <!-- Empty State -->
+    <div class="empty-state text-center py-5" *ngIf="!isLoadingBlogs && allBlogs.length === 0">
+      <i class="bi bi-journal-text" style="font-size: 3rem; color: #6c757d;"></i>
+      <p class="mt-3 text-muted">No blogs available at the moment</p>
+    </div>
+    
+    <div class="section-footer" *ngIf="!isLoadingBlogs">
       <button class="btn btn-outline-primary" routerLink="/blogs">
         <span>View All</span>
         <i class="bi bi-arrow-right ms-1"></i>

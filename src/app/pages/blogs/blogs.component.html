@@ -9,40 +9,48 @@
           <p class="page-subtitle text-muted">Stay updated with our latest insights and tips</p>
         </div>
 
+        <!-- Loading State -->
+        <div class="loading-state text-center py-5" *ngIf="isLoading">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-3">Loading blogs...</p>
+        </div>
+
         <!-- Blog Grid -->
-        <div class="blog-grid">
+        <div class="blog-grid" *ngIf="!isLoading">
           <div class="row">
-            <div class="col-md-6 mb-4" *ngFor="let post of [1,2,3,4,5,6,7,8,9,10,11,12]">
+            <div class="col-lg-6 col-md-6 mb-4" *ngFor="let blog of allBlogs">
               <article class="blog-card">
                 <div class="card h-100 border-0 shadow-sm">
                   <div class="blog-image">
-                    <img src="assets/images/Untitled.webp" 
-                         alt="Blog Post" 
-                         class="card-img-top">
+                    <img [src]="blog.image || 'assets/images/placeholder-blog.jpg'" 
+                         [alt]="blog.title" 
+                         class="card-img-top"
+                         (error)="onImageError($event)">
                     <div class="blog-overlay">
-                      <span class="blog-category">Design Tips</span>
+                      <span class="blog-category">{{blog.category || 'General'}}</span>
                     </div>
                   </div>
                   
                   <div class="card-body d-flex flex-column">
                     <h5 class="blog-title">
-                      Halloween Is Almost Here: 5 Creative Ways to Celebrate
+                      {{blog.title}}
                     </h5>
                     
                     <p class="blog-excerpt text-muted">
-                      Halloween ranks as one of the most consumer-driven holidays in the calendar year, 
-                      second in prominence only to Christmas. Families and businesses alike...
+                      {{blog.description | slice:0:120}}...
                     </p>
                     
                     <div class="blog-meta mt-auto">
                       <div class="d-flex justify-content-between align-items-center">
-                        <a href="#" class="btn btn-primary btn-sm read-more-btn">
+                        <a [routerLink]="['/blog-details', blog._id]" class="btn btn-primary btn-sm read-more-btn">
                           Read More
                           <i class="bi bi-arrow-right ms-1"></i>
                         </a>
                         <span class="blog-date text-muted small">
                           <i class="bi bi-calendar3 me-1"></i>
-                          Sep 15, 2023
+                          {{blog.updatedAt | date:'MMM dd, yyyy'}}
                         </span>
                       </div>
                     </div>
@@ -53,37 +61,53 @@
           </div>
         </div>
 
+        <!-- Empty State -->
+        <div class="empty-state text-center py-5" *ngIf="!isLoading && allBlogs.length === 0">
+          <i class="bi bi-journal-text" style="font-size: 4rem; color: #6c757d;"></i>
+          <h4 class="mt-3">No blogs found</h4>
+          <p class="text-muted">Check back later for new blog posts!</p>
+        </div>
+
         <!-- Pagination -->
-        <nav aria-label="Blog pagination" class="mt-5">
+        <nav aria-label="Blog pagination" class="mt-5" *ngIf="!isLoading && totalPages > 1">
           <ul class="pagination justify-content-center">
-            <li class="page-item">
-              <a class="page-link" href="#" aria-label="First">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <a class="page-link" href="javascript:void(0)" 
+                 (click)="onPageChange(1)" 
+                 aria-label="First">
                 <i class="bi bi-chevron-double-left"></i>
               </a>
             </li>
-            <li class="page-item">
-              <a class="page-link" href="#" aria-label="Previous">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <a class="page-link" href="javascript:void(0)" 
+                 (click)="onPageChange(currentPage - 1)" 
+                 aria-label="Previous">
                 <i class="bi bi-chevron-left"></i>
               </a>
             </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">...</a></li>
-            <li class="page-item"><a class="page-link" href="#">10</a></li>
-            <li class="page-item"><a class="page-link" href="#">11</a></li>
-            <li class="page-item active">
-              <span class="page-link">12</span>
+            
+            <!-- Page numbers -->
+            <li class="page-item" 
+                *ngFor="let page of getPageNumbers()" 
+                [class.active]="page === currentPage">
+              <a class="page-link" 
+                 href="javascript:void(0)" 
+                 (click)="onPageChange(page)"
+                 *ngIf="page !== '...'">{{page}}</a>
+              <span class="page-link" *ngIf="page === '...'">...</span>
             </li>
-            <li class="page-item"><a class="page-link" href="#">13</a></li>
-            <li class="page-item disabled"><span class="page-link">14</span></li>
-            <li class="page-item"><a class="page-link" href="#">...</a></li>
-            <li class="page-item"><a class="page-link" href="#">20</a></li>
-            <li class="page-item">
-              <a class="page-link" href="#" aria-label="Next">
+            
+            <li class="page-item" [class.disabled]="currentPage === totalPages">
+              <a class="page-link" href="javascript:void(0)" 
+                 (click)="onPageChange(currentPage + 1)" 
+                 aria-label="Next">
                 <i class="bi bi-chevron-right"></i>
               </a>
             </li>
-            <li class="page-item">
-              <a class="page-link" href="#" aria-label="Last">
+            <li class="page-item" [class.disabled]="currentPage === totalPages">
+              <a class="page-link" href="javascript:void(0)" 
+                 (click)="onPageChange(totalPages)" 
+                 aria-label="Last">
                 <i class="bi bi-chevron-double-right"></i>
               </a>
             </li>

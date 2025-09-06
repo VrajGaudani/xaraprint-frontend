@@ -51,7 +51,7 @@ export class HomeComponent implements OnInit {
 
   // Fixed Slider configurations for Most Loved Products
   slideConfigForML = {
-    slidesToShow: 2,
+    slidesToShow: 3,
     slidesToScroll: 1,
     dots: false,
     infinite: true,
@@ -59,16 +59,27 @@ export class HomeComponent implements OnInit {
     autoplaySpeed: 4000,
     arrows: true,
     centerMode: false,
-    pauseOnHover: false,
-    pauseOnFocus: false,
+    pauseOnHover: true,
+    pauseOnFocus: true,
     swipe: true,
     touchMove: true,
+    variableWidth: false,
+    adaptiveHeight: false,
     prevArrow:
       '<button class="slick-arrow slick-prev" aria-label="Previous"><i class="bi bi-chevron-left"></i></button>',
     nextArrow: '<button class="slick-arrow slick-next" aria-label="Next"><i class="bi bi-chevron-right"></i></button>',
     responsive: [
       {
-        breakpoint: 998,
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: 2,
+          centerMode: false,
+          arrows: true,
+          autoplay: true,
+        },
+      },
+      {
+        breakpoint: 768,
         settings: {
           slidesToShow: 1,
           centerMode: false,
@@ -159,6 +170,7 @@ export class HomeComponent implements OnInit {
   email: any = ""
   isLoadingProducts = false
   isLoadingSubCategories = false
+  isLoadingBlogs = false
 
   // Mock data for demo
   cartItems = 0
@@ -270,13 +282,16 @@ export class HomeComponent implements OnInit {
 
   // API Calls
   getBlogs(): void {
+    this.isLoadingBlogs = true
     this.httpService.get(APIURLs.getLatestBlogAPI, { limit: 4 }).subscribe(
       (res: any) => {
         this.allBlogs = res.data?.data || res.data || []
+        this.isLoadingBlogs = false
       },
       (err) => {
         this.gs.errorToaster(err?.error?.msg || "Something went wrong!")
         this.allBlogs = []
+        this.isLoadingBlogs = false
       },
     )
   }

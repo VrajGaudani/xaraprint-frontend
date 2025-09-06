@@ -369,12 +369,18 @@
                     <input type="text" class="form-control" [(ngModel)]="addressForm.address" name="address">
                   </div>
                   <div class="col-md-6 mb-3">
-                    <label class="form-label">City</label>
-                    <input type="text" class="form-control" [(ngModel)]="addressForm.city" name="city">
+                    <label class="form-label">State <span class="text-danger">*</span></label>
+                    <select class="form-control" [(ngModel)]="addressForm.state" name="state" required (change)="onStateChange()">
+                      <option value="">Select State</option>
+                      <option *ngFor="let state of indianStates" [value]="state">{{state}}</option>
+                    </select>
                   </div>
                   <div class="col-md-6 mb-3">
-                    <label class="form-label">State</label>
-                    <input type="text" class="form-control" [(ngModel)]="addressForm.state" name="state">
+                    <label class="form-label">City <span class="text-danger">*</span></label>
+                    <select class="form-control" [(ngModel)]="addressForm.city" name="city" required>
+                      <option value="">Select City</option>
+                      <option *ngFor="let city of getCitiesForState(addressForm.state)" [value]="city">{{city}}</option>
+                    </select>
                   </div>
                   <div class="col-md-6 mb-3">
                     <label class="form-label">Country</label>

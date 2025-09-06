@@ -118,11 +118,20 @@ export class OrderTrackingService {
       'xpressbees': `https://www.xpressbees.com/track/${trackingNumber}`,
       'shadowfax': `https://track.shadowfax.in/track/${trackingNumber}`,
       'pickrr': `https://pickrr.com/tracking/${trackingNumber}`,
-      'shiprocket': `https://track.shiprocket.in/tracking/${trackingNumber}`
+      'shiprocket': `https://www.shiprocket.in/shipment-tracking/`
     };
 
     const normalizedCourier = courierName.toLowerCase().replace(/\s+/g, '');
-    return courierUrls[normalizedCourier] || `https://track.shiprocket.in/tracking/${trackingNumber}`;
+    
+    // For Shiprocket, use the main tracking page with tracking number as parameter
+    if (normalizedCourier === 'shiprocket') {
+      if (trackingNumber) {
+        return `https://www.shiprocket.in/shipment-tracking/?tracking_number=${trackingNumber}`;
+      }
+      return `https://www.shiprocket.in/shipment-tracking/`;
+    }
+    
+    return courierUrls[normalizedCourier] || `https://www.shiprocket.in/shipment-tracking/`;
   }
 
   /**

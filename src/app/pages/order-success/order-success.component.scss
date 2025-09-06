@@ -76,40 +76,6 @@
           }
         }
         
-        .success-actions {
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-          
-          .review-order-btn {
-            padding: 14px 32px;
-            font-weight: 700;
-            font-size: 1rem;
-            border-radius: 8px;
-            border: none;
-            transition: all 0.3s ease;
-            
-            &:hover {
-              background: #0056b3;
-              transform: translateY(-2px);
-              box-shadow: 0 8px 25px rgba(0,123,255,0.3);
-            }
-          }
-          
-          .continue-shopping-btn {
-            padding: 12px 32px;
-            font-weight: 600;
-            border-radius: 8px;
-            border: 2px solid #007bff;
-            transition: all 0.3s ease;
-            
-            &:hover {
-              background: #007bff;
-              color: white;
-              transform: translateY(-2px);
-            }
-          }
-        }
       }
     }
   }

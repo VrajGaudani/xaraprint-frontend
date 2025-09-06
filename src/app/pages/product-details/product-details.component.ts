@@ -123,6 +123,7 @@ export class ProductDetailsComponent implements OnInit {
   modelViewType: number = 0
   modelViewName: string = "Select Design Method"
   imageName: string = ""
+  selectedImageForModal: string = ""
   proid: string = ""
 
   reviewForm: FormGroup
@@ -479,12 +480,20 @@ export class ProductDetailsComponent implements OnInit {
     }
   }
 
-  imageViewModal(name: string): void {
-    // Using jQuery - make sure jQuery is available
-    if (typeof $ !== 'undefined') {
-      $("#imageModal").modal("show")
+  imageViewModal(imageUrl: string): void {
+    this.selectedImageForModal = imageUrl;
+    this.imageName = imageUrl;
+    
+    // Using Bootstrap modal API
+    const modalElement = document.getElementById('imageModal');
+    if (modalElement) {
+      const modal = new (window as any).bootstrap.Modal(modalElement);
+      modal.show();
     }
-    this.imageName = name
+  }
+
+  onImageError(event: any): void {
+    event.target.src = 'assets/images/placeholder-product.jpg';
   }
 
   updateCart(): void {

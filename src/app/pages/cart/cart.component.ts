@@ -4,6 +4,20 @@ import { GlobleService } from "../../service/globle.service"
 import { APIURLs } from "../../../environments/apiUrls"
 import { Router } from "@angular/router"
 
+interface Calculations {
+  subtotal: number
+  total_discount: number
+  taxable_amount: number
+  coupon_discount: number
+  final_taxable_amount: number
+  total_tax: number
+  shipping_charge: number
+  shipping_tax: number
+  grand_total: number
+  coupon_details: any
+  item_calculations: any[]
+}
+
 @Component({
   selector: "app-cart",
   templateUrl: "./cart.component.html",
@@ -18,7 +32,7 @@ export class CartComponent implements OnInit {
   isApplyingCoupon = false
   isCouponApplied = false
 
-  calculations = {
+  calculations: Calculations = {
     subtotal: 0,
     total_discount: 0,
     taxable_amount: 0,
@@ -55,6 +69,9 @@ export class CartComponent implements OnInit {
           this.allData = res.data.data || []
           this.calculations = res.data.calculations || this.calculations
           console.log("Cart calculations:", this.calculations)
+
+          // Validate calculations
+          this.validateCalculations()
 
           // Check if coupon is applied
           const itemWithCoupon = this.allData.find((item) => item.applied_coupon_code)
@@ -96,6 +113,32 @@ export class CartComponent implements OnInit {
     )
   }
 
+  validateCalculations(): void {
+    // Ensure all calculation values are numbers
+    const numericFields: (keyof Calculations)[] = [
+      'subtotal', 'total_discount', 'taxable_amount', 'coupon_discount',
+      'final_taxable_amount', 'total_tax', 'shipping_charge', 'shipping_tax', 'grand_total'
+    ]
+
+    numericFields.forEach(field => {
+      if (this.calculations[field] === undefined || this.calculations[field] === null) {
+        (this.calculations[field] as number) = 0
+      } else {
+        (this.calculations[field] as number) = Number(this.calculations[field]) || 0
+      }
+    })
+
+    // Ensure grand total is calculated correctly
+    const calculatedTotal = this.calculations.final_taxable_amount + this.calculations.total_tax + this.calculations.shipping_charge
+    if (Math.abs(this.calculations.grand_total - calculatedTotal) > 0.01) {
+      console.warn('Grand total mismatch:', {
+        stored: this.calculations.grand_total,
+        calculated: calculatedTotal
+      })
+      this.calculations.grand_total = calculatedTotal
+    }
+  }
+
   changeQuantity(item: any, newQty: number) {
     if (newQty < 1) return
     this.updateQuantity(item, newQty)
@@ -126,6 +169,9 @@ export class CartComponent implements OnInit {
         if (res.data && res.data.calculations) {
           // Update calculations from backend
           this.calculations = res.data.calculations
+          
+          // Validate calculations
+          this.validateCalculations()
 
           // Update the item in the local array
           const index = this.allData.findIndex((cartItem) => cartItem._id === item._id)
