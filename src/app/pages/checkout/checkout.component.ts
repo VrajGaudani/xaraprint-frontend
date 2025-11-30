@@ -237,7 +237,7 @@ export class CheckoutComponent implements OnInit {
       key: orderData.razorpay_order?.key || "rzp_test_key", // Replace with your Razorpay key
       amount: orderData.razorpay_order?.amount || this.getFinalTotal() * 100,
       currency: orderData.razorpay_order?.currency || "INR",
-      name: orderData.razorpay_order?.name || "XaraPrint",
+      name: orderData.razorpay_order?.name || "The Prints Plus",
       description: orderData.razorpay_order?.description || "Order Payment",
       order_id: orderData.razorpay_order?.id,
       handler: (response: any) => {
