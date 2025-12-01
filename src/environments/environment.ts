@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  baseUrl: "https://api.xaraprint.com/v1/",
-  imgUrl: "https://api.xaraprint.com/uploads/",
+  baseUrl: "https://api.theprintsplus.com/v1/",
+  imgUrl: "https://api.theprintsplus.com/uploads/",
   firebaseConfig: {
     apiKey: "AIzaSyDu4WF-7oely4T3JPHjxAzKxKA1rC-9YDM",
     authDomain: "banner-web-b98bc.firebaseapp.com",
